@@ -82,6 +82,7 @@ const wordvec &inode::readfile() const {
 void inode::writefile (const wordvec &words) {
    TRACE ('i', words);
    assert (type == FILE_INODE);
+   *contents.data = words;
 }
 
 void inode::remove (const string &filename) {
