@@ -1,4 +1,4 @@
-// $Id: inode.cc,v 1.5 2010-12-13 20:11:09-08 - - $
+// $Id: inode.cc,v 1.21 2011-01-09 20:00:40-08 - - $
 
 #include <cassert>
 #include <iostream>
@@ -56,7 +56,19 @@ int inode::get_inode_nr() {
 }
 
 int inode::size() {
-   int size = 0;
+   int size = 1;
+   directory dirents = *contents.dirents;
+   switch (type) {
+      case DIR_INODE:
+         size = dirents.size();
+         break;
+      case FILE_INODE:
+         wordvec data = *contents.data;
+         for(unsigned vec_itor = 0; vec_itor < data.size(); vec_itor++){
+            size += data[vec_itor].size();
+         }
+         break;
+   }
    TRACE ('i', "size = " << size);
    return size;
 }
