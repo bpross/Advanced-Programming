@@ -89,6 +89,8 @@ class inode {
       const wordvec &readfile() const;
       void writefile (const wordvec &newdata);
       void remove (const string &filename);
+      void mkdir (const string &filename);
+      void mkfile(const string &filename);
 };
 
 //
