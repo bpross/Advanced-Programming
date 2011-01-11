@@ -1,4 +1,4 @@
-// $Id: inode.cc,v 1.52 2011-01-10 22:32:01-08 - - $
+// $Id: inode.cc,v 1.53 2011-01-11 13:22:56-08 - - $
 
 #include <cassert>
 #include <iostream>
@@ -59,11 +59,10 @@ int inode::get_inode_nr() {
 
 int inode::size() {
    int size = 1;
-   directory dirents = *contents.dirents;
    //Checks for INODE Type
    switch (type) {
      case DIR_INODE:
-       size = dirents.size();
+       size = contents.dirents->size();
        break;
      case FILE_INODE:
        wordvec data = *contents.data;
@@ -83,10 +82,10 @@ const wordvec &inode::readfile() const {
    return *contents.data;
 }
 
-void inode::writefile (const wordvec &words) {
-   TRACE ('i', words);
-   assert (type == FILE_INODE);
-   *contents.data = words;
+void inode::writefile(const wordvec &words) {
+  TRACE('i', words);
+  assert (type == FILE_INODE);
+  *contents.data = words;
 }
 
 void inode::remove (const string &filename) {
@@ -96,7 +95,7 @@ void inode::remove (const string &filename) {
   directory dirents = *contents.dirents;
   
   //Searches the directory for the filename
-  search = dirents.find("filename");
+  search = dirents.find(filename);
   int size = 0;
   //Checks to see if the file was found. Throws error if not found
   assert (search != dirents.end());
@@ -117,24 +116,24 @@ void inode::remove (const string &filename) {
   TRACE ('i', filename);
 }
 
-void inode::mkdir (const string &filename) {
+inode inode::mkdir (const string &filename) {
   inode new_dir (DIR_INODE);
-  directory dirents = *contents.dirents;
-  dirents.insert( pair<string, inode *>(filename,new_dir) );
-  directory new_dirents = *new_dir.contents.dirents;
+  contents.dirents->insert( pair<string, inode *>(filename,&new_dir) );
   inode dot (DIR_INODE);
   inode dot_dot (DIR_INODE);
-  new_dirents.insert( pair<string, inode *> pair(".",dot));
-  new_dirents.insert( pair<string, inode *> pair("..",dot_dot));
+  new_dir.contents.dirents->insert( pair<string, inode *>(".",&dot));
+  new_dir.contents.dirents->insert(pair<string,inode *>("..",&dot_dot));
+  cout << new_dir.contents.dirents->size() << "\n";
+  return new_dir;
 }
 
-void inode::mkfile (const string &filename) {
+inode inode::mkfile (const string &filename) {
   map<string, inode *>::iterator search;
-  directory dirents = *contents.dirents;
-  search = dirents.find(filename);
-  assert (search == dirents.end() );
+  search = contents.dirents->find(filename);
+  assert (search == contents.dirents->end() );
   inode new_file (FILE_INODE);
-  dirents.insert( pair<string, inode *>pair (filename, new_file) );
+  contents.dirents->insert(pair<string, inode *>(filename, &new_file));
+  return new_file;
 }
 
 
