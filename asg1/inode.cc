@@ -112,8 +112,25 @@ void inode::remove (const string &filename) {
 }
 
 void inode::mkdir (const string &filename){
+  inode new_dir (DIR_INODE);
+  directory dirents = *contents.dirents;
+  dirents.insert( pair<string, inode *>(filename,new_dir) );
+  directory new_dirents = *new_dir.contents.dirents;
+  inode dot (DIR_INODE);
+  inode dot_dot (DIR_INODE);
+  dirents.insert( pair<string, inode *>(".",dot));
+  dirents.insert( pair<string, inode *>("..",dot_dot));
+}
 
+void inode::mkfile (const string &filename){
+  map<string, inode *>::iterator search;
+  directory dirents = *contents.dirents;
 
+  search = dirents.find(filename);
+  assert (search == dirents.end());
+  
+  inode new_file (FILE_INODE);
+  dirents.insert( pair<string, inode *>(filename,new_file) );
 }
 inode_state::inode_state(): root (NULL), cwd (NULL), prompt ("%") {
    TRACE ('i', "root = " << (void*) root << ", cwd = " << (void*) cwd
