@@ -1,4 +1,4 @@
-// $Id: inode.cc,v 1.38 2011-01-10 21:31:40-08 - - $
+// $Id: inode.cc,v 1.41 2011-01-10 21:41:56-08 - - $
 
 #include <cassert>
 #include <iostream>
@@ -67,7 +67,7 @@ int inode::size() {
        wordvec data = *contents.data;
        //Adds the word count to the character count of each word
        for(unsigned vec_itor = 0; vec_itor < data.size(); vec_itor++){
-	 size += data[vec_itor].size();
+         size += data[vec_itor].size();
        }
        break;
    }
@@ -100,11 +100,11 @@ void inode::remove (const string &filename) {
   assert (search != dirents.end());
   switch(type){
     case DIR_INODE:
-      remove_node = dirents(search);
+      remove_node = dirents;
 //      remove_node = dirents(search);
       size = remove_node.size();
-      //Checks the size of the directory. If it is NOT 2, the directory is not
-      //empty
+      //Checks the size of the directory. If it is NOT 2,
+      //the directory is not empty
       assert (size == 2);
       dirents.erase(search);
       break;
