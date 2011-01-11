@@ -7,7 +7,11 @@ using namespace std;
 
 
 int main(){
-   inode newinode (DIR_INODE);
-   int size = newinode.size();
+   inode new_dir (DIR_INODE);
+   int size = new_dir.size();
    cout << size;
+   inode new_file (FILE_INODE);
+   new_file.writefile(work);
+   
+   
 }

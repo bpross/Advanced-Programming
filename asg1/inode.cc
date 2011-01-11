@@ -1,4 +1,4 @@
-// $Id: inode.cc,v 1.21 2011-01-09 20:00:40-08 - - $
+// $Id: inode.cc,v 1.38 2011-01-10 21:31:40-08 - - $
 
 #include <cassert>
 #include <iostream>
@@ -90,48 +90,54 @@ void inode::writefile (const wordvec &words) {
 void inode::remove (const string &filename) {
   //Iterator used to search the map 
   map<string, inode *>::iterator search;
+  map<string, inode *> remove_node;
   directory dirents = *contents.dirents;
   
   //Searches the directory for the filename
-  search = dirents.find(filename);
+  search = dirents.find("filename");
   int size = 0;
   //Checks to see if the file was found. Throws error if not found
   assert (search != dirents.end());
   switch(type){
     case DIR_INODE:
-      remove_node = dirents[search];
+      remove_node = dirents(search);
+//      remove_node = dirents(search);
       size = remove_node.size();
       //Checks the size of the directory. If it is NOT 2, the directory is not
       //empty
       assert (size == 2);
-      dirents.erase[search];
+      dirents.erase(search);
+      break;
     case FILE_INODE:
-      dirents.earse[found];
+      dirents.erase(search);
+      break;
   }
   TRACE ('i', filename);
 }
+/*
 
-void inode::mkdir (const string &filename){
+void inode::mkdir (const string &filename) {
   inode new_dir (DIR_INODE);
   directory dirents = *contents.dirents;
   dirents.insert( pair<string, inode *>(filename,new_dir) );
   directory new_dirents = *new_dir.contents.dirents;
   inode dot (DIR_INODE);
   inode dot_dot (DIR_INODE);
-  dirents.insert( pair<string, inode *>(".",dot));
-  dirents.insert( pair<string, inode *>("..",dot_dot));
+  new_dirents.insert( pair<string, inode *>(".",dot));
+  new_dirents.insert( pair<string, inode *>("..",dot_dot));
 }
 
-void inode::mkfile (const string &filename){
+void inode::mkfile (const string &filename) {
   map<string, inode *>::iterator search;
   directory dirents = *contents.dirents;
-
   search = dirents.find(filename);
-  assert (search == dirents.end());
-  
+  assert (search == dirents.end() );
   inode new_file (FILE_INODE);
   dirents.insert( pair<string, inode *>(filename,new_file) );
 }
+*/
+
+
 inode_state::inode_state(): root (NULL), cwd (NULL), prompt ("%") {
    TRACE ('i', "root = " << (void*) root << ", cwd = " << (void*) cwd
           << ", prompt = " << prompt);
