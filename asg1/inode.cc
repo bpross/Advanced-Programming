@@ -58,16 +58,18 @@ int inode::get_inode_nr() {
 int inode::size() {
    int size = 1;
    directory dirents = *contents.dirents;
+   //Checks for INODE Type
    switch (type) {
-      case DIR_INODE:
-         size = dirents.size();
-         break;
-      case FILE_INODE:
-         wordvec data = *contents.data;
-         for(unsigned vec_itor = 0; vec_itor < data.size(); vec_itor++){
-            size += data[vec_itor].size();
-         }
-         break;
+     case DIR_INODE:
+       size = dirents.size();
+       break;
+     case FILE_INODE:
+       wordvec data = *contents.data;
+       //Adds the word count to the character count of each word
+       for(unsigned vec_itor = 0; vec_itor < data.size(); vec_itor++){
+	 size += data[vec_itor].size();
+       }
+       break;
    }
    TRACE ('i', "size = " << size);
    return size;
@@ -86,10 +88,33 @@ void inode::writefile (const wordvec &words) {
 }
 
 void inode::remove (const string &filename) {
-   TRACE ('i', filename);
-   assert (type == DIR_INODE);
+  //Iterator used to search the map 
+  map<string, inode *>::iterator search;
+  directory dirents = *contents.dirents;
+  
+  //Searches the directory for the filename
+  search = dirents.find(filename);
+  int size = 0;
+  //Checks to see if the file was found. Throws error if not found
+  assert (search != dirents.end());
+  switch(type){
+    case DIR_INODE:
+      remove_node = dirents[search];
+      size = remove_node.size();
+      //Checks the size of the directory. If it is NOT 2, the directory is not
+      //empty
+      assert (size == 2);
+      dirents.erase[search];
+    case FILE_INODE:
+      dirents.earse[found];
+  }
+  TRACE ('i', filename);
 }
 
+void inode::mkdir (const string &filename){
+
+
+}
 inode_state::inode_state(): root (NULL), cwd (NULL), prompt ("%") {
    TRACE ('i', "root = " << (void*) root << ", cwd = " << (void*) cwd
           << ", prompt = " << prompt);
