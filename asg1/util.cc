@@ -1,4 +1,4 @@
-// $Id: util.cc,v 1.1 2011-01-11 11:26:08-08 - - $
+// $Id: util.cc,v 1.3 2011-01-12 00:02:03-08 - - $
 
 #include <cstdlib>
 #include <unistd.h>

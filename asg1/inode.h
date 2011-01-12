@@ -108,7 +108,15 @@ class inode {
 //
 // change_prompt -
 //    used to change the prompt string
-
+//
+// get_root-
+//    returns pointer to the root node
+//
+// get_cwd -
+//    returns pointer to the cwd node
+//
+// get_prompt -
+//    returns the current prompt 
 
 class inode_state {
    friend class inode;

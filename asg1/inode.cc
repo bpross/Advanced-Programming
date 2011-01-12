@@ -1,4 +1,4 @@
-// $Id: inode.cc,v 1.71 2011-01-11 23:03:04-08 - - $
+// $Id: inode.cc,v 1.72 2011-01-12 00:04:37-08 - - $
 
 #include <cassert>
 #include <iostream>
@@ -141,7 +141,6 @@ void inode_state::change_cwd(inode &new_cwd){
 
 void inode_state::change_prompt(string &prompt_string){
   prompt = prompt_string;
-  cout << "prompt is: " << prompt << endl;
 }
 
 inode inode_state::get_root(){
