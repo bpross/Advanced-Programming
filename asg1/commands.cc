@@ -1,7 +1,8 @@
-// $Id: commands.cc,v 1.29 2011-01-12 13:26:54-08 - - $
+// $Id: commands.cc,v 1.48 2011-01-12 14:50:37-08 - - $
 
 #include <cstdlib>
 #include "commands.h"
+#include "inode.h"
 #include "trace.h"
 
 commands::commands(): map (commandmap()) {
@@ -23,13 +24,22 @@ function commands::operator[] (const string& cmd) {
 }
 
 void fn_cat (inode_state &state, const wordvec &words){
-   TRACE ('c', state);
-   TRACE ('c', words);
+  wordvec cat_vec = words;
+  //Erases the command from the vector, size is decremented
+  cat_vec.erase (cat_vec.begin());
+  inode cwd = state.get_cwd();
+  inode read_node = cwd.locate(cat_vec.front());
+  cout << "read_node type " << read_node.get_type() << endl;
+  //Read in file
+  wordvec file_contents = read_node.readfile();
+  cout << cat_vec << "contains" << file_contents << endl;
+  TRACE ('c', state);
+  TRACE ('c', words);
 }
 
 void fn_cd (inode_state &state, const wordvec &words){
-   TRACE ('c', state);
-   TRACE ('c', words);
+  TRACE ('c', state);
+  TRACE ('c', words);
 }
 
 void fn_echo (inode_state &state, const wordvec &words){
@@ -80,28 +90,43 @@ void fn_exit (inode_state &state, const wordvec &words){
 }
 
 void fn_ls (inode_state &state, const wordvec &words){
-   TRACE ('c', state);
-   TRACE ('c', words);
+  TRACE ('c', state);
+  TRACE ('c', words);
 }
 
 void fn_lsr (inode_state &state, const wordvec &words){
-   TRACE ('c', state);
-   TRACE ('c', words);
+  TRACE ('c', state);
+  TRACE ('c', words);
 }
 
 void fn_make (inode_state &state, const wordvec &words){
-   TRACE ('c', state);
-   TRACE ('c', words);
+  wordvec make_vec = words;
+  //Removes command from vector, size is decremented
+  make_vec.erase (make_vec.begin());
+  //Store the Name of the file
+  string filename = make_vec.front();
+  //Remove the filename from rest
+  make_vec.erase (make_vec.begin());
+  //Now create a new file
+  inode cwd = state.get_cwd();
+  inode newfile = cwd.mkfile(filename);
+  //Now add the contents of words into newfile
+  cout << "new file type: " << newfile.get_type() << endl;
+  newfile.writefile(make_vec);
+  cout << cwd.size() << endl;
+  TRACE ('c', state);
+  TRACE ('c', words);
 }
 
 void fn_mkdir (inode_state &state, const wordvec &words){
-   TRACE ('c', state);
-   TRACE ('c', words);
+  
+  TRACE ('c', state);
+  TRACE ('c', words);
 }
 
 void fn_prompt (inode_state &state, const wordvec &words){
   wordvec prompt_vec = words;
-  //Removes commoand from vector, size is decremented
+  //Removes command from vector, size is decremented
   prompt_vec.erase (prompt_vec.begin());
   string prompt_string;
   // appends a string to change the prompt based on strings
@@ -120,18 +145,18 @@ void fn_prompt (inode_state &state, const wordvec &words){
 }
 
 void fn_pwd (inode_state &state, const wordvec &words){
-   TRACE ('c', state);
-   TRACE ('c', words);
+  TRACE ('c', state);
+  TRACE ('c', words);
 }
 
 void fn_rm (inode_state &state, const wordvec &words){
-   TRACE ('c', state);
-   TRACE ('c', words);
+  TRACE ('c', state);
+  TRACE ('c', words);
 }
 
 void fn_rmr (inode_state &state, const wordvec &words){
-   TRACE ('c', state);
-   TRACE ('c', words);
+  TRACE ('c', state);
+  TRACE ('c', words);
 }
 
 int exit_status_message() {

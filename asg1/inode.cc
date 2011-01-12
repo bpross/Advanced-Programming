@@ -1,4 +1,4 @@
-// $Id: inode.cc,v 1.72 2011-01-12 00:04:37-08 - - $
+// $Id: inode.cc,v 1.29 2011-01-12 15:00:04-08 - - $
 
 #include <cassert>
 #include <iostream>
@@ -89,6 +89,7 @@ void inode::writefile(const wordvec &words) {
   *contents.data = words;
 }
 
+
 void inode::remove (const string &filename) {
   map<string, inode*>::iterator search;
   search = contents.dirents->find(filename);
@@ -105,6 +106,33 @@ void inode::remove (const string &filename) {
   }
   TRACE ('i', filename);
 }
+
+int inode::get_type(){
+  int type_int = 2;
+  switch(type){
+    case DIR_INODE:
+      type_int = 0;
+      break;
+    case FILE_INODE:
+      type_int = 1;
+      break;
+  }
+  return type_int;
+}
+
+inode &inode::locate (const string &filename) {
+  map<string, inode*>::iterator search;
+  search = contents.dirents->find(filename);
+  assert (search != contents.dirents->end());
+  inode *found_node = search->second;
+  cout << found_node->get_type() << endl;
+  return *found_node;
+}
+
+
+
+
+
 inode inode::mkdir (const string &filename) {
   inode new_dir (DIR_INODE);
   contents.dirents->insert( pair<string, inode *>(filename,&new_dir) );
