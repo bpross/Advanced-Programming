@@ -1,4 +1,4 @@
-// $Id: inode.cc,v 1.53 2011-01-11 13:22:56-08 - - $
+// $Id: inode.cc,v 1.161 2011-01-11 17:44:08-08 - - $
 
 #include <cassert>
 #include <iostream>
@@ -25,6 +25,7 @@ inode::inode(inode_t init_type):
    }
    TRACE ('i', "inode " << inode_nr << ", type = " << type);
 }
+
 
 //
 // copy ctor -
@@ -87,35 +88,55 @@ void inode::writefile(const wordvec &words) {
   assert (type == FILE_INODE);
   *contents.data = words;
 }
-
+/*
 void inode::remove (const string &filename) {
   //Iterator used to search the map 
+  directory dirents;
+  dirents = *contents.dirents;
+  exit(0);
   map<string, inode *>::iterator search;
-  map<string, inode *> remove_node;
-  directory dirents = *contents.dirents;
-  
   //Searches the directory for the filename
-  search = dirents.find(filename);
+  search = contents.dirents->find(filename);
   int size = 0;
   //Checks to see if the file was found. Throws error if not found
-  assert (search != dirents.end());
-  switch(type){
+  assert (search != contents.dirents->end());
+  inode *remove_node;
+  remove_node = dirents[filename];
+  switch(remove_node->type){
     case DIR_INODE:
-      remove_node = dirents;
-//      remove_node = dirents(search);
-      size = remove_node.size();
+      size = remove_node->size();
       //Checks the size of the directory. If it is NOT 2,
       //the directory is not empty
-      assert (size == 2);
-      dirents.erase(search);
+      cout << "rsize = " << size << endl;
+      assert (size <= 2);
+      contents.dirents->erase(search);
+      cout << int (contents.dirents->size()) << endl;
       break;
     case FILE_INODE:
-      dirents.erase(search);
+      contents.dirents->erase(search);
+      cout << "Remove file" << int (contents.dirents->size()) << endl;
       break;
   }
   TRACE ('i', filename);
 }
+*/
 
+void inode::remove (const string &filename) {
+  map<string, inode*>::iterator search;
+  search = contents.dirents->find(filename);
+  assert (search != contents.dirents->end());
+  inode *remove_node = search->second;
+  switch(remove_node->type){
+    case DIR_INODE:
+      assert (remove_node->size() <= 2);
+      contents.dirents->erase(search);
+      break;
+    case FILE_INODE:
+      contents.dirents->erase(search);
+      break;
+  }
+  TRACE ('i', filename);
+}
 inode inode::mkdir (const string &filename) {
   inode new_dir (DIR_INODE);
   contents.dirents->insert( pair<string, inode *>(filename,&new_dir) );

@@ -81,6 +81,7 @@ class inode {
       } contents;
       static int next_inode_nr;
    public:
+      ~inode(){};
       inode (inode_t init_type);
       inode (const inode &source);
       inode &operator= (const inode &from);
