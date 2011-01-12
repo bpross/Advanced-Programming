@@ -1,4 +1,4 @@
-// $Id: yshell.cc,v 1.6 2011-01-11 23:06:10-08 - - $
+// $Id: yshell.cc,v 1.7 2011-01-12 13:48:10-08 - - $
 
 #include <cstdlib>
 #include <iostream>
@@ -52,6 +52,9 @@ int main (int argc, char **argv) {
    commands cmdmap;
    inode_state state;
    string prompt = state.get_prompt();
+   inode start_root = (DIR_INODE);
+   state.change_root(start_root);
+   state.change_cwd(start_root);
    try {
       for (;;) {
          try {
