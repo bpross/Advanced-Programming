@@ -1,4 +1,4 @@
-// $Id: commands.cc,v 1.1 2011-01-10 19:15:30-08 - - $
+// $Id: commands.cc,v 1.14 2011-01-11 23:12:25-08 - - $
 
 #include "commands.h"
 #include "trace.h"
@@ -32,8 +32,14 @@ void fn_cd (inode_state &state, const wordvec &words){
 }
 
 void fn_echo (inode_state &state, const wordvec &words){
-   TRACE ('c', state);
-   TRACE ('c', words);
+  wordvec echo_vec = words;
+  echo_vec.erase (echo_vec.begin());
+  for(unsigned int vec_itor = 0; vec_itor < echo_vec.size(); vec_itor++)
+    cout << echo_vec[vec_itor] << " ";
+  cout << "\n";
+
+  TRACE ('c', state);
+  TRACE ('c', words);
 }
 
 void fn_exit (inode_state &state, const wordvec &words){
@@ -63,8 +69,18 @@ void fn_mkdir (inode_state &state, const wordvec &words){
 }
 
 void fn_prompt (inode_state &state, const wordvec &words){
-   TRACE ('c', state);
-   TRACE ('c', words);
+  wordvec prompt_vec = words;
+  prompt_vec.erase (prompt_vec.begin());
+  string prompt_string;
+  for(unsigned int vec_itor=0;vec_itor<prompt_vec.size();vec_itor++){
+    prompt_string.append(prompt_vec[vec_itor]);
+    if (!(vec_itor+1 >= prompt_vec.size())){
+      prompt_string.append(" ");
+    }
+  }
+  state.change_prompt(prompt_string);
+  TRACE ('c', state);
+  TRACE ('c', words);
 }
 
 void fn_pwd (inode_state &state, const wordvec &words){

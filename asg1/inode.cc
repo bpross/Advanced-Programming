@@ -1,4 +1,4 @@
-// $Id: inode.cc,v 1.161 2011-01-11 17:44:08-08 - - $
+// $Id: inode.cc,v 1.71 2011-01-11 23:03:04-08 - - $
 
 #include <cassert>
 #include <iostream>
@@ -88,38 +88,6 @@ void inode::writefile(const wordvec &words) {
   assert (type == FILE_INODE);
   *contents.data = words;
 }
-/*
-void inode::remove (const string &filename) {
-  //Iterator used to search the map 
-  directory dirents;
-  dirents = *contents.dirents;
-  exit(0);
-  map<string, inode *>::iterator search;
-  //Searches the directory for the filename
-  search = contents.dirents->find(filename);
-  int size = 0;
-  //Checks to see if the file was found. Throws error if not found
-  assert (search != contents.dirents->end());
-  inode *remove_node;
-  remove_node = dirents[filename];
-  switch(remove_node->type){
-    case DIR_INODE:
-      size = remove_node->size();
-      //Checks the size of the directory. If it is NOT 2,
-      //the directory is not empty
-      cout << "rsize = " << size << endl;
-      assert (size <= 2);
-      contents.dirents->erase(search);
-      cout << int (contents.dirents->size()) << endl;
-      break;
-    case FILE_INODE:
-      contents.dirents->erase(search);
-      cout << "Remove file" << int (contents.dirents->size()) << endl;
-      break;
-  }
-  TRACE ('i', filename);
-}
-*/
 
 void inode::remove (const string &filename) {
   map<string, inode*>::iterator search;
@@ -161,6 +129,31 @@ inode inode::mkfile (const string &filename) {
 inode_state::inode_state(): root (NULL), cwd (NULL), prompt ("%") {
    TRACE ('i', "root = " << (void*) root << ", cwd = " << (void*) cwd
           << ", prompt = " << prompt);
+}
+
+void inode_state::change_root(inode &new_root){
+  root = &new_root;
+}
+
+void inode_state::change_cwd(inode &new_cwd){
+  cwd = &new_cwd;
+}
+
+void inode_state::change_prompt(string &prompt_string){
+  prompt = prompt_string;
+  cout << "prompt is: " << prompt << endl;
+}
+
+inode inode_state::get_root(){
+  return *root;
+}
+
+inode inode_state::get_cwd(){
+  return *cwd;
+}
+
+string inode_state::get_prompt(){
+  return prompt;
 }
 
 ostream &operator<< (ostream &out, const inode_state &state) {

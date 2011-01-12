@@ -16,9 +16,9 @@ COMPILECCC  = g++ -g -Wall -Wextra -Werror
 MAKEDEPSCCC = g++ -MM
 endif
 
-CCSOURCE    = commands.cc inode.cc trace.cc util.cc  inodetest.cc
+CCSOURCE    = commands.cc inode.cc trace.cc util.cc  yshell.cc
 CCHEADER    = commands.h  inode.h  trace.h  util.h
-EXECBIN     = inodetest
+EXECBIN     = yshell
 OBJECTS     = ${CCSOURCE:.cc=.o}
 OTHERS      = ${MKFILE} README
 ALLSOURCES  = ${CCHEADER} ${CCSOURCE} ${OTHERS}

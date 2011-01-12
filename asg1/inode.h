@@ -100,6 +100,15 @@ class inode {
 //    process:  the root (/), the current directory (.), and the
 //    prompt.
 //
+// change_root -
+//    used to assign/change the root directory of the shell
+//
+// change_cwd -
+//    used to assign/change the cwd of the shell
+//
+// change_prompt -
+//    used to change the prompt string
+
 
 class inode_state {
    friend class inode;
@@ -112,6 +121,13 @@ class inode_state {
       string prompt;
    public:
       inode_state();
+      void change_root(inode &new_root);
+      void change_cwd(inode &new_cwd);
+      void change_prompt(string &prompt_string);
+      inode get_root();
+      inode get_cwd();
+      string get_prompt();
+      
 };
 
 ostream &operator<< (ostream &out, const inode_state &);

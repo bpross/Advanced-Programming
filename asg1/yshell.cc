@@ -1,4 +1,4 @@
-// $Id: yshell.cc,v 1.1 2011-01-11 11:26:09-08 - - $
+// $Id: yshell.cc,v 1.6 2011-01-11 23:06:10-08 - - $
 
 #include <cstdlib>
 #include <iostream>
@@ -50,8 +50,8 @@ int main (int argc, char **argv) {
    scan_options (argc, argv);
    bool need_echo = want_echo();
    commands cmdmap;
-   string prompt = "%";
    inode_state state;
+   string prompt = state.get_prompt();
    try {
       for (;;) {
          try {
@@ -78,6 +78,7 @@ int main (int argc, char **argv) {
                throw yshell_exn (words[0] + ": no such function");
             }
             fn (state, words);
+            prompt = state.get_prompt();
          }catch (yshell_exn exn) {
             // If there is a problem discovered in any function, an
             // exn is thrown and printed here.
