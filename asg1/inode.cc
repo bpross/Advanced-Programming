@@ -1,4 +1,4 @@
-// $Id: inode.cc,v 1.59 2011-01-12 19:02:00-08 - - $
+// $Id: inode.cc,v 1.61 2011-01-12 19:18:19-08 - - $
 
 #include <cassert>
 #include <iostream>
@@ -133,7 +133,7 @@ directory &inode::get_directory(){
   return *contents.dirents;
 }
 
-void inode::mkdir (const string &filename) {
+inode inode::mkdir (const string &filename) {
   inode new_dir (DIR_INODE);
   contents.dirents->insert( pair<string, inode *>(filename,&new_dir) );
   inode dot (DIR_INODE);
@@ -141,7 +141,7 @@ void inode::mkdir (const string &filename) {
   new_dir.contents.dirents->insert( pair<string, inode *>(".",&dot));
   new_dir.contents.dirents->insert(pair<string,inode *>("..",&dot_dot));
   cout << new_dir.contents.dirents->size() << "\n";
-//return new_dir;
+  return new_dir;
 }
 
 void inode::list (){

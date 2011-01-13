@@ -1,4 +1,4 @@
-// $Id: commands.cc,v 1.52 2011-01-12 19:06:58-08 - - $
+// $Id: commands.cc,v 1.54 2011-01-12 19:16:12-08 - - $
 
 #include <cstdlib>
 #include <cassert>
@@ -112,8 +112,6 @@ void fn_ls (inode_state &state, const wordvec &words){
   ls_vec.erase (ls_vec.begin());
   inode cwd = state.get_cwd();
   cwd.list();
-
-
   TRACE ('c', state);
   TRACE ('c', words);
 }
@@ -146,7 +144,14 @@ void fn_make (inode_state &state, const wordvec &words){
 }
 
 void fn_mkdir (inode_state &state, const wordvec &words){
-  
+  wordvec mkdir_vec = words;
+  //Removes command from vector, size is decremented
+  mkdir_vec.erase (mkdir_vec.begin());
+  //Store the Name of the file
+  string dirname = mkdir_vec.front();
+  //Now create a directory
+  inode cwd = state.get_cwd();
+  inode newdir = cwd.mkdir(dirname);
   TRACE ('c', state);
   TRACE ('c', words);
 }

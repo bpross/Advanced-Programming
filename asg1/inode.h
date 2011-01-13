@@ -94,7 +94,7 @@ class inode {
       directory &get_directory();
       int get_type();
       void list ();
-      void mkdir (const string &filename);
+      inode mkdir (const string &filename);
       void mkroot (const inode &start_root);
       inode mkfile(const string &filename);
 };
