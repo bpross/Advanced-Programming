@@ -1,4 +1,4 @@
-// $Id: inode.cc,v 1.61 2011-01-12 19:18:19-08 - - $
+// $Id: inode.cc,v 1.133 2011-01-13 02:17:26-08 - - $
 
 #include <cassert>
 #include <iostream>
@@ -95,15 +95,19 @@ void inode::remove (const string &filename) {
   search = contents.dirents->find(filename);
   assert (search != contents.dirents->end());
   inode *remove_node = search->second;
+  cout << "in remove1" << endl;
   switch(remove_node->type){
     case DIR_INODE:
+      cout << "In dir" << endl;
       assert (remove_node->size() <= 2);
       contents.dirents->erase(search);
       break;
     case FILE_INODE:
+      cout << "In file" << endl;
       contents.dirents->erase(search);
       break;
   }
+  cout << "in remove2" << endl;
   TRACE ('i', filename);
 }
 
@@ -134,14 +138,14 @@ directory &inode::get_directory(){
 }
 
 inode inode::mkdir (const string &filename) {
-  inode new_dir (DIR_INODE);
-  contents.dirents->insert( pair<string, inode *>(filename,&new_dir) );
-  inode dot (DIR_INODE);
-  inode dot_dot (DIR_INODE);
-  new_dir.contents.dirents->insert( pair<string, inode *>(".",&dot));
-  new_dir.contents.dirents->insert(pair<string,inode *>("..",&dot_dot));
-  cout << new_dir.contents.dirents->size() << "\n";
-  return new_dir;
+  inode *new_dir = new inode (DIR_INODE);
+  contents.dirents->insert( pair<string, inode *>(filename,new_dir) );
+  inode *dot = new inode (DIR_INODE);
+  inode *dot_dot = new inode (DIR_INODE);
+  new_dir->contents.dirents->insert( pair<string, inode *>(".",dot));
+  new_dir->contents.dirents->insert(pair<string,inode *>("..",dot_dot));
+  dot_dot->contents.dirents = contents.dirents;
+  return *new_dir;
 }
 
 void inode::list (){
@@ -153,28 +157,66 @@ void inode::list (){
 
 void inode::mkroot (const inode &start_root){
 //  start_root.contents.dirents->insert( pair<string, inode *>("/", start_root);
-  inode dot (DIR_INODE);
-  inode dot_dot (DIR_INODE);
-  start_root.contents.dirents->insert( pair<string, inode *>(".", &dot));
-  start_root.contents.dirents->insert( pair<string, inode *>("..", &dot_dot));
-
+  inode *dot = new inode (DIR_INODE);
+  inode *dot_dot = new inode (DIR_INODE);
+  start_root.contents.dirents->insert( pair<string, inode *>(".", dot));
+  start_root.contents.dirents->insert( pair<string, inode *>("..", dot_dot));
+  dot_dot->contents.dirents = contents.dirents;
 }
 
 inode inode::mkfile (const string &filename) {
   map<string, inode *>::iterator search;
   search = contents.dirents->find(filename);
   assert (search == contents.dirents->end() );
-  inode new_file (FILE_INODE);
-  contents.dirents->insert(pair<string, inode *>(filename, &new_file));
-  cout << "make file type: " << new_file.get_type() << endl;
-  cout << "mkfile inode number: " << new_file.get_inode_nr() << endl;
-  return new_file;
+  inode *new_file = new inode (FILE_INODE);
+  contents.dirents->insert(pair<string, inode *>(filename, new_file));
+  return *new_file;
 }
 
+void inode_state::append_cwd_string(string addition){
+  string append_str;
+  if(cwd_string.size() != 1)
+    append_str.append("/");
+  append_str.append(addition);
+  cwd_string.append(append_str);
+}
 
-inode_state::inode_state(): root (NULL), cwd (NULL), prompt ("%") {
+void inode_state::remove_dir_string(){
+  unsigned int str_itor = 0;
+  string temp;
+  for(str_itor = cwd_string.size();;str_itor--){
+    temp = cwd_string[str_itor];
+    if(temp == "/")
+      break;
+    else
+      cwd_string.erase(str_itor);
+  }
+  if(cwd_string.size() != 1)
+    cwd_string.erase(str_itor);
+}
+
+void inode_state::to_root(){
+  cwd_string = "/";
+}
+
+string inode_state::get_cwd_string(){
+  return cwd_string;
+}
+
+inode_state::inode_state(): root (NULL), cwd (NULL), prompt ("%"), cwd_string("/") {
    TRACE ('i', "root = " << (void*) root << ", cwd = " << (void*) cwd
           << ", prompt = " << prompt);
+}
+
+inode *inode_state::locateinode(const string &filename){
+
+  map<string, inode *>::iterator search;
+  inode cwd = get_cwd();
+  directory cwd_dirents = cwd.get_directory();
+  for( search = cwd_dirents.begin(); search != cwd_dirents.end(); search++){
+    if(search->first == filename) return search->second;
+  }
+  return NULL;
 }
 
 void inode_state::change_root(inode &new_root){
@@ -189,9 +231,10 @@ void inode_state::change_prompt(string &prompt_string){
   prompt = prompt_string;
 }
 
-inode inode_state::get_root(){
-  return *root;
+inode *inode_state::get_root(){
+  return root;
 }
+
 
 inode inode_state::get_cwd(){
   return *cwd;

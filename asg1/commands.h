@@ -57,6 +57,7 @@ void fn_pwd    (inode_state &state, const wordvec &words);
 void fn_rm     (inode_state &state, const wordvec &words);
 void fn_rmr    (inode_state &state, const wordvec &words);
 
+
 //
 // exit_status_message -
 //    Prints an exit message and returns the exit status, as recorded

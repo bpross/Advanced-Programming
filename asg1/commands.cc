@@ -1,4 +1,4 @@
-// $Id: commands.cc,v 1.54 2011-01-12 19:16:12-08 - - $
+// $Id: commands.cc,v 1.114 2011-01-13 02:00:13-08 - - $
 
 #include <cstdlib>
 #include <cassert>
@@ -28,26 +28,11 @@ void fn_cat (inode_state &state, const wordvec &words){
   wordvec cat_vec = words;
   //Erases the command from the vector, size is decremented
   cat_vec.erase (cat_vec.begin());
-  //inode cwd = state.get_cwd();
-  //inode read_node = cwd.locate(cat_vec.front());
-  //cout << "read_node type " << read_node.get_type() << endl;
-  //Read in file
-  //wordvec file_contents = read_node.readfile();
-  //cout << cat_vec << "contains" << file_contents << endl;
-  
-  inode cwd = state.get_cwd();
-  directory current_dir = cwd.get_directory();
-  map<string, inode*>::iterator search;
-  search = current_dir.find(cat_vec.front());
-  cout << "searching for " << cat_vec.front() << endl;
-  assert (search != current_dir.end());
-  inode *found_node = search->second;
-  cout << "file type after find " << found_node->get_type() << endl;
-  cout << "inode number of found: " << found_node->get_inode_nr() << endl;
-  cout << "size of dir " << cwd.size() << endl;
+  inode *found_node = state.locateinode(cat_vec.front());
   wordvec file_contents = found_node->readfile();
-  for(unsigned int vec_itor = 0; vec_itor < cat_vec.size(); vec_itor++)
-    cout << cat_vec[vec_itor] << " ";
+  for(unsigned int vec_itor = 0; vec_itor < file_contents.size();
+      vec_itor++)
+    cout << file_contents[vec_itor] << " ";
   cout << "\n";
 
   TRACE ('c', state);
@@ -55,9 +40,50 @@ void fn_cat (inode_state &state, const wordvec &words){
 }
 
 void fn_cd (inode_state &state, const wordvec &words){
+  const string root = "/";
+  wordvec cd_vec = words;
+  //Removes command from vector, size is decremented
+  cd_vec.erase (cd_vec.begin());
+  //Store the Name of the file
+  string filename = cd_vec.front();
+  if(filename[0] == '/'){
+    inode *to_root = state.get_root();
+ //   inode cdir (DIR_INODE);
+    state.change_cwd(*to_root);
+    state.to_root();
+    wordvec dir_change = split(cd_vec.front(), root);
+    for(unsigned int vec_itor = 0; vec_itor < dir_change.size(); vec_itor++){
+      state.append_cwd_string(dir_change[vec_itor]);
+      inode *cdir = state.locateinode( dir_change[vec_itor] );
+      state.change_cwd(*cdir);
+    }
+  }
+  else if(filename[0] == '.' && filename[1] == '.'){
+    string dot_dot = "..";
+    state.remove_dir_string();
+    inode *up_dir = state.locateinode(dot_dot);
+    state.change_cwd(*up_dir);
+    wordvec dir_change = split(cd_vec.front(), root);
+    dir_change.erase(dir_change.begin());
+    for(unsigned int vec_itor = 0; vec_itor < dir_change.size(); vec_itor++){
+      if(dir_change[vec_itor] == "..")
+        state.remove_dir_string();
+      else
+        state.append_cwd_string(dir_change[vec_itor]);
+      inode *cdir = state.locateinode( dir_change[vec_itor] );
+      state.change_cwd(*cdir);
+    }
+  }
+  else{
+    state.append_cwd_string(filename);
+    inode *found_node = state.locateinode(filename);
+    state.change_cwd(*found_node);
+  }
   TRACE ('c', state);
   TRACE ('c', words);
 }
+
+
 
 void fn_echo (inode_state &state, const wordvec &words){
   wordvec echo_vec = words;
@@ -131,14 +157,9 @@ void fn_make (inode_state &state, const wordvec &words){
   make_vec.erase (make_vec.begin());
   //Now create a new file
   inode cwd = state.get_cwd();
-  cout << "cwd number " << cwd.get_inode_nr() << endl;
   inode newfile = cwd.mkfile(filename);
   //Now add the contents of words into newfile
-  cout << "new file type: " << newfile.get_type() << endl;
   newfile.writefile(make_vec);
-  cout << "after write " << newfile.get_type() << endl;
-  cout << "number of inode added " << newfile.get_inode_nr() << endl;
-  cout << "size of dir " << cwd.size() << endl;
   TRACE ('c', state);
   TRACE ('c', words);
 }
@@ -177,11 +198,21 @@ void fn_prompt (inode_state &state, const wordvec &words){
 }
 
 void fn_pwd (inode_state &state, const wordvec &words){
+  string pwd_string = state.get_cwd_string();
+  cout << pwd_string << endl;
   TRACE ('c', state);
   TRACE ('c', words);
 }
 
 void fn_rm (inode_state &state, const wordvec &words){
+  wordvec rm_vec = words;
+  //Removes command from vector, size is decremented
+  rm_vec.erase (rm_vec.begin());
+  //Store the Name of the file
+  string filename = rm_vec.front();
+  inode cwd = state.get_cwd();
+  cwd.remove(filename);
+  
   TRACE ('c', state);
   TRACE ('c', words);
 }
