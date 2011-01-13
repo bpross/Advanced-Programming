@@ -1,4 +1,4 @@
-// $Id: yshell.cc,v 1.10 2011-01-13 05:06:36-08 - - $
+// $Id: yshell.cc,v 1.13 2011-01-13 05:39:26-08 - - $
 
 #include <cstdlib>
 #include <iostream>
@@ -77,12 +77,15 @@ int main (int argc, char **argv) {
             // function.  Complain or call it.
             wordvec words = split (line, " \t");
             TRACE ('y', "words = " << words);
-            function fn = cmdmap[words[0]];
-            if (fn == NULL) {
-               throw yshell_exn (words[0] + ": no such function");
-            }
-            fn (state, words);
-            prompt = state.get_prompt();
+	    string comment = words[0];
+            if (!(comment == "#")){
+	      function fn = cmdmap[words[0]];
+	      if (fn == NULL) {
+		throw yshell_exn (words[0] + ": no such function");
+	      }
+	      fn (state, words);
+	    }
+	    prompt = state.get_prompt();
          }catch (yshell_exn exn) {
             // If there is a problem discovered in any function, an
             // exn is thrown and printed here.

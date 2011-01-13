@@ -1,7 +1,8 @@
-// $Id: commands.cc,v 1.52 2011-01-13 05:28:52-08 - - $
+// $Id: commands.cc,v 1.69 2011-01-13 06:55:24-08 - - $
 
 #include <cstdlib>
 #include <cassert>
+#include <queue>
 #include "commands.h"
 #include "inode.h"
 #include "trace.h"
@@ -158,14 +159,9 @@ void fn_ls (inode_state &state, const wordvec &words){
   //Removes command from vector, size is decremented
   ls_vec.erase (ls_vec.begin());
   string filename = ls_vec.front();
-  //inode tmp_cwd = state.get_cwd(); 
-  //state.change_tmp(tmp_cwd);
   if (filename[0] == '/' || (filename[0] == '.' && filename[1] == '.')){
     inode *fake_cwd = state.get_root();
     if(filename[0] == '/'){
-      //inode *to_root = state.get_root();
-      //   inode cdir (DIR_INODE);
-      //state.change_tmp(*to_root);
       wordvec dir_change = split(ls_vec.front(), root);
       for(unsigned int vec_itor = 0; vec_itor < dir_change.size(); vec_itor++){
 	inode *cdir = state.locateinode( dir_change[vec_itor] );
@@ -181,15 +177,11 @@ void fn_ls (inode_state &state, const wordvec &words){
       string dot_dot = "..";
       state.remove_dir_string();
       inode *up_dir = state.locateinode(dot_dot);
-      //state.change_cwd(*up_dir);
       fake_cwd = up_dir;
       wordvec dir_change = split(ls_vec.front(), root);
       dir_change.erase(dir_change.begin());
-      for(unsigned int vec_itor = 0; vec_itor < dir_change.size(); vec_itor++){
-	//if(dir_change[vec_itor] == "..")
-	//  state.remove_dir_string();
-	//else
-        //state.append_cwd_string(dir_change[vec_itor]);
+      for(unsigned int vec_itor = 0; vec_itor < dir_change.size();
+	  vec_itor++){
 	inode *cdir = state.locateinode( dir_change[vec_itor] );
 	if (cdir == NULL){
 	  state.set_cwd_string(old_cwd);
@@ -199,13 +191,12 @@ void fn_ls (inode_state &state, const wordvec &words){
 	  fake_cwd = cdir;
       }
     }
-    //inode cwd = state.get_cwd();
-    //cwd.list();
-    //state.change_cwd(tmp_cwd);
+    cout << state.get_cwd_string() << ":\n";
     fake_cwd->list();
   }
   else{
     inode cwd = state.get_cwd();
+    cout << state.get_cwd_string() << ":\n";
     cwd.list();
    }
   TRACE ('c', state);
@@ -213,6 +204,104 @@ void fn_ls (inode_state &state, const wordvec &words){
 }
 
 void fn_lsr (inode_state &state, const wordvec &words){
+  queue<inode*> print_queue;
+  const string root = "/";
+  const string old_cwd = state.get_cwd_string();
+  wordvec ls_vec = words;
+  //Removes command from vector, size is decremented
+  ls_vec.erase (ls_vec.begin());
+  string filename = ls_vec.front();
+  if (filename[0] == '/' || (filename[0] == '.' && filename[1] == '.')){
+    inode *fake_cwd = state.get_root();
+    if(filename[0] == '/'){
+      wordvec dir_change = split(ls_vec.front(), root);
+      for(unsigned int vec_itor = 0; vec_itor < dir_change.size(); vec_itor++){
+	inode *cdir = state.locateinode( dir_change[vec_itor] );
+	if (cdir == NULL){
+	  state.set_cwd_string(old_cwd);
+	  throw yshell_exn ("Directory does not exist");
+	}
+	else
+	  fake_cwd = cdir;
+      }
+    }
+    else if(filename[0] == '.' && filename[1] == '.'){
+      string dot_dot = "..";
+      state.remove_dir_string();
+      inode *up_dir = state.locateinode(dot_dot);
+      fake_cwd = up_dir;
+      wordvec dir_change = split(ls_vec.front(), root);
+      dir_change.erase(dir_change.begin());
+      for(unsigned int vec_itor = 0; vec_itor < dir_change.size();
+	  vec_itor++){
+	inode *cdir = state.locateinode( dir_change[vec_itor] );
+	if (cdir == NULL){
+	  state.set_cwd_string(old_cwd);
+	  throw yshell_exn ("Directory does not exist");
+	}
+	else
+	  fake_cwd = cdir;
+      }
+    }
+    inode *front;
+    string dir_name;
+    map<string, inode*>::iterator search;
+    directory current_dir = fake_cwd->get_directory();
+    for(search = current_dir.begin(); search != current_dir.end();
+	search++)
+    {
+      if(search->second->get_type() == 0 && 
+	 (search->first[0] != '.')){
+	cout << search->first << ":\n";
+	print_queue.push(search->second);
+      }
+    }
+    while(!print_queue.empty()){
+      front = print_queue.front();
+      print_queue.pop();
+      front->list();
+      current_dir = front->get_directory();
+      for(search = current_dir.begin(); search != current_dir.end();
+	  search++)
+      {
+	if(search->second->get_type() == 0 && 
+	   (search->first[0] != '.')){
+	  cout << search->first << ":\n";
+	  print_queue.push(search->second);
+	}
+      }
+    }
+  }
+  else{
+    inode cwd = state.get_cwd();
+    string fake_cwd_string = state.get_cwd_string();
+    cout << fake_cwd_string << ":\n";
+    cwd.list();
+    inode *front;
+    map<string, inode*>::iterator search;
+    directory current_dir = cwd.get_directory();
+    for(search = current_dir.begin(); search != current_dir.end();
+	search++)
+    {
+      if(search->second->get_type() == 0 && 
+	 (search->first[0] != '.')){
+	print_queue.push(search->second);
+      }
+    }
+    while(!print_queue.empty()){
+      front = print_queue.front();
+      print_queue.pop();
+      front->list();
+      current_dir = front->get_directory();
+      for(search = current_dir.begin(); search != current_dir.end();
+	  search++)
+      {
+	if(search->second->get_type() == 0 && 
+	 (search->first[0] != '.'))
+	  print_queue.push(search->second);
+      }
+    }
+  }
   TRACE ('c', state);
   TRACE ('c', words);
 }
