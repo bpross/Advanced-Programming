@@ -1,4 +1,4 @@
-// $Id: commands.cc,v 1.114 2011-01-13 02:00:13-08 - - $
+// $Id: commands.cc,v 1.144 2011-01-13 04:11:05-08 - - $
 
 #include <cstdlib>
 #include <cassert>
@@ -133,11 +133,53 @@ void fn_exit (inode_state &state, const wordvec &words){
 }
 
 void fn_ls (inode_state &state, const wordvec &words){
+  const string root = "/";
   wordvec ls_vec = words;
   //Removes command from vector, size is decremented
   ls_vec.erase (ls_vec.begin());
-  inode cwd = state.get_cwd();
-  cwd.list();
+  string filename = ls_vec.front();
+  //inode tmp_cwd = state.get_cwd(); 
+  //state.change_tmp(tmp_cwd);
+  if (filename[0] == '/' || (filename[0] == '.' && filename[1] == '.')){
+    inode *fake_cwd = state.get_root();
+    if(filename[0] == '/'){
+      //inode *to_root = state.get_root();
+      //   inode cdir (DIR_INODE);
+      //state.change_tmp(*to_root);
+      wordvec dir_change = split(ls_vec.front(), root);
+      for(unsigned int vec_itor = 0; vec_itor < dir_change.size(); vec_itor++){
+	inode *cdir = state.locateinode( dir_change[vec_itor] );
+	//state.change_tmp(*cdir);
+	fake_cwd = cdir;
+      }
+    }
+    else if(filename[0] == '.' && filename[1] == '.'){
+      string dot_dot = "..";
+      state.remove_dir_string();
+      inode *up_dir = state.locateinode(dot_dot);
+      //state.change_cwd(*up_dir);
+      fake_cwd = up_dir;
+      wordvec dir_change = split(ls_vec.front(), root);
+      dir_change.erase(dir_change.begin());
+      for(unsigned int vec_itor = 0; vec_itor < dir_change.size(); vec_itor++){
+	//if(dir_change[vec_itor] == "..")
+	//  state.remove_dir_string();
+	//else
+        //state.append_cwd_string(dir_change[vec_itor]);
+	inode *cdir = state.locateinode( dir_change[vec_itor] );
+	//state.change_cwd(*cdir);
+	fake_cwd = cdir;
+      }
+    }
+    //inode cwd = state.get_cwd();
+    //cwd.list();
+    //state.change_cwd(tmp_cwd);
+    fake_cwd->list();
+  }
+  else{
+    inode cwd = state.get_cwd();
+    cwd.list();
+   }
   TRACE ('c', state);
   TRACE ('c', words);
 }
@@ -172,7 +214,7 @@ void fn_mkdir (inode_state &state, const wordvec &words){
   string dirname = mkdir_vec.front();
   //Now create a directory
   inode cwd = state.get_cwd();
-  inode newdir = cwd.mkdir(dirname);
+  cwd.mkdir(dirname);
   TRACE ('c', state);
   TRACE ('c', words);
 }

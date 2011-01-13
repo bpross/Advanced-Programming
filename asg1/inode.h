@@ -94,7 +94,7 @@ class inode {
       directory &get_directory();
       int get_type();
       void list ();
-      inode mkdir (const string &filename);
+      void mkdir (const string &filename);
       void mkroot (const inode &start_root);
       inode mkfile(const string &filename);
       inode &get_contents();
@@ -132,6 +132,7 @@ class inode_state {
       inode_state &operator= (const inode_state &); // disable op=
       inode *root;
       inode *cwd;
+      inode *tmp;
       string prompt;
       string cwd_string;
    public:
@@ -139,12 +140,14 @@ class inode_state {
       inode *locateinode(const string &filename);
       void change_root(inode &new_root);
       void change_cwd(inode &new_cwd);
+      void change_tmp(inode &new_tmp);
       void change_prompt(string &prompt_string);
       void append_cwd_string(string addition);
       void remove_dir_string();
       void to_root();
       string get_cwd_string();
       inode *get_root();
+      inode get_tmp();
       inode get_cwd();
       string get_prompt();
       

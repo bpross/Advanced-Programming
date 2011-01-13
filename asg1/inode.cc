@@ -1,4 +1,4 @@
-// $Id: inode.cc,v 1.133 2011-01-13 02:17:26-08 - - $
+// $Id: inode.cc,v 1.170 2011-01-13 03:22:29-08 - - $
 
 #include <cassert>
 #include <iostream>
@@ -137,31 +137,29 @@ directory &inode::get_directory(){
   return *contents.dirents;
 }
 
-inode inode::mkdir (const string &filename) {
+void inode::mkdir (const string &filename) {
   inode *new_dir = new inode (DIR_INODE);
-  contents.dirents->insert( pair<string, inode *>(filename,new_dir) );
-  inode *dot = new inode (DIR_INODE);
   inode *dot_dot = new inode (DIR_INODE);
+  contents.dirents->insert( pair<string, inode *>(filename,new_dir) );
+  inode *dot = new_dir;
   new_dir->contents.dirents->insert( pair<string, inode *>(".",dot));
   new_dir->contents.dirents->insert(pair<string,inode *>("..",dot_dot));
   dot_dot->contents.dirents = contents.dirents;
-  return *new_dir;
 }
 
 void inode::list (){
   map<string, inode*>::iterator it;
   for( it = contents.dirents->begin(); it != contents.dirents->end(); it++){
-    cout <<  (*it).first << endl;
+    inode *curr = it->second;
+    cout << "      " << curr->get_inode_nr() << "      " << curr->size() << "  " <<  (*it).first << endl;
   }
 }
 
 void inode::mkroot (const inode &start_root){
 //  start_root.contents.dirents->insert( pair<string, inode *>("/", start_root);
-  inode *dot = new inode (DIR_INODE);
-  inode *dot_dot = new inode (DIR_INODE);
-  start_root.contents.dirents->insert( pair<string, inode *>(".", dot));
-  start_root.contents.dirents->insert( pair<string, inode *>("..", dot_dot));
-  dot_dot->contents.dirents = contents.dirents;
+  inode *dot = this;
+  start_root.contents.dirents->insert( pair<string, inode *>(".",dot));
+  start_root.contents.dirents->insert( pair<string, inode *>("..", this));
 }
 
 inode inode::mkfile (const string &filename) {
@@ -227,6 +225,10 @@ void inode_state::change_cwd(inode &new_cwd){
   cwd = &new_cwd;
 }
 
+void inode_state::change_tmp(inode &new_tmp){
+  tmp = &new_tmp;
+}
+
 void inode_state::change_prompt(string &prompt_string){
   prompt = prompt_string;
 }
@@ -235,6 +237,9 @@ inode *inode_state::get_root(){
   return root;
 }
 
+inode inode_state::get_tmp(){
+  return *tmp;
+}
 
 inode inode_state::get_cwd(){
   return *cwd;
