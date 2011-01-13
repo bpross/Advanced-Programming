@@ -1,4 +1,4 @@
-// $Id: inode.cc,v 1.170 2011-01-13 03:22:29-08 - - $
+// $Id: inode.cc,v 1.82 2011-01-13 05:30:25-08 - - $
 
 #include <cassert>
 #include <iostream>
@@ -95,19 +95,15 @@ void inode::remove (const string &filename) {
   search = contents.dirents->find(filename);
   assert (search != contents.dirents->end());
   inode *remove_node = search->second;
-  cout << "in remove1" << endl;
   switch(remove_node->type){
     case DIR_INODE:
-      cout << "In dir" << endl;
       assert (remove_node->size() <= 2);
       contents.dirents->erase(search);
       break;
     case FILE_INODE:
-      cout << "In file" << endl;
       contents.dirents->erase(search);
       break;
   }
-  cout << "in remove2" << endl;
   TRACE ('i', filename);
 }
 
@@ -191,6 +187,10 @@ void inode_state::remove_dir_string(){
   }
   if(cwd_string.size() != 1)
     cwd_string.erase(str_itor);
+}
+
+void inode_state::set_cwd_string(string start){
+  cwd_string = start;
 }
 
 void inode_state::to_root(){

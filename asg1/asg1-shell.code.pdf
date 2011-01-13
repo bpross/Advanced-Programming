@@ -1,0 +1,2416 @@
+%PDF-1.2
+5 0 obj
+<</Length 6 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+1 i
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(12/13/10)Tj
+-0.659766 -12.8004 Td
+(20:20:20)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(1)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 270.42 736.5 Tm
+(commands.h)Tj
+-110.316 18 Td
+($cmps109-wm/Assignments/asg1-shell-fnptrs/code/)Tj
+/R10 10 Tf
+-92.1031 -35.5 Td
+[(1:)-600(// $Id: commands.h,v 1.2 2010-12-13 20:11:09-08 - - $)]TJ
+11 TL
+(2:)'
+T*[(3:)-600(#ifndef __COMMANDS_H__)]TJ
+T*[(4:)-600(#define __COMMANDS_H__)]TJ
+(5:)'
+T*[(6:)-600(#include <map>)]TJ
+(7:)'
+T*[(8:)-600(using namespace std;)]TJ
+(9:)'
+-6 -11 Td
+[(10:)-600(#include "inode.h")]TJ
+T*[(11:)-600(#include "trace.h")]TJ
+T*[(12:)-600(#include "util.h")]TJ
+(13:)'
+T*[(14:)-600(//)]TJ
+T*[(15:)-600(// A couple of convenient typedefs to avoid verbosity.)]TJ
+T*[(16:)-600(//)]TJ
+(17:)'
+T*[(18:)-600(typedef void \(*function\) \(inode_state &state, const wordvec &words\);)]TJ
+T*[(19:)-600(typedef map<string, function> commandmap;)]TJ
+(20:)'
+T*[(21:)-600(//)]TJ
+T*[(22:)-600(// commands -)]TJ
+T*[(23:)-600(//    A class to hold and dispatch each of the command functions.)]TJ
+T*[(24:)-600(//    Each command "foo" is interpreted by a function fn_foo.)]TJ
+T*[(25:)-600(// ctor -)]TJ
+T*[(26:)-600(//    The default ctor initializes the map.)]TJ
+T*[(27:)-600(// operator[] -)]TJ
+T*[(28:)-600(//    Given a string, returns a function associated with it,)]TJ
+T*[(29:)-600(//    or 0 if not found.)]TJ
+T*[(30:)-600(//)]TJ
+(31:)'
+T*[(32:)-600(class commands {)]TJ
+T*[(33:)-600(   private:)]TJ
+T*[(34:)-600(      commands \(const inode &\); // disable copy ctor)]TJ
+T*[(35:)-600(      commands &operator= \(const inode &\); // disable operator=)]TJ
+T*[(36:)-600(      commandmap map;)]TJ
+T*[(37:)-600(   public:)]TJ
+T*[(38:)-600(      commands\(\);)]TJ
+T*[(39:)-600(      function operator[] \(const string &cmd\);)]TJ
+T*[(40:)-600(};)]TJ
+(41:)'
+T*[(42:)-600(//)]TJ
+T*[(43:)-600(// execution functions -)]TJ
+T*[(44:)-600(//    See the man page for a description of each of these functions.)]TJ
+T*[(45:)-600(//)]TJ
+(46:)'
+T*[(47:)-600(void fn_cat    \(inode_state &state, const wordvec &words\);)]TJ
+T*[(48:)-600(void fn_cd     \(inode_state &state, const wordvec &words\);)]TJ
+T*[(49:)-600(void fn_echo   \(inode_state &state, const wordvec &words\);)]TJ
+T*[(50:)-600(void fn_exit   \(inode_state &state, const wordvec &words\);)]TJ
+T*[(51:)-600(void fn_ls     \(inode_state &state, const wordvec &words\);)]TJ
+T*[(52:)-600(void fn_lsr    \(inode_state &state, const wordvec &words\);)]TJ
+T*[(53:)-600(void fn_make   \(inode_state &state, const wordvec &words\);)]TJ
+T*[(54:)-600(void fn_mkdir  \(inode_state &state, const wordvec &words\);)]TJ
+T*[(55:)-600(void fn_prompt \(inode_state &state, const wordvec &words\);)]TJ
+T*[(56:)-600(void fn_pwd    \(inode_state &state, const wordvec &words\);)]TJ
+T*[(57:)-600(void fn_rm     \(inode_state &state, const wordvec &words\);)]TJ
+T*[(58:)-600(void fn_rmr    \(inode_state &state, const wordvec &words\);)]TJ
+(59:)'
+T*[(60:)-600(//)]TJ
+T*[(61:)-600(// exit_status_message -)]TJ
+T*[(62:)-600(//    Prints an exit message and returns the exit status, as recorded)]TJ
+T*[(63:)-600(//    by any of the functions.)]TJ
+T*[(64:)-600(//)]TJ
+ET
+Q
+Q
+endstream
+endobj
+6 0 obj
+3397
+endobj
+14 0 obj
+<</Length 15 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(12/13/10)Tj
+-0.659766 -12.8004 Td
+(20:20:20)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(2)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 270.42 736.5 Tm
+(commands.h)Tj
+-110.316 18 Td
+($cmps109-wm/Assignments/asg1-shell-fnptrs/code/)Tj
+/R10 10 Tf
+-98.1031 -35.5 Td
+(65:)Tj
+11 TL
+T*[(66:)-600(int exit_status_message\(\);)]TJ
+T*[(67:)-600(class ysh_exit_exn: public exception {};)]TJ
+(68:)'
+T*[(69:)-600(#endif)]TJ
+(70:)'
+ET
+Q
+Q
+endstream
+endobj
+15 0 obj
+677
+endobj
+18 0 obj
+<</Length 19 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(12/13/10)Tj
+-0.659766 -12.8004 Td
+(20:20:20)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(1)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 285.196 736.5 Tm
+(inode.h)Tj
+-125.093 18 Td
+($cmps109-wm/Assignments/asg1-shell-fnptrs/code/)Tj
+/R10 10 Tf
+-92.1031 -35.5 Td
+[(1:)-600(// $Id: inode.h,v 1.3 2010-12-13 20:11:09-08 - - $)]TJ
+11 TL
+(2:)'
+T*[(3:)-600(#ifndef __INODE_H__)]TJ
+T*[(4:)-600(#define __INODE_H__)]TJ
+(5:)'
+T*[(6:)-600(#include <exception>)]TJ
+T*[(7:)-600(#include <iostream>)]TJ
+T*[(8:)-600(#include <map>)]TJ
+T*[(9:)-600(#include <vector>)]TJ
+-6 -11 Td
+(10:)Tj
+T*[(11:)-600(using namespace std;)]TJ
+(12:)'
+T*[(13:)-600(#include "trace.h")]TJ
+T*[(14:)-600(#include "util.h")]TJ
+(15:)'
+T*[(16:)-600(//)]TJ
+T*[(17:)-600(// inode_t -)]TJ
+T*[(18:)-600(//    An inode is either a directory or a plain file.)]TJ
+T*[(19:)-600(//)]TJ
+(20:)'
+T*[(21:)-600(enum inode_t {DIR_INODE, FILE_INODE};)]TJ
+(22:)'
+T*[(23:)-600(//)]TJ
+T*[(24:)-600(// directory -)]TJ
+T*[(25:)-600(//    A directory is a list of paired strings \(filenames\) and inodes.)]TJ
+T*[(26:)-600(//    An inode in a directory may be a directory or a file.)]TJ
+T*[(27:)-600(//)]TJ
+(28:)'
+T*[(29:)-600(class inode;)]TJ
+T*[(30:)-600(typedef map<string, inode *> directory;)]TJ
+(31:)'
+T*[(32:)-600(//)]TJ
+T*[(33:)-600(// class inode -)]TJ
+T*[(34:)-600(//)]TJ
+T*[(35:)-600(// inode ctor -)]TJ
+T*[(36:)-600(//    Create a new inode of the given type, using a union.)]TJ
+T*[(37:)-600(//)]TJ
+T*[(38:)-600(// get_inode_nr -)]TJ
+T*[(39:)-600(//    Retrieves the serial number of the inode.  Inode numbers are)]TJ
+T*[(40:)-600(//    allocated in sequence by small integer.)]TJ
+T*[(41:)-600(//)]TJ
+T*[(42:)-600(// size -)]TJ
+T*[(43:)-600(//    Returns the size of an inode.  For a directory, this is the)]TJ
+T*[(44:)-600(//    number of dirents.  For a text file, the number of characters)]TJ
+T*[(45:)-600(//    when printed \(the sum of the lengths of each word, plus the)]TJ
+T*[(46:)-600(//    number of words.)]TJ
+T*[(47:)-600(//)]TJ
+T*[(48:)-600(// readfile -)]TJ
+T*[(49:)-600(//    Returns a copy of the contents of the wordvec in the file.)]TJ
+T*[(50:)-600(//    Throws an yshell_exn for a directory.)]TJ
+T*[(51:)-600(//)]TJ
+T*[(52:)-600(// writefile -)]TJ
+T*[(53:)-600(//    Replaces the contents of a file with new contents.)]TJ
+T*[(54:)-600(//    Throws an yshell_exn for a directory.)]TJ
+T*[(55:)-600(//)]TJ
+T*[(56:)-600(// remove -)]TJ
+T*[(57:)-600(//    Removes the file or subdirectory from the current inode.)]TJ
+T*[(58:)-600(//    Throws an yshell_exn if this is not a directory, the file)]TJ
+T*[(59:)-600(//    does not exist, or the subdirectory is not empty.)]TJ
+T*[(60:)-600(//    Here empty means the only entries are dot \(.\) and dotdot \(..\).)]TJ
+T*[(61:)-600(//)]TJ
+T*[(62:)-600(// mkdir -)]TJ
+T*[(63:)-600(//    Creates a new directory under the current directory and )]TJ
+T*[(64:)-600(//    immediately adds the directories dot \(.\) and dotdot \(..\) to it.)]TJ
+ET
+Q
+Q
+endstream
+endobj
+19 0 obj
+3199
+endobj
+22 0 obj
+<</Length 23 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(12/13/10)Tj
+-0.659766 -12.8004 Td
+(20:20:20)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(2)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 285.196 736.5 Tm
+(inode.h)Tj
+-125.093 18 Td
+($cmps109-wm/Assignments/asg1-shell-fnptrs/code/)Tj
+/R10 10 Tf
+-98.1031 -35.5 Td
+[(65:)-600(//    Note that the parent \(..\) of / is / itself.  It is an error)]TJ
+11 TL
+T*[(66:)-600(//    if the entry already exists.)]TJ
+T*[(67:)-600(//)]TJ
+T*[(68:)-600(// mkfile -)]TJ
+T*[(69:)-600(//    Create a new empty text file with the given name.  Error if)]TJ
+T*[(70:)-600(//    a dirent with that name exists.)]TJ
+T*[(71:)-600(//  )]TJ
+T*[(72:)-600(//    )]TJ
+(73:)'
+T*[(74:)-600(class inode {)]TJ
+T*[(75:)-600(   private:)]TJ
+T*[(76:)-600(      int inode_nr;)]TJ
+T*[(77:)-600(      inode_t type;)]TJ
+T*[(78:)-600(      union {)]TJ
+T*[(79:)-600(         directory *dirents;)]TJ
+T*[(80:)-600(         wordvec *data;)]TJ
+T*[(81:)-600(      } contents;)]TJ
+T*[(82:)-600(      static int next_inode_nr;)]TJ
+T*[(83:)-600(   public:)]TJ
+T*[(84:)-600(      inode \(inode_t init_type\);)]TJ
+T*[(85:)-600(      inode \(const inode &source\);)]TJ
+T*[(86:)-600(      inode &operator= \(const inode &from\);)]TJ
+T*[(87:)-600(      int get_inode_nr\(\);)]TJ
+T*[(88:)-600(      int size\(\);)]TJ
+T*[(89:)-600(      const wordvec &readfile\(\) const;)]TJ
+T*[(90:)-600(      void writefile \(const wordvec &newdata\);)]TJ
+T*[(91:)-600(      void remove \(const string &filename\);)]TJ
+T*[(92:)-600(};)]TJ
+(93:)'
+T*[(94:)-600(//)]TJ
+T*[(95:)-600(// inode_state -)]TJ
+T*[(96:)-600(//    A small convenient class to maintain the state of the simulated)]TJ
+T*[(97:)-600(//    process:  the root \(/\), the current directory \(.\), and the)]TJ
+T*[(98:)-600(//    prompt.)]TJ
+T*[(99:)-600(//)]TJ
+-6 -11 Td
+(100:)Tj
+T*[(101:)-600(class inode_state {)]TJ
+T*[(102:)-600(   friend class inode;)]TJ
+T*[(103:)-600(   friend ostream &operator<< \(ostream &out, const inode_state &\);)]TJ
+T*[(104:)-600(   private:)]TJ
+T*[(105:)-600(      inode_state \(const inode_state &\); // disable copy ctor)]TJ
+T*[(106:)-600(      inode_state &operator= \(const inode_state &\); // disable op=)]TJ
+T*[(107:)-600(      inode *root;)]TJ
+T*[(108:)-600(      inode *cwd;)]TJ
+T*[(109:)-600(      string prompt;)]TJ
+T*[(110:)-600(   public:)]TJ
+T*[(111:)-600(      inode_state\(\);)]TJ
+T*[(112:)-600(};)]TJ
+(113:)'
+T*[(114:)-600(ostream &operator<< \(ostream &out, const inode_state &\);)]TJ
+(115:)'
+T*[(116:)-600(#endif)]TJ
+(117:)'
+ET
+Q
+Q
+endstream
+endobj
+23 0 obj
+2720
+endobj
+26 0 obj
+<</Length 27 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(12/13/10)Tj
+-0.659766 -12.8004 Td
+(20:20:20)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(1)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 287.073 736.5 Tm
+(trace.h)Tj
+-126.97 18 Td
+($cmps109-wm/Assignments/asg1-shell-fnptrs/code/)Tj
+/R10 10 Tf
+-92.1031 -35.5 Td
+[(1:)-600(// $Id: trace.h,v 1.3 2010-12-13 20:11:09-08 - - $)]TJ
+11 TL
+(2:)'
+T*[(3:)-600(#ifndef __TRACE_H__)]TJ
+T*[(4:)-600(#define __TRACE_H__)]TJ
+(5:)'
+T*[(6:)-600(#include <string>)]TJ
+T*[(7:)-600(#include <vector>)]TJ
+(8:)'
+T*[(9:)-600(using namespace std;)]TJ
+-6 -11 Td
+(10:)Tj
+T*[(11:)-600(//)]TJ
+T*[(12:)-600(// traceflags -)]TJ
+T*[(13:)-600(//    static class for maintaining global trace flags, each indicated)]TJ
+T*[(14:)-600(//    by a single character.)]TJ
+T*[(15:)-600(// setflags -)]TJ
+T*[(16:)-600(//    Takes a string argument, and sets a flag for each char in the)]TJ
+T*[(17:)-600(//    string.  As a special case, '@', sets all flags.)]TJ
+T*[(18:)-600(// getflag -)]TJ
+T*[(19:)-600(//    Used by the TRACE macro to check to see if a flag has been set.)]TJ
+T*[(20:)-600(//    Not to be called by user code.)]TJ
+T*[(21:)-600(//)]TJ
+(22:)'
+T*[(23:)-600(class traceflags {)]TJ
+T*[(24:)-600(   private:)]TJ
+T*[(25:)-600(      static vector<char> flags;)]TJ
+T*[(26:)-600(   public:)]TJ
+T*[(27:)-600(      static void setflags \(const string &optflags\);)]TJ
+T*[(28:)-600(      static bool getflag \(char flag\);)]TJ
+T*[(29:)-600(};)]TJ
+(30:)'
+T*[(31:)-600(//)]TJ
+T*[(32:)-600(// TRACE -)]TJ
+T*[(33:)-600(//    Macro which expands into trace code.  First argument is a)]TJ
+T*[(34:)-600(//    trace flag char, second argument is output code that can)]TJ
+T*[(35:)-600(//    be sandwiched between <<.  Beware of operator precedence.)]TJ
+T*[(36:)-600(//    Example:)]TJ
+T*[(37:)-600(//       TRACE \('u', "foo = " << foo\);)]TJ
+T*[(38:)-600(//    will print two words and a newline if flag 'u' is  on.)]TJ
+T*[(39:)-600(//    Traces are preceded by filename, line number, and function.)]TJ
+T*[(40:)-600(//)]TJ
+(41:)'
+T*[(42:)-600(#define TRACE\(FLAG,CODE\) { \\)]TJ
+T*[(43:)-600(           if \(traceflags::getflag \(FLAG\)\) { \\)]TJ
+T*[(44:)-600(              cerr << __FILE__ << ":" << __LINE__ << ":" \\)]TJ
+T*[(45:)-600(                   << __func__ << ":" << endl; \\)]TJ
+T*[(46:)-600(              cerr << CODE << endl; \\)]TJ
+T*[(47:)-600(           } \\)]TJ
+T*[(48:)-600(        })]TJ
+(49:)'
+T*[(50:)-600(#endif)]TJ
+(51:)'
+ET
+Q
+Q
+endstream
+endobj
+27 0 obj
+2658
+endobj
+30 0 obj
+<</Length 31 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(12/13/10)Tj
+-0.659766 -12.8004 Td
+(20:20:20)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(1)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 291.412 736.5 Tm
+(util.h)Tj
+-131.309 18 Td
+($cmps109-wm/Assignments/asg1-shell-fnptrs/code/)Tj
+/R10 10 Tf
+-92.1031 -35.5 Td
+[(1:)-600(// $Id: util.h,v 1.3 2010-12-13 20:11:09-08 - - $)]TJ
+11 TL
+(2:)'
+T*[(3:)-600(//)]TJ
+T*[(4:)-600(// util -)]TJ
+T*[(5:)-600(//    A utility class to provide various services not conveniently)]TJ
+T*[(6:)-600(//    included in other modules.)]TJ
+T*[(7:)-600(//)]TJ
+(8:)'
+T*[(9:)-600(#ifndef __UTIL_H__)]TJ
+-6 -11 Td
+[(10:)-600(#define __UTIL_H__)]TJ
+(11:)'
+T*[(12:)-600(#include <iostream>)]TJ
+T*[(13:)-600(#include <string>)]TJ
+T*[(14:)-600(#include <vector>)]TJ
+(15:)'
+T*[(16:)-600(#ifdef __GNUC__)]TJ
+T*[(17:)-600(#include <stdexcept>)]TJ
+T*[(18:)-600(#endif)]TJ
+(19:)'
+T*[(20:)-600(using namespace std;)]TJ
+(21:)'
+T*[(22:)-600(#include "trace.h")]TJ
+(23:)'
+T*[(24:)-600(//)]TJ
+T*[(25:)-600(// A couple of convenient typedefs to allow brevity of code elsewhere.)]TJ
+T*[(26:)-600(//)]TJ
+(27:)'
+T*[(28:)-600(typedef vector<string> wordvec;)]TJ
+T*[(29:)-600(typedef wordvec::const_iterator wordvec_itor;)]TJ
+(30:)'
+T*[(31:)-600(//)]TJ
+T*[(32:)-600(// yshell_exn -)]TJ
+T*[(33:)-600(//    Extend runtime_error for throwing exceptions related to this)]TJ
+T*[(34:)-600(//    program.)]TJ
+T*[(35:)-600(//)]TJ
+(36:)'
+T*[(37:)-600(class yshell_exn: public runtime_error {)]TJ
+T*[(38:)-600(   public:)]TJ
+T*[(39:)-600(      explicit yshell_exn \(const string &what\);)]TJ
+T*[(40:)-600(};)]TJ
+(41:)'
+T*[(42:)-600(//)]TJ
+T*[(43:)-600(// setexecname -)]TJ
+T*[(44:)-600(//    Sets the static string to be used as an execname.)]TJ
+T*[(45:)-600(// execname -)]TJ
+T*[(46:)-600(//    Returns the basename of the executable image, which is used in)]TJ
+T*[(47:)-600(//    printing error messags.)]TJ
+T*[(48:)-600(//)]TJ
+(49:)'
+T*[(50:)-600(void setexecname \(const string &\);)]TJ
+T*[(51:)-600(string &execname\(\);)]TJ
+(52:)'
+T*[(53:)-600(//)]TJ
+T*[(54:)-600(// want_echo -)]TJ
+T*[(55:)-600(//    We want to echo all of cin to cout if if either cin or cout)]TJ
+T*[(56:)-600(//    is not a tty.  This helps make batch processing easier by)]TJ
+T*[(57:)-600(//    making cout look like a terminal session trace.)]TJ
+T*[(58:)-600(//)]TJ
+(59:)'
+T*[(60:)-600(bool want_echo\(\);)]TJ
+(61:)'
+T*[(62:)-600(//)]TJ
+T*[(63:)-600(// exit_status -)]TJ
+T*[(64:)-600(//    A static class for maintaining the exit status.  The default)]TJ
+ET
+Q
+Q
+endstream
+endobj
+31 0 obj
+2730
+endobj
+34 0 obj
+<</Length 35 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(12/13/10)Tj
+-0.659766 -12.8004 Td
+(20:20:20)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(2)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 291.412 736.5 Tm
+(util.h)Tj
+-131.309 18 Td
+($cmps109-wm/Assignments/asg1-shell-fnptrs/code/)Tj
+/R10 10 Tf
+-98.1031 -35.5 Td
+[(65:)-600(//    status is EXIT_SUCCESS \(0\), but can be set to another value,)]TJ
+11 TL
+T*[(66:)-600(//    such as EXIT_FAILURE \(1\) to indicate that error messages have)]TJ
+T*[(67:)-600(//    been printed.)]TJ
+T*[(68:)-600(//)]TJ
+(69:)'
+T*[(70:)-600(class exit_status {)]TJ
+T*[(71:)-600(   private:)]TJ
+T*[(72:)-600(      static int status;)]TJ
+T*[(73:)-600(   public:)]TJ
+T*[(74:)-600(      static void set \(int\);)]TJ
+T*[(75:)-600(      static int get\(\);)]TJ
+T*[(76:)-600(};)]TJ
+(77:)'
+T*[(78:)-600(//)]TJ
+T*[(79:)-600(// split -)]TJ
+T*[(80:)-600(//    Split a string into a wordvec \(as defined above\).  Any sequence)]TJ
+T*[(81:)-600(//    of chars in the delimiter string is used as a separator.  To)]TJ
+T*[(82:)-600(//    Split a pathname, use "/".  To split a shell command, use " ".)]TJ
+T*[(83:)-600(//)]TJ
+(84:)'
+T*[(85:)-600(wordvec split \(const string &line, const string &delimiter\);)]TJ
+(86:)'
+T*[(87:)-600(// complain -)]TJ
+T*[(88:)-600(//    Used for starting error messages.  Sets the exit status to)]TJ
+T*[(89:)-600(//    EXIT_FAILURE, writes the program name to cerr, and then)]TJ
+T*[(90:)-600(//    returns the cerr ostream.  Example:)]TJ
+T*[(91:)-600(//       complain\(\) << filename << ": some problem" << endl;)]TJ
+T*[(92:)-600(//)]TJ
+(93:)'
+T*[(94:)-600(ostream &complain\(\);)]TJ
+(95:)'
+T*[(96:)-600(//)]TJ
+T*[(97:)-600(// operator<< \(vector\) -)]TJ
+T*[(98:)-600(//    An overloaded template operator which allows vectors to be)]TJ
+T*[(99:)-600(//    printed out as a single operator, each element separated from)]TJ
+-6 -11 Td
+[(100:)-600(//    the next with spaces.  The item_t must have an output operator)]TJ
+T*[(101:)-600(//    defined for it.)]TJ
+T*[(102:)-600(//)]TJ
+(103:)'
+T*[(104:)-600(template <typename item_t>)]TJ
+T*[(105:)-600(ostream &operator<< \(ostream &out, const vector<item_t> &vec\);)]TJ
+(106:)'
+T*[(107:)-600(//)]TJ
+T*[(108:)-600(// Put the RCS Id string in the object file.)]TJ
+T*[(109:)-600(//)]TJ
+(110:)'
+T*[(111:)-600(#endif)]TJ
+(112:)'
+ET
+Q
+Q
+endstream
+endobj
+35 0 obj
+2516
+endobj
+38 0 obj
+<</Length 39 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(12/13/10)Tj
+-0.659766 -12.8004 Td
+(20:20:21)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(1)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 267.704 736.5 Tm
+(commands.cc)Tj
+-107.601 18 Td
+($cmps109-wm/Assignments/asg1-shell-fnptrs/code/)Tj
+/R10 10 Tf
+-92.1031 -35.5 Td
+[(1:)-600(// $Id: commands.cc,v 1.3 2010-12-13 20:11:09-08 - - $)]TJ
+11 TL
+(2:)'
+T*[(3:)-600(#include "commands.h")]TJ
+T*[(4:)-600(#include "trace.h")]TJ
+(5:)'
+T*[(6:)-600(commands::commands\(\): map \(commandmap\(\)\) {)]TJ
+T*[(7:)-600(   map["cat"    ] = fn_cat    ;)]TJ
+T*[(8:)-600(   map["cd"     ] = fn_cd     ;)]TJ
+T*[(9:)-600(   map["echo"   ] = fn_echo   ;)]TJ
+-6 -11 Td
+[(10:)-600(   map["exit"   ] = fn_exit   ;)]TJ
+T*[(11:)-600(   map["ls"     ] = fn_ls     ;)]TJ
+T*[(12:)-600(   map["lsr"    ] = fn_lsr    ;)]TJ
+T*[(13:)-600(   map["make"   ] = fn_make   ;)]TJ
+T*[(14:)-600(   map["mkdir"  ] = fn_mkdir  ;)]TJ
+T*[(15:)-600(   map["prompt" ] = fn_prompt ;)]TJ
+T*[(16:)-600(   map["pwd"    ] = fn_pwd    ;)]TJ
+T*[(17:)-600(   map["rm"     ] = fn_rm     ;)]TJ
+T*[(18:)-600(})]TJ
+(19:)'
+T*[(20:)-600(function commands::operator[] \(const string& cmd\) {)]TJ
+T*[(21:)-600(   return map[cmd];)]TJ
+T*[(22:)-600(})]TJ
+(23:)'
+T*[(24:)-600(void fn_cat \(inode_state &state, const wordvec &words\){)]TJ
+T*[(25:)-600(   TRACE \('c', state\);)]TJ
+T*[(26:)-600(   TRACE \('c', words\);)]TJ
+T*[(27:)-600(})]TJ
+(28:)'
+T*[(29:)-600(void fn_cd \(inode_state &state, const wordvec &words\){)]TJ
+T*[(30:)-600(   TRACE \('c', state\);)]TJ
+T*[(31:)-600(   TRACE \('c', words\);)]TJ
+T*[(32:)-600(})]TJ
+(33:)'
+T*[(34:)-600(void fn_echo \(inode_state &state, const wordvec &words\){)]TJ
+T*[(35:)-600(   TRACE \('c', state\);)]TJ
+T*[(36:)-600(   TRACE \('c', words\);)]TJ
+T*[(37:)-600(})]TJ
+(38:)'
+T*[(39:)-600(void fn_exit \(inode_state &state, const wordvec &words\){)]TJ
+T*[(40:)-600(   TRACE \('c', state\);)]TJ
+T*[(41:)-600(   TRACE \('c', words\);)]TJ
+T*[(42:)-600(   throw ysh_exit_exn \(\);)]TJ
+T*[(43:)-600(})]TJ
+(44:)'
+T*[(45:)-600(void fn_ls \(inode_state &state, const wordvec &words\){)]TJ
+T*[(46:)-600(   TRACE \('c', state\);)]TJ
+T*[(47:)-600(   TRACE \('c', words\);)]TJ
+T*[(48:)-600(})]TJ
+(49:)'
+T*[(50:)-600(void fn_lsr \(inode_state &state, const wordvec &words\){)]TJ
+T*[(51:)-600(   TRACE \('c', state\);)]TJ
+T*[(52:)-600(   TRACE \('c', words\);)]TJ
+T*[(53:)-600(})]TJ
+(54:)'
+T*[(55:)-600(void fn_make \(inode_state &state, const wordvec &words\){)]TJ
+T*[(56:)-600(   TRACE \('c', state\);)]TJ
+T*[(57:)-600(   TRACE \('c', words\);)]TJ
+T*[(58:)-600(})]TJ
+(59:)'
+T*[(60:)-600(void fn_mkdir \(inode_state &state, const wordvec &words\){)]TJ
+T*[(61:)-600(   TRACE \('c', state\);)]TJ
+T*[(62:)-600(   TRACE \('c', words\);)]TJ
+T*[(63:)-600(})]TJ
+(64:)'
+ET
+Q
+Q
+endstream
+endobj
+39 0 obj
+2980
+endobj
+42 0 obj
+<</Length 43 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(12/13/10)Tj
+-0.659766 -12.8004 Td
+(20:20:21)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(2)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 267.704 736.5 Tm
+(commands.cc)Tj
+-107.601 18 Td
+($cmps109-wm/Assignments/asg1-shell-fnptrs/code/)Tj
+/R10 10 Tf
+-98.1031 -35.5 Td
+[(65:)-600(void fn_prompt \(inode_state &state, const wordvec &words\){)]TJ
+11 TL
+T*[(66:)-600(   TRACE \('c', state\);)]TJ
+T*[(67:)-600(   TRACE \('c', words\);)]TJ
+T*[(68:)-600(})]TJ
+(69:)'
+T*[(70:)-600(void fn_pwd \(inode_state &state, const wordvec &words\){)]TJ
+T*[(71:)-600(   TRACE \('c', state\);)]TJ
+T*[(72:)-600(   TRACE \('c', words\);)]TJ
+T*[(73:)-600(})]TJ
+(74:)'
+T*[(75:)-600(void fn_rm \(inode_state &state, const wordvec &words\){)]TJ
+T*[(76:)-600(   TRACE \('c', state\);)]TJ
+T*[(77:)-600(   TRACE \('c', words\);)]TJ
+T*[(78:)-600(})]TJ
+(79:)'
+T*[(80:)-600(void fn_rmr \(inode_state &state, const wordvec &words\){)]TJ
+T*[(81:)-600(   TRACE \('c', state\);)]TJ
+T*[(82:)-600(   TRACE \('c', words\);)]TJ
+T*[(83:)-600(})]TJ
+(84:)'
+T*[(85:)-600(int exit_status_message\(\) {)]TJ
+T*[(86:)-600(   int exit_status = exit_status::get\(\);)]TJ
+T*[(87:)-600(   cout << execname\(\) << ": exit\(" << exit_status << "\)" << endl;)]TJ
+T*[(88:)-600(   return exit_status;)]TJ
+T*[(89:)-600(})]TJ
+(90:)'
+ET
+Q
+Q
+endstream
+endobj
+43 0 obj
+1529
+endobj
+46 0 obj
+<</Length 47 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(12/13/10)Tj
+-0.659766 -12.8004 Td
+(20:20:21)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(1)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 282.48 736.5 Tm
+(inode.cc)Tj
+-122.377 18 Td
+($cmps109-wm/Assignments/asg1-shell-fnptrs/code/)Tj
+/R10 10 Tf
+-92.1031 -35.5 Td
+[(1:)-600(// $Id: inode.cc,v 1.5 2010-12-13 20:11:09-08 - - $)]TJ
+11 TL
+(2:)'
+T*[(3:)-600(#include <cassert>)]TJ
+T*[(4:)-600(#include <iostream>)]TJ
+(5:)'
+T*[(6:)-600(using namespace std;)]TJ
+(7:)'
+T*[(8:)-600(#include "trace.h")]TJ
+T*[(9:)-600(#include "inode.h")]TJ
+-6 -11 Td
+(10:)Tj
+T*[(11:)-600(int inode::next_inode_nr = 1;)]TJ
+(12:)'
+T*[(13:)-600(inode::inode\(inode_t init_type\):)]TJ
+T*[(14:)-600(   inode_nr \(next_inode_nr++\), type \(init_type\))]TJ
+T*[(15:)-600({)]TJ
+T*[(16:)-600(   switch \(type\) {)]TJ
+T*[(17:)-600(      case DIR_INODE:)]TJ
+T*[(18:)-600(           contents.dirents = new directory\(\);)]TJ
+T*[(19:)-600(           break;)]TJ
+T*[(20:)-600(      case FILE_INODE:)]TJ
+T*[(21:)-600(           contents.data = new wordvec\(\);)]TJ
+T*[(22:)-600(           break;)]TJ
+T*[(23:)-600(   })]TJ
+T*[(24:)-600(   TRACE \('i', "inode " << inode_nr << ", type = " << type\);)]TJ
+T*[(25:)-600(})]TJ
+(26:)'
+T*[(27:)-600(//)]TJ
+T*[(28:)-600(// copy ctor -)]TJ
+T*[(29:)-600(//    Make a copy of a given inode.  This should not be used in)]TJ
+T*[(30:)-600(//    your program if you can avoid it, since it is expensive.)]TJ
+T*[(31:)-600(//    Here, we can leverage operator=.)]TJ
+T*[(32:)-600(//)]TJ
+T*[(33:)-600(inode::inode \(const inode &that\) {)]TJ
+T*[(34:)-600(   *this = that;)]TJ
+T*[(35:)-600(})]TJ
+(36:)'
+T*[(37:)-600(//)]TJ
+T*[(38:)-600(// operator= -)]TJ
+T*[(39:)-600(//    Assignment operator.  Copy an inode.  Make a copy of a)]TJ
+T*[(40:)-600(//    given inode.  This should not be used in your program if)]TJ
+T*[(41:)-600(//    you can avoid it, since it is expensive.)]TJ
+T*[(42:)-600(//)]TJ
+T*[(43:)-600(inode &inode::operator= \(const inode &that\) {)]TJ
+T*[(44:)-600(   if \(this != &that\) {)]TJ
+T*[(45:)-600(      inode_nr = that.inode_nr;)]TJ
+T*[(46:)-600(      type = that.type;)]TJ
+T*[(47:)-600(      contents = that.contents;)]TJ
+T*[(48:)-600(   })]TJ
+T*[(49:)-600(   TRACE \('i', "inode " << inode_nr << ", type = " << type\);)]TJ
+T*[(50:)-600(   return *this;)]TJ
+T*[(51:)-600(})]TJ
+(52:)'
+T*[(53:)-600(int inode::get_inode_nr\(\) {)]TJ
+T*[(54:)-600(   TRACE \('i', "inode = " << inode_nr\);)]TJ
+T*[(55:)-600(   return inode_nr;)]TJ
+T*[(56:)-600(})]TJ
+(57:)'
+T*[(58:)-600(int inode::size\(\) {)]TJ
+T*[(59:)-600(   int size = 0;)]TJ
+T*[(60:)-600(   TRACE \('i', "size = " << size\);)]TJ
+T*[(61:)-600(   return size;)]TJ
+T*[(62:)-600(})]TJ
+(63:)'
+T*[(64:)-600(const wordvec &inode::readfile\(\) const {)]TJ
+ET
+Q
+Q
+endstream
+endobj
+47 0 obj
+2962
+endobj
+50 0 obj
+<</Length 51 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(12/13/10)Tj
+-0.659766 -12.8004 Td
+(20:20:21)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(2)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 282.48 736.5 Tm
+(inode.cc)Tj
+-122.377 18 Td
+($cmps109-wm/Assignments/asg1-shell-fnptrs/code/)Tj
+/R10 10 Tf
+-98.1031 -35.5 Td
+[(65:)-600(   TRACE \('i', *contents.data\);)]TJ
+11 TL
+T*[(66:)-600(   assert \(type == FILE_INODE\);)]TJ
+T*[(67:)-600(   return *contents.data;)]TJ
+T*[(68:)-600(})]TJ
+(69:)'
+T*[(70:)-600(void inode::writefile \(const wordvec &words\) {)]TJ
+T*[(71:)-600(   TRACE \('i', words\);)]TJ
+T*[(72:)-600(   assert \(type == FILE_INODE\);)]TJ
+T*[(73:)-600(})]TJ
+(74:)'
+T*[(75:)-600(void inode::remove \(const string &filename\) {)]TJ
+T*[(76:)-600(   TRACE \('i', filename\);)]TJ
+T*[(77:)-600(   assert \(type == DIR_INODE\);)]TJ
+T*[(78:)-600(})]TJ
+(79:)'
+T*[(80:)-600(inode_state::inode_state\(\): root \(NULL\), cwd \(NULL\), prompt \("%"\) {)]TJ
+T*[(81:)-600(   TRACE \('i', "root = " << \(void*\) root << ", cwd = " << \(void*\) cwd)]TJ
+T*[(82:)-600(          << ", prompt = " << prompt\);)]TJ
+T*[(83:)-600(})]TJ
+(84:)'
+T*[(85:)-600(ostream &operator<< \(ostream &out, const inode_state &state\) {)]TJ
+T*[(86:)-600(   out << "inode_state: root = " << state.root)]TJ
+T*[(87:)-600(       << ", cwd = " << state.cwd;)]TJ
+T*[(88:)-600(   return out;)]TJ
+T*[(89:)-600(})]TJ
+(90:)'
+ET
+Q
+Q
+endstream
+endobj
+51 0 obj
+1589
+endobj
+54 0 obj
+<</Length 55 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(12/13/10)Tj
+-0.659766 -12.8004 Td
+(20:20:21)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(1)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 284.357 736.5 Tm
+(trace.cc)Tj
+-124.254 18 Td
+($cmps109-wm/Assignments/asg1-shell-fnptrs/code/)Tj
+/R10 10 Tf
+-92.1031 -35.5 Td
+[(1:)-600(// $Id: trace.cc,v 1.2 2010-12-13 20:11:09-08 - - $)]TJ
+11 TL
+(2:)'
+T*[(3:)-600(#include <iostream>)]TJ
+T*[(4:)-600(#include <climits>)]TJ
+T*[(5:)-600(#include <vector>)]TJ
+(6:)'
+T*[(7:)-600(using namespace std;)]TJ
+(8:)'
+T*[(9:)-600(#include "trace.h")]TJ
+-6 -11 Td
+(10:)Tj
+T*[(11:)-600(//)]TJ
+T*[(12:)-600(// ** BUG IN STL ** BUG IN STL **)]TJ
+T*[(13:)-600(// We should use vector<bool> instead of vector<char>,)]TJ
+T*[(14:)-600(// but vector<bool> has a bug:)]TJ
+T*[(15:)-600(// http://forums.sun.com/thread.jspa?threadID=5277939)]TJ
+T*[(16:)-600(// Static linking works, but doubles the size of the executable)]TJ
+T*[(17:)-600(// image.)]TJ
+T*[(18:)-600(// ** BUG IN STL ** BUG IN STL **)]TJ
+T*[(19:)-600(//)]TJ
+(20:)'
+T*[(21:)-600(typedef vector<char> boolvec;)]TJ
+T*[(22:)-600(boolvec traceflags::flags \(UCHAR_MAX + 1, false\);)]TJ
+T*[(23:)-600(const boolvec trueflags \(UCHAR_MAX + 1, true\);)]TJ
+(24:)'
+T*[(25:)-600(void traceflags::setflags \(const string &optflags\) {)]TJ
+T*[(26:)-600(   string::const_iterator itor = optflags.begin\(\);)]TJ
+T*[(27:)-600(   string::const_iterator end = optflags.end\(\);)]TJ
+T*[(28:)-600(   for \(; itor != end; ++itor\) {)]TJ
+T*[(29:)-600(      if \(*itor == '@'\) {)]TJ
+T*[(30:)-600(         flags = trueflags;)]TJ
+T*[(31:)-600(      }else {)]TJ
+T*[(32:)-600(         flags[*itor] = true;)]TJ
+T*[(33:)-600(      })]TJ
+T*[(34:)-600(   })]TJ
+T*[(35:)-600(   // Note that TRACE can trace setflags.)]TJ
+T*[(36:)-600(   TRACE \('t',  "optflags = " << optflags\);)]TJ
+T*[(37:)-600(})]TJ
+(38:)'
+T*[(39:)-600(//)]TJ
+T*[(40:)-600(// getflag -)]TJ
+T*[(41:)-600(//    Check to see if a certain flag is on.)]TJ
+T*[(42:)-600(//)]TJ
+(43:)'
+T*[(44:)-600(bool traceflags::getflag \(char flag\) {)]TJ
+T*[(45:)-600(   // Bug alert:)]TJ
+T*[(46:)-600(   // Don't TRACE this function or the stack will blow up.)]TJ
+T*[(47:)-600(   bool result = flags[flag];)]TJ
+T*[(48:)-600(   return result;)]TJ
+T*[(49:)-600(})]TJ
+(50:)'
+ET
+Q
+Q
+endstream
+endobj
+55 0 obj
+2480
+endobj
+58 0 obj
+<</Length 59 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(12/13/10)Tj
+-0.659766 -12.8004 Td
+(20:20:22)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(1)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 288.696 736.5 Tm
+(util.cc)Tj
+-128.593 18 Td
+($cmps109-wm/Assignments/asg1-shell-fnptrs/code/)Tj
+/R10 10 Tf
+-92.1031 -35.5 Td
+[(1:)-600(// $Id: util.cc,v 1.4 2010-12-13 20:11:09-08 - - $)]TJ
+11 TL
+(2:)'
+T*[(3:)-600(#include <cstdlib>)]TJ
+T*[(4:)-600(#include <unistd.h>)]TJ
+(5:)'
+T*[(6:)-600(using namespace std;)]TJ
+(7:)'
+T*[(8:)-600(#include "util.h")]TJ
+(9:)'
+-6 -11 Td
+[(10:)-600(yshell_exn::yshell_exn \(const string &what\): runtime_error \(what\) {)]TJ
+T*[(11:)-600(})]TJ
+(12:)'
+T*[(13:)-600(int exit_status::status = EXIT_SUCCESS;)]TJ
+T*[(14:)-600(static string execname_string;)]TJ
+(15:)'
+T*[(16:)-600(void exit_status::set \(int new_status\) {)]TJ
+T*[(17:)-600(   status = new_status;)]TJ
+T*[(18:)-600(})]TJ
+(19:)'
+T*[(20:)-600(int exit_status::get\(\) {)]TJ
+T*[(21:)-600(   return status;)]TJ
+T*[(22:)-600(})]TJ
+(23:)'
+T*[(24:)-600(void setexecname \(const string &name\) {)]TJ
+T*[(25:)-600(   execname_string =  name.substr \(name.rfind \('/'\) + 1\);)]TJ
+T*[(26:)-600(   TRACE \('u', execname_string\);)]TJ
+T*[(27:)-600(})]TJ
+(28:)'
+T*[(29:)-600(string &execname\(\) {)]TJ
+T*[(30:)-600(   TRACE \('u', execname_string\);)]TJ
+T*[(31:)-600(   return execname_string;)]TJ
+T*[(32:)-600(})]TJ
+(33:)'
+T*[(34:)-600(bool want_echo\(\) {)]TJ
+T*[(35:)-600(   const int CIN_FD = 0;)]TJ
+T*[(36:)-600(   const int COUT_FD = 1;)]TJ
+T*[(37:)-600(   bool cin_isatty = isatty \(CIN_FD\);)]TJ
+T*[(38:)-600(   bool cout_isatty = isatty \(COUT_FD\);)]TJ
+T*[(39:)-600(   TRACE \('u', "cin_isatty = " << cin_isatty)]TJ
+T*[(40:)-600(          << ", cout_isatty = " << cout_isatty\);)]TJ
+T*[(41:)-600(   return ! cin_isatty || ! cout_isatty;)]TJ
+T*[(42:)-600(})]TJ
+(43:)'
+(44:)'
+T*[(45:)-600(wordvec split \(const string &line, const string &delimiters\) {)]TJ
+T*[(46:)-600(   wordvec words;)]TJ
+T*[(47:)-600(   size_t end = 0;)]TJ
+(48:)'
+T*[(49:)-600(   // Loop over the string, splitting out words, and for each word)]TJ
+T*[(50:)-600(   // thus found, append it to the output wordvec.)]TJ
+T*[(51:)-600(   for \(;;\) {)]TJ
+T*[(52:)-600(      size_t start = line.find_first_not_of \(delimiters, end\);)]TJ
+T*[(53:)-600(      if \(start == string::npos\) break;)]TJ
+T*[(54:)-600(      end = line.find_first_of \(delimiters, start\);)]TJ
+T*[(55:)-600(      words.push_back \(line.substr \(start, end - start\)\);)]TJ
+T*[(56:)-600(   })]TJ
+T*[(57:)-600(   TRACE \('u', words\);)]TJ
+T*[(58:)-600(   return words;)]TJ
+T*[(59:)-600(})]TJ
+(60:)'
+T*[(61:)-600(ostream &complain\(\) {)]TJ
+T*[(62:)-600(   exit_status::set \(EXIT_FAILURE\);)]TJ
+T*[(63:)-600(   cerr << execname\(\) << ": ";)]TJ
+T*[(64:)-600(   return cerr;)]TJ
+ET
+Q
+Q
+endstream
+endobj
+59 0 obj
+3000
+endobj
+62 0 obj
+<</Length 63 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(12/13/10)Tj
+-0.659766 -12.8004 Td
+(20:20:22)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(2)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 288.696 736.5 Tm
+(util.cc)Tj
+-128.593 18 Td
+($cmps109-wm/Assignments/asg1-shell-fnptrs/code/)Tj
+/R10 10 Tf
+-98.1031 -35.5 Td
+[(65:)-600(})]TJ
+11 TL
+(66:)'
+T*[(67:)-600(template <typename item_t>)]TJ
+T*[(68:)-600(ostream &operator<< \(ostream &out, const vector<item_t> &vec\) {)]TJ
+T*[(69:)-600(   typename vector<item_t>::const_iterator itor = vec.begin\(\);)]TJ
+T*[(70:)-600(   typename vector<item_t>::const_iterator end = vec.end\(\);)]TJ
+(71:)'
+T*[(72:)-600(   // If the vector is empty, do nothing.)]TJ
+T*[(73:)-600(   if \(itor != end\) {)]TJ
+T*[(74:)-600(      // Print out the first element without a space.)]TJ
+T*[(75:)-600(      out << *itor++;)]TJ
+T*[(76:)-600(      // Print out the rest of the elements each preceded by a space.)]TJ
+T*[(77:)-600(      while \(itor != end\) out << " " << *itor++;)]TJ
+T*[(78:)-600(   })]TJ
+T*[(79:)-600(   return out;)]TJ
+T*[(80:)-600(})]TJ
+(81:)'
+ET
+Q
+Q
+endstream
+endobj
+63 0 obj
+1289
+endobj
+66 0 obj
+<</Length 67 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(12/13/10)Tj
+-0.659766 -12.8004 Td
+(20:20:22)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(1)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 281.312 736.5 Tm
+(yshell.cc)Tj
+-121.209 18 Td
+($cmps109-wm/Assignments/asg1-shell-fnptrs/code/)Tj
+/R10 10 Tf
+-92.1031 -35.5 Td
+[(1:)-600(// $Id: yshell.cc,v 1.2 2010-12-13 20:11:09-08 - - $)]TJ
+11 TL
+(2:)'
+T*[(3:)-600(#include <cstdlib>)]TJ
+T*[(4:)-600(#include <iostream>)]TJ
+T*[(5:)-600(#include <string>)]TJ
+T*[(6:)-600(#include <utility>)]TJ
+T*[(7:)-600(#include <unistd.h>)]TJ
+(8:)'
+T*[(9:)-600(using namespace std;)]TJ
+-6 -11 Td
+(10:)Tj
+T*[(11:)-600(#include "commands.h")]TJ
+T*[(12:)-600(#include "trace.h")]TJ
+T*[(13:)-600(#include "inode.h")]TJ
+T*[(14:)-600(#include "util.h")]TJ
+(15:)'
+T*[(16:)-600(//)]TJ
+T*[(17:)-600(// scan_options)]TJ
+T*[(18:)-600(//    Options analysis:  The only option is -Dflags. )]TJ
+T*[(19:)-600(//)]TJ
+(20:)'
+T*[(21:)-600(void scan_options \(int argc, char **argv\) {)]TJ
+T*[(22:)-600(   opterr = 0;)]TJ
+T*[(23:)-600(   for \(;;\) {)]TJ
+T*[(24:)-600(      int option = getopt \(argc, argv, "@:"\);)]TJ
+T*[(25:)-600(      if \(option == EOF\) break;)]TJ
+T*[(26:)-600(      switch \(option\) {)]TJ
+T*[(27:)-600(         case '@':)]TJ
+T*[(28:)-600(            traceflags::setflags \(optarg\);)]TJ
+T*[(29:)-600(            break;)]TJ
+T*[(30:)-600(         default:)]TJ
+T*[(31:)-600(            complain\(\) << "-" << \(char\) option << ": invalid option")]TJ
+T*[(32:)-600(                       << endl;)]TJ
+T*[(33:)-600(            break;)]TJ
+T*[(34:)-600(      })]TJ
+T*[(35:)-600(   })]TJ
+T*[(36:)-600(   if \(optind < argc\) {)]TJ
+T*[(37:)-600(      complain\(\) << "operands not permitted" << endl;)]TJ
+T*[(38:)-600(   })]TJ
+T*[(39:)-600(})]TJ
+(40:)'
+T*[(41:)-600(//)]TJ
+T*[(42:)-600(// main -)]TJ
+T*[(43:)-600(//    Main program which loops reading commands until end of file.)]TJ
+T*[(44:)-600(//)]TJ
+(45:)'
+T*[(46:)-600(int main \(int argc, char **argv\) {)]TJ
+T*[(47:)-600(   setexecname \(argv[0]\);)]TJ
+T*[(48:)-600(   cout << boolalpha; // Print false or true instead of 0 or 1.)]TJ
+T*[(49:)-600(   cerr << boolalpha;)]TJ
+T*[(50:)-600(   scan_options \(argc, argv\);)]TJ
+T*[(51:)-600(   bool need_echo = want_echo\(\);)]TJ
+T*[(52:)-600(   commands cmdmap;)]TJ
+T*[(53:)-600(   string prompt = "%";)]TJ
+T*[(54:)-600(   inode_state state;)]TJ
+T*[(55:)-600(   try {)]TJ
+T*[(56:)-600(      for \(;;\) {)]TJ
+T*[(57:)-600(         try {)]TJ
+T*[(58:)-600(   )]TJ
+T*[(59:)-600(            // Read a line, break at EOF, and echo print the prompt)]TJ
+T*[(60:)-600(            // if one is needed.)]TJ
+T*[(61:)-600(            cout << prompt << " ";)]TJ
+T*[(62:)-600(            string line;)]TJ
+T*[(63:)-600(            getline \(cin, line\);)]TJ
+T*[(64:)-600(            if \(cin.eof\(\)\) {)]TJ
+ET
+Q
+Q
+endstream
+endobj
+67 0 obj
+3024
+endobj
+70 0 obj
+<</Length 71 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(12/13/10)Tj
+-0.659766 -12.8004 Td
+(20:20:22)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(2)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 281.312 736.5 Tm
+(yshell.cc)Tj
+-121.209 18 Td
+($cmps109-wm/Assignments/asg1-shell-fnptrs/code/)Tj
+/R10 10 Tf
+-98.1031 -35.5 Td
+[(65:)-600(               if \(need_echo\) cout << "^D";)]TJ
+11 TL
+T*[(66:)-600(               cout << endl;)]TJ
+T*[(67:)-600(               TRACE \('y', "EOF"\);)]TJ
+T*[(68:)-600(               break;)]TJ
+T*[(69:)-600(            })]TJ
+T*[(70:)-600(            if \(need_echo\) cout << line << endl;)]TJ
+T*[(71:)-600(   )]TJ
+T*[(72:)-600(            // Split the line into words and lookup the appropriate)]TJ
+T*[(73:)-600(            // function.  Complain or call it.)]TJ
+T*[(74:)-600(            wordvec words = split \(line, " \\t"\);)]TJ
+T*[(75:)-600(            TRACE \('y', "words = " << words\);)]TJ
+T*[(76:)-600(            function fn = cmdmap[words[0]];)]TJ
+T*[(77:)-600(            if \(fn == NULL\) {)]TJ
+T*[(78:)-600(               throw yshell_exn \(words[0] + ": no such function"\);)]TJ
+T*[(79:)-600(            })]TJ
+T*[(80:)-600(            fn \(state, words\);)]TJ
+T*[(81:)-600(         }catch \(yshell_exn exn\) {)]TJ
+T*[(82:)-600(            // If there is a problem discovered in any function, an)]TJ
+T*[(83:)-600(            // exn is thrown and printed here.)]TJ
+T*[(84:)-600(            complain\(\) << exn.what\(\) << endl;)]TJ
+T*[(85:)-600(         })]TJ
+T*[(86:)-600(      })]TJ
+T*[(87:)-600(   } catch \(ysh_exit_exn\) {)]TJ
+T*[(88:)-600(   })]TJ
+(89:)'
+T*[(90:)-600(   return exit_status_message\(\);)]TJ
+T*[(91:)-600(})]TJ
+(92:)'
+ET
+Q
+Q
+endstream
+endobj
+71 0 obj
+1884
+endobj
+74 0 obj
+<</Length 75 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(12/13/10)Tj
+-0.659766 -12.8004 Td
+(20:20:21)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(1)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 280.773 736.5 Tm
+(Makefile)Tj
+-120.67 18 Td
+($cmps109-wm/Assignments/asg1-shell-fnptrs/code/)Tj
+/R10 10 Tf
+-92.1031 -35.5 Td
+[(1:)-600(# $Id: Makefile,v 1.4 2010-12-13 20:12:44-08 - - $)]TJ
+11 TL
+(2:)'
+T*[(3:)-600(MKFILE      = Makefile)]TJ
+T*[(4:)-600(DEPSFILE    = ${MKFILE}.deps)]TJ
+T*[(5:)-600(NOINCL      = ci clean spotless)]TJ
+T*[(6:)-600(NEEDINCL    = ${filter ${NOINCL}, ${MAKECMDGOALS}})]TJ
+T*[(7:)-600(GMAKE       = ${MAKE} --no-print-directory)]TJ
+T*[(8:)-600(UNAME      ?= ${shell uname -s})]TJ
+(9:)'
+-6 -11 Td
+[(10:)-600(ifeq \(${UNAME},SunOS\))]TJ
+T*[(11:)-600(COMPILECCC  = CC -g -features=extensions)]TJ
+T*[(12:)-600(MAKEDEPSCCC = CC -xM1)]TJ
+T*[(13:)-600(endif)]TJ
+T*[(14:)-600(ifeq \(${UNAME},Linux\))]TJ
+T*[(15:)-600(COMPILECCC  = g++ -g -Wall -Wextra -Werror)]TJ
+T*[(16:)-600(MAKEDEPSCCC = g++ -MM)]TJ
+T*[(17:)-600(endif)]TJ
+(18:)'
+T*[(19:)-600(CCSOURCE    = commands.cc inode.cc trace.cc util.cc yshell.cc)]TJ
+T*[(20:)-600(CCHEADER    = commands.h  inode.h  trace.h  util.h)]TJ
+T*[(21:)-600(EXECBIN     = yshell)]TJ
+T*[(22:)-600(OBJECTS     = ${CCSOURCE:.cc=.o})]TJ
+T*[(23:)-600(OTHERS      = ${MKFILE} README)]TJ
+T*[(24:)-600(ALLSOURCES  = ${CCHEADER} ${CCSOURCE} ${OTHERS})]TJ
+T*[(25:)-600(LISTING     = ../asg1-shell.code.ps)]TJ
+T*[(26:)-600(CLASS       = cmps109-wm.w11)]TJ
+T*[(27:)-600(PROJECT     = asg1)]TJ
+(28:)'
+T*[(29:)-600(all : ${EXECBIN})]TJ
+(30:)'
+T*[(31:)-600(${EXECBIN} : ${OBJECTS})]TJ
+T*[(32:)-600(        ${COMPILECCC} -o $@ ${OBJECTS})]TJ
+T*[(33:)-600(        - checksource ${CCSOURCE})]TJ
+(34:)'
+T*[(35:)-600(%.o : %.cc)]TJ
+T*[(36:)-600(        cid + $<)]TJ
+T*[(37:)-600(        ${COMPILECCC} -c $<)]TJ
+(38:)'
+T*[(39:)-600(ci : ${ALLSOURCES})]TJ
+T*[(40:)-600(        - checksource ${ALLSOURCES})]TJ
+T*[(41:)-600(        cid + ${ALLSOURCES})]TJ
+(42:)'
+T*[(43:)-600(lis : ${ALLSOURCES})]TJ
+T*[(44:)-600(        mkpspdf ${LISTING} ${ALLSOURCES} ${DEPSFILE})]TJ
+(45:)'
+T*[(46:)-600(clean :)]TJ
+T*[(47:)-600(        - rm ${OBJECTS} ${DEPSFILE} core ${EXECBIN}.errs)]TJ
+(48:)'
+T*[(49:)-600(spotless : clean)]TJ
+T*[(50:)-600(        - rm ${EXECBIN} )]TJ
+(51:)'
+T*[(52:)-600(submit : ${ALLSOURCES})]TJ
+T*[(53:)-600(        - checksource ${ALLSOURCES})]TJ
+T*[(54:)-600(        submit ${CLASS} ${PROJECT} ${ALLSOURCES})]TJ
+T*[(55:)-600(        testsubmit ${CLASS} ${PROJECT} ${ALLSOURCES})]TJ
+(56:)'
+T*[(57:)-600(deps : ${CCSOURCE} ${CCHEADER})]TJ
+T*[(58:)-600(        @ echo "# ${DEPSFILE} created `LC_TIME=C date`" >${DEPSFILE})]TJ
+T*[(59:)-600(        ${MAKEDEPSCCC} ${CCSOURCE} | sort | uniq >>${DEPSFILE})]TJ
+(60:)'
+T*[(61:)-600(${DEPSFILE} :)]TJ
+T*[(62:)-600(        @ touch ${DEPSFILE})]TJ
+T*[(63:)-600(        ${GMAKE} deps)]TJ
+(64:)'
+ET
+Q
+Q
+endstream
+endobj
+75 0 obj
+3070
+endobj
+78 0 obj
+<</Length 79 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(12/13/10)Tj
+-0.659766 -12.8004 Td
+(20:20:21)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(2)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 280.773 736.5 Tm
+(Makefile)Tj
+-120.67 18 Td
+($cmps109-wm/Assignments/asg1-shell-fnptrs/code/)Tj
+/R10 10 Tf
+-98.1031 -35.5 Td
+[(65:)-600(again :)]TJ
+11 TL
+T*[(66:)-600(        gmake --no-print-directory spotless deps ci all lis)]TJ
+(67:)'
+T*[(68:)-600(ifeq \(${NEEDINCL}, \))]TJ
+T*[(69:)-600(include ${DEPSFILE})]TJ
+T*[(70:)-600(endif)]TJ
+(71:)'
+ET
+Q
+Q
+endstream
+endobj
+79 0 obj
+739
+endobj
+82 0 obj
+<</Length 83 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(12/13/10)Tj
+-0.659766 -12.8004 Td
+(20:20:21)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(1)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 276.551 736.5 Tm
+(README)Tj
+-116.448 18 Td
+($cmps109-wm/Assignments/asg1-shell-fnptrs/code/)Tj
+/R10 10 Tf
+-92.1031 -35.5 Td
+[(1:)-600($Id: README,v 1.1 2010-12-13 19:22:12-08 - - $)]TJ
+ET
+Q
+Q
+endstream
+endobj
+83 0 obj
+579
+endobj
+86 0 obj
+<</Length 87 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(12/13/10)Tj
+-0.659766 -12.8004 Td
+(20:20:20)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(1)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 266.192 736.5 Tm
+(Makefile.deps)Tj
+-106.089 18 Td
+($cmps109-wm/Assignments/asg1-shell-fnptrs/code/)Tj
+/R10 10 Tf
+-92.1031 -35.5 Td
+[(1:)-600(# Makefile.deps created Mon Dec 13 20:20:20 PST 2010)]TJ
+11 TL
+T*[(2:)-600(commands.o: commands.cc commands.h inode.h trace.h util.h)]TJ
+T*[(3:)-600(inode.o: inode.cc trace.h inode.h util.h)]TJ
+T*[(4:)-600(trace.o: trace.cc trace.h)]TJ
+T*[(5:)-600(util.o: util.cc util.h trace.h)]TJ
+T*[(6:)-600(yshell.o: yshell.cc commands.h inode.h trace.h util.h)]TJ
+ET
+Q
+Q
+endstream
+endobj
+87 0 obj
+888
+endobj
+4 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 12 0 R
+>>
+/Contents 5 0 R
+>>
+endobj
+13 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 16 0 R
+>>
+/Contents 14 0 R
+>>
+endobj
+17 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 20 0 R
+>>
+/Contents 18 0 R
+>>
+endobj
+21 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 24 0 R
+>>
+/Contents 22 0 R
+>>
+endobj
+25 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 28 0 R
+>>
+/Contents 26 0 R
+>>
+endobj
+29 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 32 0 R
+>>
+/Contents 30 0 R
+>>
+endobj
+33 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 36 0 R
+>>
+/Contents 34 0 R
+>>
+endobj
+37 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 40 0 R
+>>
+/Contents 38 0 R
+>>
+endobj
+41 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 44 0 R
+>>
+/Contents 42 0 R
+>>
+endobj
+45 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 48 0 R
+>>
+/Contents 46 0 R
+>>
+endobj
+49 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 52 0 R
+>>
+/Contents 50 0 R
+>>
+endobj
+53 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 56 0 R
+>>
+/Contents 54 0 R
+>>
+endobj
+57 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 60 0 R
+>>
+/Contents 58 0 R
+>>
+endobj
+61 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 64 0 R
+>>
+/Contents 62 0 R
+>>
+endobj
+65 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 68 0 R
+>>
+/Contents 66 0 R
+>>
+endobj
+69 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 72 0 R
+>>
+/Contents 70 0 R
+>>
+endobj
+73 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 76 0 R
+>>
+/Contents 74 0 R
+>>
+endobj
+77 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 80 0 R
+>>
+/Contents 78 0 R
+>>
+endobj
+81 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 84 0 R
+>>
+/Contents 82 0 R
+>>
+endobj
+85 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 88 0 R
+>>
+/Contents 86 0 R
+>>
+endobj
+3 0 obj
+<< /Type /Pages /Kids [
+4 0 R
+13 0 R
+17 0 R
+21 0 R
+25 0 R
+29 0 R
+33 0 R
+37 0 R
+41 0 R
+45 0 R
+49 0 R
+53 0 R
+57 0 R
+61 0 R
+65 0 R
+69 0 R
+73 0 R
+77 0 R
+81 0 R
+85 0 R
+] /Count 20
+>>
+endobj
+1 0 obj
+<</Type /Catalog /Pages 3 0 R
+>>
+endobj
+12 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R/R11
+11 0 R>>
+endobj
+16 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+20 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+24 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+28 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+32 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+36 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+40 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+44 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+48 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+52 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+56 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+60 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+64 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+68 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+72 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+76 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+80 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+84 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+88 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+8 0 obj
+<</BaseFont/Times-Roman/Type/Font
+/Subtype/Type1>>
+endobj
+10 0 obj
+<</BaseFont/Courier/Type/Font
+/Subtype/Type1>>
+endobj
+7 0 obj
+<</BaseFont/Helvetica-Bold/Type/Font
+/Subtype/Type1>>
+endobj
+9 0 obj
+<</BaseFont/Times-Bold/Type/Font
+/Subtype/Type1>>
+endobj
+11 0 obj
+<</BaseFont/Courier-Bold/Type/Font
+/Subtype/Type1>>
+endobj
+2 0 obj
+<</Producer(ESP Ghostscript 815.02)
+/CreationDate(D:20101213202023)
+/ModDate(D:20101213202023)>>endobj
+xref
+0 89
+0000000000 65535 f 
+0000048263 00000 n 
+0000049833 00000 n 
+0000048070 00000 n 
+0000045372 00000 n 
+0000000009 00000 n 
+0000003456 00000 n 
+0000049631 00000 n 
+0000049502 00000 n 
+0000049700 00000 n 
+0000049568 00000 n 
+0000049765 00000 n 
+0000048311 00000 n 
+0000045505 00000 n 
+0000003476 00000 n 
+0000004205 00000 n 
+0000048381 00000 n 
+0000045640 00000 n 
+0000004225 00000 n 
+0000007476 00000 n 
+0000048440 00000 n 
+0000045775 00000 n 
+0000007497 00000 n 
+0000010269 00000 n 
+0000048499 00000 n 
+0000045910 00000 n 
+0000010290 00000 n 
+0000013000 00000 n 
+0000048558 00000 n 
+0000046045 00000 n 
+0000013021 00000 n 
+0000015803 00000 n 
+0000048617 00000 n 
+0000046180 00000 n 
+0000015824 00000 n 
+0000018392 00000 n 
+0000048676 00000 n 
+0000046315 00000 n 
+0000018413 00000 n 
+0000021445 00000 n 
+0000048735 00000 n 
+0000046450 00000 n 
+0000021466 00000 n 
+0000023047 00000 n 
+0000048794 00000 n 
+0000046585 00000 n 
+0000023068 00000 n 
+0000026082 00000 n 
+0000048853 00000 n 
+0000046720 00000 n 
+0000026103 00000 n 
+0000027744 00000 n 
+0000048912 00000 n 
+0000046855 00000 n 
+0000027765 00000 n 
+0000030297 00000 n 
+0000048971 00000 n 
+0000046990 00000 n 
+0000030318 00000 n 
+0000033370 00000 n 
+0000049030 00000 n 
+0000047125 00000 n 
+0000033391 00000 n 
+0000034732 00000 n 
+0000049089 00000 n 
+0000047260 00000 n 
+0000034753 00000 n 
+0000037829 00000 n 
+0000049148 00000 n 
+0000047395 00000 n 
+0000037850 00000 n 
+0000039786 00000 n 
+0000049207 00000 n 
+0000047530 00000 n 
+0000039807 00000 n 
+0000042929 00000 n 
+0000049266 00000 n 
+0000047665 00000 n 
+0000042950 00000 n 
+0000043741 00000 n 
+0000049325 00000 n 
+0000047800 00000 n 
+0000043761 00000 n 
+0000044392 00000 n 
+0000049384 00000 n 
+0000047935 00000 n 
+0000044412 00000 n 
+0000045352 00000 n 
+0000049443 00000 n 
+trailer
+<< /Size 89 /Root 1 0 R /Info 2 0 R
+/ID [<C2CB6CD618AD6B1C7C190F496123E93A><C2CB6CD618AD6B1C7C190F496123E93A>]
+>>
+startxref
+49944
+%%EOF
