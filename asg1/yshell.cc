@@ -1,4 +1,4 @@
-// $Id: yshell.cc,v 1.9 2011-01-12 17:38:02-08 - - $
+// $Id: yshell.cc,v 1.14 2011-01-12 18:52:02-08 - - $
 
 #include <cstdlib>
 #include <iostream>
@@ -52,8 +52,15 @@ int main (int argc, char **argv) {
    commands cmdmap;
    inode_state state;
    string prompt = state.get_prompt();
-   inode start_root;
-   start_root = start_root.mkdir("/");
+   inode start_root (DIR_INODE);
+   start_root.mkroot(start_root);
+/*
+   inode dot = start_root;
+   inode dot_dot = start_root;
+   start_root.contents.dirents->insert( pair<string, inode *>(".", &dot));
+   start_root.contents.dirents->insert( pair<string, inode *>("..", &dot_dot));
+*/
+//   start_root = start_root.mkdir("/");
    cout << "root inode number " << start_root.get_inode_nr() << endl;
    state.change_root(start_root);
    state.change_cwd(start_root);

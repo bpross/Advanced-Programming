@@ -1,4 +1,4 @@
-// $Id: inode.cc,v 1.79 2011-01-12 17:38:01-08 - - $
+// $Id: inode.cc,v 1.59 2011-01-12 19:02:00-08 - - $
 
 #include <cassert>
 #include <iostream>
@@ -133,23 +133,31 @@ directory &inode::get_directory(){
   return *contents.dirents;
 }
 
-inode inode::mkdir (const string &filename) {
+void inode::mkdir (const string &filename) {
   inode new_dir (DIR_INODE);
-  if (filename.compare("/")){
-    inode dot (DIR_INODE);
-    inode dot_dot (DIR_INODE);
-    new_dir.contents.dirents->insert( pair<string, inode *>(".",&dot));
-    new_dir.contents.dirents->insert(pair<string,inode *>("..",&dot_dot));
+  contents.dirents->insert( pair<string, inode *>(filename,&new_dir) );
+  inode dot (DIR_INODE);
+  inode dot_dot (DIR_INODE);
+  new_dir.contents.dirents->insert( pair<string, inode *>(".",&dot));
+  new_dir.contents.dirents->insert(pair<string,inode *>("..",&dot_dot));
+  cout << new_dir.contents.dirents->size() << "\n";
+//return new_dir;
+}
+
+void inode::list (){
+  map<string, inode*>::iterator it;
+  for( it = contents.dirents->begin(); it != contents.dirents->end(); it++){
+    cout <<  (*it).first << endl;
   }
-  else{
-    contents.dirents->insert( pair<string, inode *>(filename,&new_dir) );
-    inode dot (DIR_INODE);
-    inode dot_dot (DIR_INODE);
-    new_dir.contents.dirents->insert( pair<string, inode *>(".",&dot));
-    new_dir.contents.dirents->insert(pair<string,inode *>("..",&dot_dot));
-    cout << new_dir.contents.dirents->size() << "\n";
-  }  
-return new_dir;
+}
+
+void inode::mkroot (const inode &start_root){
+//  start_root.contents.dirents->insert( pair<string, inode *>("/", start_root);
+  inode dot (DIR_INODE);
+  inode dot_dot (DIR_INODE);
+  start_root.contents.dirents->insert( pair<string, inode *>(".", &dot));
+  start_root.contents.dirents->insert( pair<string, inode *>("..", &dot_dot));
+
 }
 
 inode inode::mkfile (const string &filename) {

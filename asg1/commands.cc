@@ -1,4 +1,4 @@
-// $Id: commands.cc,v 1.45 2011-01-12 17:28:38-08 - - $
+// $Id: commands.cc,v 1.52 2011-01-12 19:06:58-08 - - $
 
 #include <cstdlib>
 #include <cassert>
@@ -107,6 +107,13 @@ void fn_exit (inode_state &state, const wordvec &words){
 }
 
 void fn_ls (inode_state &state, const wordvec &words){
+  wordvec ls_vec = words;
+  //Removes command from vector, size is decremented
+  ls_vec.erase (ls_vec.begin());
+  inode cwd = state.get_cwd();
+  cwd.list();
+
+
   TRACE ('c', state);
   TRACE ('c', words);
 }
