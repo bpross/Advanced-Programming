@@ -1,4 +1,4 @@
-// $Id: inode.cc,v 1.29 2011-01-12 15:00:04-08 - - $
+// $Id: inode.cc,v 1.79 2011-01-12 17:38:01-08 - - $
 
 #include <cassert>
 #include <iostream>
@@ -129,19 +129,27 @@ inode &inode::locate (const string &filename) {
   return *found_node;
 }
 
-
-
-
+directory &inode::get_directory(){
+  return *contents.dirents;
+}
 
 inode inode::mkdir (const string &filename) {
   inode new_dir (DIR_INODE);
-  contents.dirents->insert( pair<string, inode *>(filename,&new_dir) );
-  inode dot (DIR_INODE);
-  inode dot_dot (DIR_INODE);
-  new_dir.contents.dirents->insert( pair<string, inode *>(".",&dot));
-  new_dir.contents.dirents->insert(pair<string,inode *>("..",&dot_dot));
-  cout << new_dir.contents.dirents->size() << "\n";
-  return new_dir;
+  if (filename.compare("/")){
+    inode dot (DIR_INODE);
+    inode dot_dot (DIR_INODE);
+    new_dir.contents.dirents->insert( pair<string, inode *>(".",&dot));
+    new_dir.contents.dirents->insert(pair<string,inode *>("..",&dot_dot));
+  }
+  else{
+    contents.dirents->insert( pair<string, inode *>(filename,&new_dir) );
+    inode dot (DIR_INODE);
+    inode dot_dot (DIR_INODE);
+    new_dir.contents.dirents->insert( pair<string, inode *>(".",&dot));
+    new_dir.contents.dirents->insert(pair<string,inode *>("..",&dot_dot));
+    cout << new_dir.contents.dirents->size() << "\n";
+  }  
+return new_dir;
 }
 
 inode inode::mkfile (const string &filename) {
@@ -150,6 +158,8 @@ inode inode::mkfile (const string &filename) {
   assert (search == contents.dirents->end() );
   inode new_file (FILE_INODE);
   contents.dirents->insert(pair<string, inode *>(filename, &new_file));
+  cout << "make file type: " << new_file.get_type() << endl;
+  cout << "mkfile inode number: " << new_file.get_inode_nr() << endl;
   return new_file;
 }
 

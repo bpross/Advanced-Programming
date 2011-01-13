@@ -1,6 +1,7 @@
-// $Id: commands.cc,v 1.48 2011-01-12 14:50:37-08 - - $
+// $Id: commands.cc,v 1.45 2011-01-12 17:28:38-08 - - $
 
 #include <cstdlib>
+#include <cassert>
 #include "commands.h"
 #include "inode.h"
 #include "trace.h"
@@ -27,12 +28,28 @@ void fn_cat (inode_state &state, const wordvec &words){
   wordvec cat_vec = words;
   //Erases the command from the vector, size is decremented
   cat_vec.erase (cat_vec.begin());
-  inode cwd = state.get_cwd();
-  inode read_node = cwd.locate(cat_vec.front());
-  cout << "read_node type " << read_node.get_type() << endl;
+  //inode cwd = state.get_cwd();
+  //inode read_node = cwd.locate(cat_vec.front());
+  //cout << "read_node type " << read_node.get_type() << endl;
   //Read in file
-  wordvec file_contents = read_node.readfile();
-  cout << cat_vec << "contains" << file_contents << endl;
+  //wordvec file_contents = read_node.readfile();
+  //cout << cat_vec << "contains" << file_contents << endl;
+  
+  inode cwd = state.get_cwd();
+  directory current_dir = cwd.get_directory();
+  map<string, inode*>::iterator search;
+  search = current_dir.find(cat_vec.front());
+  cout << "searching for " << cat_vec.front() << endl;
+  assert (search != current_dir.end());
+  inode *found_node = search->second;
+  cout << "file type after find " << found_node->get_type() << endl;
+  cout << "inode number of found: " << found_node->get_inode_nr() << endl;
+  cout << "size of dir " << cwd.size() << endl;
+  wordvec file_contents = found_node->readfile();
+  for(unsigned int vec_itor = 0; vec_itor < cat_vec.size(); vec_itor++)
+    cout << cat_vec[vec_itor] << " ";
+  cout << "\n";
+
   TRACE ('c', state);
   TRACE ('c', words);
 }
@@ -109,11 +126,14 @@ void fn_make (inode_state &state, const wordvec &words){
   make_vec.erase (make_vec.begin());
   //Now create a new file
   inode cwd = state.get_cwd();
+  cout << "cwd number " << cwd.get_inode_nr() << endl;
   inode newfile = cwd.mkfile(filename);
   //Now add the contents of words into newfile
   cout << "new file type: " << newfile.get_type() << endl;
   newfile.writefile(make_vec);
-  cout << cwd.size() << endl;
+  cout << "after write " << newfile.get_type() << endl;
+  cout << "number of inode added " << newfile.get_inode_nr() << endl;
+  cout << "size of dir " << cwd.size() << endl;
   TRACE ('c', state);
   TRACE ('c', words);
 }

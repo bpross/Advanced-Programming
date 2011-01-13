@@ -1,4 +1,4 @@
-# Makefile.deps created Tue Jan 11 23:05:41 PST 2011
+# Makefile.deps created Wed Jan 12 17:01:49 PST 2011
 commands.o: commands.cc commands.h inode.h trace.h util.h
 inode.o: inode.cc trace.h inode.h util.h
 trace.o: trace.cc trace.h
