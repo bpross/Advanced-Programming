@@ -1,4 +1,4 @@
-// $Id: commands.cc,v 1.69 2011-01-13 06:55:24-08 - - $
+// $Id: commands.cc,v 1.81 2011-01-13 10:09:19-08 - - $
 
 #include <cstdlib>
 #include <cassert>
@@ -244,29 +244,49 @@ void fn_lsr (inode_state &state, const wordvec &words){
       }
     }
     inode *front;
-    string dir_name;
+    wordvec dir_list;
+    string dir_string;
+    if(filename[0] == '/' && filename.size() !=1)
+      string dir_string = filename;
+    int num_in_dir;
+    string full_dir;
     map<string, inode*>::iterator search;
     directory current_dir = fake_cwd->get_directory();
+    num_in_dir = current_dir.size() - 2;
     for(search = current_dir.begin(); search != current_dir.end();
 	search++)
     {
       if(search->second->get_type() == 0 && 
 	 (search->first[0] != '.')){
-	cout << search->first << ":\n";
+	dir_list.push_back(search->first);
 	print_queue.push(search->second);
       }
     }
     while(!print_queue.empty()){
       front = print_queue.front();
       print_queue.pop();
+      if (num_in_dir >= 2){
+	full_dir.append("/");
+	full_dir.append(dir_list.front());
+	dir_list.erase(dir_list.begin());
+	cout << full_dir << ":\n";
+      }
+      else{
+	dir_string.append("/");
+	dir_string.append(dir_list.front());
+	dir_list.erase(dir_list.begin());
+	cout << dir_string << ":\n";
+      }
       front->list();
+      full_dir.erase(full_dir.begin(),full_dir.end());
       current_dir = front->get_directory();
+      num_in_dir = current_dir.size() - 2;
       for(search = current_dir.begin(); search != current_dir.end();
 	  search++)
       {
 	if(search->second->get_type() == 0 && 
 	   (search->first[0] != '.')){
-	  cout << search->first << ":\n";
+	  dir_list.push_back(search->first);
 	  print_queue.push(search->second);
 	}
       }
