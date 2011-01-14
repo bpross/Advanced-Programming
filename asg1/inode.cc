@@ -1,4 +1,4 @@
-// $Id: inode.cc,v 1.84 2011-01-13 12:48:42-08 - - $
+// $Id: inode.cc,v 1.178 2011-01-14 09:49:00-08 - - $
 
 #include <cassert>
 #include <iostream>
@@ -95,15 +95,19 @@ void inode::remove (const string &filename) {
   search = contents.dirents->find(filename);
   assert (search != contents.dirents->end());
   inode *remove_node = search->second;
+  cout << "in remove1" << endl;
   switch(remove_node->type){
     case DIR_INODE:
+      cout << "In dir" << endl;
       assert (remove_node->size() <= 2);
       contents.dirents->erase(search);
       break;
     case FILE_INODE:
+      cout << "In file" << endl;
       contents.dirents->erase(search);
       break;
   }
+  cout << "in remove2" << endl;
   TRACE ('i', filename);
 }
 
@@ -135,12 +139,12 @@ directory &inode::get_directory(){
 
 void inode::mkdir (const string &filename) {
   inode *new_dir = new inode (DIR_INODE);
-  inode *dot_dot = new inode (DIR_INODE);
+//  inode *dot_dot = new inode (DIR_INODE);
   contents.dirents->insert( pair<string, inode *>(filename,new_dir) );
   inode *dot = new_dir;
   new_dir->contents.dirents->insert( pair<string, inode *>(".",dot));
-  new_dir->contents.dirents->insert(pair<string,inode *>("..",dot_dot));
-  dot_dot->contents.dirents = contents.dirents;
+  new_dir->contents.dirents->insert(pair<string,inode *>("..", this));
+//  dot_dot->contents.dirents = contents.dirents;
 }
 
 void inode::list (){
@@ -189,10 +193,6 @@ void inode_state::remove_dir_string(){
     cwd_string.erase(str_itor);
 }
 
-void inode_state::set_cwd_string(string start){
-  cwd_string = start;
-}
-
 void inode_state::to_root(){
   cwd_string = "/";
 }
@@ -237,8 +237,8 @@ inode *inode_state::get_root(){
   return root;
 }
 
-inode inode_state::get_tmp(){
-  return *tmp;
+inode *inode_state::get_tmp(){
+  return tmp;
 }
 
 inode *inode_state::get_cwd(){
