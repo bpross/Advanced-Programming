@@ -1,4 +1,4 @@
-// $Id: inode.cc,v 1.82 2011-01-13 05:30:25-08 - - $
+// $Id: inode.cc,v 1.84 2011-01-13 12:48:42-08 - - $
 
 #include <cassert>
 #include <iostream>
@@ -209,8 +209,8 @@ inode_state::inode_state(): root (NULL), cwd (NULL), prompt ("%"), cwd_string("/
 inode *inode_state::locateinode(const string &filename){
 
   map<string, inode *>::iterator search;
-  inode cwd = get_cwd();
-  directory cwd_dirents = cwd.get_directory();
+  inode *cwd = get_cwd();
+  directory cwd_dirents = cwd->get_directory();
   for( search = cwd_dirents.begin(); search != cwd_dirents.end(); search++){
     if(search->first == filename) return search->second;
   }
@@ -241,8 +241,8 @@ inode inode_state::get_tmp(){
   return *tmp;
 }
 
-inode inode_state::get_cwd(){
-  return *cwd;
+inode *inode_state::get_cwd(){
+  return cwd;
 }
 
 string inode_state::get_prompt(){

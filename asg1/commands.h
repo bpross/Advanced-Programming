@@ -4,6 +4,8 @@
 #define __COMMANDS_H__
 
 #include <map>
+#include <queue>
+#include <stack>
 
 using namespace std;
 
@@ -17,6 +19,8 @@ using namespace std;
 
 typedef void (*function) (inode_state &state, const wordvec &words);
 typedef map<string, function> commandmap;
+
+typedef vector<inode*> nodevec;
 
 //
 // commands -
@@ -56,7 +60,7 @@ void fn_prompt (inode_state &state, const wordvec &words);
 void fn_pwd    (inode_state &state, const wordvec &words);
 void fn_rm     (inode_state &state, const wordvec &words);
 void fn_rmr    (inode_state &state, const wordvec &words);
-
+void pre_order (nodevec *node_vec,inode &new_root);
 
 //
 // exit_status_message -

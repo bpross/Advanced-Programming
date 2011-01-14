@@ -1,4 +1,4 @@
-// $Id: commands.cc,v 1.81 2011-01-13 10:09:19-08 - - $
+// $Id: commands.cc,v 1.89 2011-01-13 12:47:41-08 - - $
 
 #include <cstdlib>
 #include <cassert>
@@ -156,28 +156,33 @@ void fn_ls (inode_state &state, const wordvec &words){
   const string root = "/";
   const string old_cwd = state.get_cwd_string();
   wordvec ls_vec = words;
+  inode *old_cwd_node = state.get_cwd();
   //Removes command from vector, size is decremented
   ls_vec.erase (ls_vec.begin());
   string filename = ls_vec.front();
   if (filename[0] == '/' || (filename[0] == '.' && filename[1] == '.')){
-    inode *fake_cwd = state.get_root();
     if(filename[0] == '/'){
+      inode *to_root = state.get_root();
+      state.change_cwd(*to_root);
+      state.to_root();
       wordvec dir_change = split(ls_vec.front(), root);
       for(unsigned int vec_itor = 0; vec_itor < dir_change.size(); vec_itor++){
+	state.append_cwd_string( dir_change[vec_itor] );
 	inode *cdir = state.locateinode( dir_change[vec_itor] );
 	if (cdir == NULL){
 	  state.set_cwd_string(old_cwd);
+	  state.change_cwd(*old_cwd_node);
 	  throw yshell_exn ("Directory does not exist");
 	}
 	else
-	  fake_cwd = cdir;
+	  state.change_cwd(*cdir);
       }
     }
     else if(filename[0] == '.' && filename[1] == '.'){
       string dot_dot = "..";
       state.remove_dir_string();
       inode *up_dir = state.locateinode(dot_dot);
-      fake_cwd = up_dir;
+      state.change_cwd(*up_dir);
       wordvec dir_change = split(ls_vec.front(), root);
       dir_change.erase(dir_change.begin());
       for(unsigned int vec_itor = 0; vec_itor < dir_change.size();
@@ -185,51 +190,86 @@ void fn_ls (inode_state &state, const wordvec &words){
 	inode *cdir = state.locateinode( dir_change[vec_itor] );
 	if (cdir == NULL){
 	  state.set_cwd_string(old_cwd);
+	  state.change_cwd(*old_cwd_node);
 	  throw yshell_exn ("Directory does not exist");
 	}
 	else
-	  fake_cwd = cdir;
+	  state.change_cwd(*cdir);
       }
     }
     cout << state.get_cwd_string() << ":\n";
-    fake_cwd->list();
+    state.get_cwd()->list();
   }
   else{
-    inode cwd = state.get_cwd();
+    inode *cwd = state.get_cwd();
     cout << state.get_cwd_string() << ":\n";
-    cwd.list();
+    cwd->list();
    }
   TRACE ('c', state);
   TRACE ('c', words);
 }
 
+void pre_order (nodevec *node_vec,inode &new_root){
+  inode root = &new_root;
+  if (root.size() > 2){
+    map<string, inode*>::iterator search;
+    directory current_dir = root.get_directory();
+    for(search = current_dir.end(); search != current_dir.begin();
+	search--)
+    {
+      if(search->second->get_type() == 0 && 
+	 (search->first[0] != '.')){
+	state.append_cwd_string(search->first);
+	pre_order(map_pre,state,*root);
+      }
+    }
+  }
+  else{
+    map<queue<inode*>,queue<string>>::iterator find;
+    find = map_pre->begin();
+    queue<inode*>nodes = find->first;
+    nodes.push(root);
+    queue<string>dir_name = find->second;
+    dir_name.push(state.get_cwd_string());
+    map_pre->insert ( pair<queue<inode*>,queue<string>(nodes,dir_name));
+  }
+}
+
 void fn_lsr (inode_state &state, const wordvec &words){
-  queue<inode*> print_queue;
+  queue<directory> print_queue;
   const string root = "/";
   const string old_cwd = state.get_cwd_string();
   wordvec ls_vec = words;
+  string last_dir;
+  inode *old_cwd_node = state.get_cwd();
+
   //Removes command from vector, size is decremented
   ls_vec.erase (ls_vec.begin());
+  
   string filename = ls_vec.front();
   if (filename[0] == '/' || (filename[0] == '.' && filename[1] == '.')){
-    inode *fake_cwd = state.get_root();
     if(filename[0] == '/'){
+      inode *to_root = state.get_root();
+      state.change_cwd(*to_root);
+      state.to_root();
       wordvec dir_change = split(ls_vec.front(), root);
       for(unsigned int vec_itor = 0; vec_itor < dir_change.size(); vec_itor++){
 	inode *cdir = state.locateinode( dir_change[vec_itor] );
 	if (cdir == NULL){
 	  state.set_cwd_string(old_cwd);
+	  state.change_cwd(*old_cwd_node);
 	  throw yshell_exn ("Directory does not exist");
 	}
-	else
-	  fake_cwd = cdir;
+	else{
+	  state.change_cwd(*cdir);
+	}
       }
     }
     else if(filename[0] == '.' && filename[1] == '.'){
       string dot_dot = "..";
       state.remove_dir_string();
       inode *up_dir = state.locateinode(dot_dot);
-      fake_cwd = up_dir;
+      state.change_cwd(*up_dir);
       wordvec dir_change = split(ls_vec.front(), root);
       dir_change.erase(dir_change.begin());
       for(unsigned int vec_itor = 0; vec_itor < dir_change.size();
@@ -237,29 +277,24 @@ void fn_lsr (inode_state &state, const wordvec &words){
 	inode *cdir = state.locateinode( dir_change[vec_itor] );
 	if (cdir == NULL){
 	  state.set_cwd_string(old_cwd);
+	  state.change_cwd(*old_cwd_node);
 	  throw yshell_exn ("Directory does not exist");
 	}
 	else
-	  fake_cwd = cdir;
+	  state.change_cwd(*cdir);
       }
     }
     inode *front;
-    wordvec dir_list;
-    string dir_string;
-    if(filename[0] == '/' && filename.size() !=1)
-      string dir_string = filename;
-    int num_in_dir;
-    string full_dir;
     map<string, inode*>::iterator search;
-    directory current_dir = fake_cwd->get_directory();
-    num_in_dir = current_dir.size() - 2;
+    directory current_dir = state.get_cwd()->get_directory();
+    directory no_dots;
     for(search = current_dir.begin(); search != current_dir.end();
 	search++)
     {
       if(search->second->get_type() == 0 && 
 	 (search->first[0] != '.')){
-	dir_list.push_back(search->first);
-	print_queue.push(search->second);
+	no_dots.insert( pair<string,inode*>(search
+	
       }
     }
     while(!print_queue.empty()){
@@ -324,6 +359,7 @@ void fn_lsr (inode_state &state, const wordvec &words){
   }
   TRACE ('c', state);
   TRACE ('c', words);
+
 }
 
 void fn_make (inode_state &state, const wordvec &words){
@@ -335,8 +371,8 @@ void fn_make (inode_state &state, const wordvec &words){
   //Remove the filename from rest
   make_vec.erase (make_vec.begin());
   //Now create a new file
-  inode cwd = state.get_cwd();
-  inode newfile = cwd.mkfile(filename);
+  inode *cwd = state.get_cwd();
+  inode newfile = cwd->mkfile(filename);
   //Now add the contents of words into newfile
   newfile.writefile(make_vec);
   TRACE ('c', state);
@@ -350,8 +386,8 @@ void fn_mkdir (inode_state &state, const wordvec &words){
   //Store the Name of the file
   string dirname = mkdir_vec.front();
   //Now create a directory
-  inode cwd = state.get_cwd();
-  cwd.mkdir(dirname);
+  inode *cwd = state.get_cwd();
+  cwd->mkdir(dirname);
   TRACE ('c', state);
   TRACE ('c', words);
 }
@@ -394,8 +430,8 @@ void fn_rm (inode_state &state, const wordvec &words){
     throw yshell_exn ("File does not exist");
   }
   else{
-    inode cwd = state.get_cwd();
-    cwd.remove(filename);
+    inode *cwd = state.get_cwd();
+    cwd->remove(filename);
   }
   TRACE ('c', state);
   TRACE ('c', words);

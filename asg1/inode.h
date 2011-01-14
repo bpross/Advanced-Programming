@@ -149,7 +149,7 @@ class inode_state {
       string get_cwd_string();
       inode *get_root();
       inode get_tmp();
-      inode get_cwd();
+      inode *get_cwd();
       string get_prompt();
       
 };
