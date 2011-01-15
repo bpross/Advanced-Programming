@@ -91,6 +91,7 @@ class inode {
       void writefile (const wordvec &newdata);
       void remove (const string &filename);
       inode &locate(const string &filename);
+      string get_inode_name();
       directory &get_directory();
       int get_type();
       void list ();

@@ -1,4 +1,4 @@
-// $Id: commands.cc,v 1.225 2011-01-14 12:53:58-08 - - $
+// $Id: commands.cc,v 1.273 2011-01-15 14:50:18-08 - - $
 
 #include <cstdlib>
 #include <cassert>
@@ -18,6 +18,7 @@ commands::commands(): map (commandmap()) {
    map["prompt" ] = fn_prompt ;
    map["pwd"    ] = fn_pwd    ;
    map["rm"     ] = fn_rm     ;
+   map["rmr"    ] = fn_rmr    ;
 }
 
 function commands::operator[] (const string& cmd) {
@@ -223,7 +224,6 @@ void fn_lsr (inode_state &state, const wordvec &words){
       }
     }else{
       state.append_cwd_string(current_file);
-
     }
 
     wordvec curr_file;
@@ -302,8 +302,37 @@ void fn_prompt (inode_state &state, const wordvec &words){
 }
 
 void fn_pwd (inode_state &state, const wordvec &words){
+  vector<string> pwd_string;
+  string tmp_cwd;
+  directory cwd_dirents;
+  inode *cwd = state.get_cwd();
+//  pwd_string.push_back("/");
+//  pwd_string = cwd->get_inode_name();
+  int inode_nr = 0;
+  inode_nr = cwd->get_inode_nr();
+  while(inode_nr != 1){
+    tmp_cwd = cwd->get_inode_name();
+    pwd_string.push_back(tmp_cwd);
+    inode_nr = cwd->get_inode_nr();
+    cwd_dirents = cwd->get_directory();
+    cwd = (cwd_dirents)[".."];
+    inode_nr = cwd->get_inode_nr();
+    
+  } 
+  if(pwd_string.empty()){
+    cout << "/";
+  }
+  else{
+    vector<string>::reverse_iterator rit;
+    for(rit = pwd_string.rbegin(); rit < pwd_string.rend(); ++rit){
+      cout << "/" << *rit;
+    }
+  }
+  cout << endl;
+/*
   string pwd_string = state.get_cwd_string();
   cout << pwd_string << endl;
+*/
   TRACE ('c', state);
   TRACE ('c', words);
 }
@@ -322,6 +351,30 @@ void fn_rm (inode_state &state, const wordvec &words){
 }
 
 void fn_rmr (inode_state &state, const wordvec &words){
+  inode *cwd = state.get_cwd();
+  if(hack == 0) state.change_tmp(*cwd);
+  hack++;
+  map<string, inode*>::iterator it;
+  wordvec rmr_vec = words;
+  rmr_vec.erase (rmr_vec.begin() );
+  string filename = rmr_vec.front();
+  cout << "filename = " << filename << endl;
+  inode *change_node = state.locateinode(filename);
+  state.change_cwd(*change_node);
+  directory cwd_dirents = cwd->get_directory();
+  for(it = cwd_dirents.begin(); it != cwd_dirents.end(); it++){
+    string current_file = it->first;
+    cout << "File in rmr " << current_file << endl;
+    if(current_file == "." || current_file == "..") continue;
+    wordvec curr_file;
+    curr_file.push_back("crap");
+    curr_file.push_back(current_file);
+    fn_rmr(state, curr_file);
+  }
+  hack = 0;
+  inode *change_node_back = state.get_tmp();
+  state.change_cwd(*change_node_back);
+  fn_rm(state, words);
   TRACE ('c', state);
   TRACE ('c', words);
 }
