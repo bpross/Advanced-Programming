@@ -1,4 +1,4 @@
-// $Id: commands.cc,v 1.273 2011-01-15 14:50:18-08 - - $
+// $Id: commands.cc,v 1.306 2011-01-15 16:16:24-08 - - $
 
 #include <cstdlib>
 #include <cassert>
@@ -351,33 +351,39 @@ void fn_rm (inode_state &state, const wordvec &words){
 }
 
 void fn_rmr (inode_state &state, const wordvec &words){
-  inode *cwd = state.get_cwd();
-  if(hack == 0) state.change_tmp(*cwd);
-  hack++;
   map<string, inode*>::iterator it;
   wordvec rmr_vec = words;
   rmr_vec.erase (rmr_vec.begin() );
   string filename = rmr_vec.front();
   cout << "filename = " << filename << endl;
   inode *change_node = state.locateinode(filename);
-  state.change_cwd(*change_node);
-  directory cwd_dirents = cwd->get_directory();
-  for(it = cwd_dirents.begin(); it != cwd_dirents.end(); it++){
+  cout << "got through cn " << endl;
+  directory *curr_dirents = &(change_node->get_directory() );
+  cout << "got through getdir " << endl;
+  for(it = curr_dirents->begin(); it != curr_dirents->end(); it++){
     string current_file = it->first;
     cout << "File in rmr " << current_file << endl;
     if(current_file == "." || current_file == "..") continue;
     wordvec curr_file;
+    change_node = state.locateinode(it->first);
     curr_file.push_back("crap");
     curr_file.push_back(current_file);
+    cout << "Should be foo: " << current_file << endl;
     fn_rmr(state, curr_file);
   }
-  hack = 0;
-  inode *change_node_back = state.get_tmp();
-  state.change_cwd(*change_node_back);
+  cout << "I'm here " << endl;
+  curr_dirents = &(change_node->get_directory() );
+  change_node = (*curr_dirents)[".."];
+  state.change_cwd(*change_node);
   fn_rm(state, words);
   TRACE ('c', state);
   TRACE ('c', words);
 }
+/*
+    change_cwd = state.locateinode(it->first);
+    state.change_cwd(*change_node);
+    cwd_dirents = cwd->get_directory();
+*/
 
 int exit_status_message() {
    int exit_status = exit_status::get();

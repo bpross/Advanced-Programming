@@ -1,4 +1,4 @@
-// $Id: inode.cc,v 1.194 2011-01-15 14:10:48-08 - - $
+// $Id: inode.cc,v 1.195 2011-01-15 14:53:07-08 - - $
 
 #include <cassert>
 #include <iostream>
@@ -195,15 +195,12 @@ void inode_state::remove_dir_string(){
 }
 
 string inode::get_inode_name(){
-   string name = "a";
+   string name;
    map<string, inode*>::iterator search;
    inode *parent = (*contents.dirents)[".."];
- //  directory *parent_dirents = parent->contents.dirents;
    for(search = parent->contents.dirents->begin(); search != parent->contents.dirents->end(); search++){
      if(search->second->inode_nr == this->inode_nr)
-//       cout << "Made it here" << endl;
        name = search->first;
-//       cout << name << endl;
 
   }
    return name;
