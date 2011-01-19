@@ -145,6 +145,7 @@ class inode_state {
       void change_prompt(string &prompt_string);
       void append_cwd_string(string addition);
       void remove_dir_string();
+      void set_cwd_string(const string start);
       void to_root();
       string get_cwd_string();
       inode *get_root();

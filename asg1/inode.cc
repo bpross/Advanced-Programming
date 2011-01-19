@@ -1,4 +1,4 @@
-// $Id: inode.cc,v 1.195 2011-01-15 14:53:07-08 - - $
+// $Id: inode.cc,v 1.93 2011-01-18 16:23:13-08 - - $
 
 #include <cassert>
 #include <iostream>
@@ -93,7 +93,7 @@ void inode::writefile(const wordvec &words) {
 void inode::remove (const string &filename) {
   map<string, inode*>::iterator search;
   search = contents.dirents->find(filename);
-  cout << filename << endl;
+  cout << "Removing: " << filename << endl;
   assert (search != contents.dirents->end());
   inode *remove_node = search->second;
   cout << "in remove1" << endl;
@@ -125,14 +125,6 @@ int inode::get_type(){
   return type_int;
 }
 
-inode &inode::locate (const string &filename) {
-  map<string, inode*>::iterator search;
-  search = contents.dirents->find(filename);
-  assert (search != contents.dirents->end());
-  inode *found_node = search->second;
-  cout << found_node->get_type() << endl;
-  return *found_node;
-}
 
 directory &inode::get_directory(){
   return *contents.dirents;
@@ -215,6 +207,10 @@ string inode_state::get_cwd_string(){
   return cwd_string;
 }
 
+void inode_state::set_cwd_string(const string start){
+  cwd_string = start;
+}
+
 inode_state::inode_state(): root (NULL), cwd (NULL), prompt ("%"), cwd_string("/") {
    TRACE ('i', "root = " << (void*) root << ", cwd = " << (void*) cwd
           << ", prompt = " << prompt);
@@ -224,8 +220,8 @@ inode *inode_state::locateinode(const string &filename){
 
   map<string, inode *>::iterator search;
   inode *cwd = get_cwd();
-  directory cwd_dirents = cwd->get_directory();
-  for( search = cwd_dirents.begin(); search != cwd_dirents.end(); search++){
+  directory *cwd_dirents = &cwd->get_directory();
+  for( search = cwd_dirents->begin(); search != cwd_dirents->end(); search++){
     if(search->first == filename) return search->second;
   }
   return NULL;
