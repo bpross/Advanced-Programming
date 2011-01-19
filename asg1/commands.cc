@@ -1,4 +1,4 @@
-// $Id: commands.cc,v 1.11 2011-01-18 21:32:01-08 - - $
+// $Id: commands.cc,v 1.45 2011-01-18 23:02:42-08 - - $
 // Authors: Ben Ross, Erik Steggall
 // Usernames: bpross@ucsc.edu, esteggal@ucsc.edu
 
@@ -194,7 +194,6 @@ void fn_exit (inode_state &state, const wordvec &words){
 void fn_ls (inode_state &state, const wordvec &words){
   const string root = "/";
   wordvec ls_vec = words;
-  
   //Removes command from vector, size is decremented
   ls_vec.erase (ls_vec.begin());
   size_t found;
@@ -262,36 +261,125 @@ void fn_lsr (inode_state &state, const wordvec &words){
   //initalize variables, store the words after lsr command
   map<string, inode *>::iterator it;
   wordvec lsr_vec = words;
-  lsr_vec.erase (lsr_vec.begin() );
-  string filename = lsr_vec.front();
+  lsr_vec.erase(lsr_vec.begin());
+  string pathname;
+  size_t found;
+  for(unsigned int vec_iter=0;vec_iter<lsr_vec.size();vec_iter++){
+    cout << "called" << endl;
+    string old_cwd = state.get_cwd_string();
+    pathname = lsr_vec[vec_iter];
+    found = pathname.find(slash);
+    if (found != string::npos)
+      pathname.insert(0,"/");
+    if (pathname[0] == '/'){
+      inode *to_root = state.get_root();
+      state.change_cwd(*to_root);
+      state.to_root();
+      wordvec dir_change = split(lsr_vec[vec_iter],"/");
+      
+      for(unsigned int vec_iter = 0; vec_iter< dir_change.size(); vec_iter++){
+	state.append_cwd_string(dir_change[vec_iter]);
+	inode *cdir = state.locateinode( dir_change[vec_iter] );
+	if (cdir == NULL){
+	  state.set_cwd_string(old_cwd);
+	  throw yshell_exn("File does not exist");
+	}
+	else
+	  state.change_cwd(*cdir);
+      }
+    }/*
+    // Call ls preorder
+    fn_ls(state, words);
+    // Get the dirents of cwd
+    directory cwd_dirents = cwd->get_directory();
+    // For all dirents in the directory:
+    for( it = cwd_dirents.begin(); it != cwd_dirents.end(); it++){
+      
+      // Get the filename
+      string current_file = it->first;
+      // Skip through if it's . or ..
+      if(current_file == "." || current_file == "..") continue;
+      
+      // Makes sure that cwd_string is corrent 
+      string pwd_string = state.get_cwd_string();
+      if(pwd_string.compare(slash) != 0){
+	wordvec pathname = split(pwd_string, slash);
+	string end = pathname.back();
+	if(current_file.compare(end) != 0 ){
+	  state.append_cwd_string(current_file);
+	}
+      }else{
+	state.append_cwd_string(current_file);
+      }
+      
+      // Create a wordvec to pass back into lsr, needs an 
+      // lsr at the front so it doesn't delete the filename
+      wordvec curr_file;
+      curr_file.push_back("lsr");
+      curr_file.push_back(current_file);
+      // Find the node
+      inode *change_node = state.locateinode(current_file);
+      // check to make sure it's a directory
+      int type = change_node->get_type();
+      if (type != 1){
+	state.change_cwd(*change_node);
+	// call lsr recurvisly
+	fn_lsr(state, curr_file);
+      }
+      }*/
+    wordvec curr_file;
+    curr_file.push_back("lsr");
+    print_lsr(state,curr_file);
+  }
+  if (lsr_vec.size() == 0){
+    wordvec curr_file;
+    curr_file.push_back("lsr");
+    print_lsr(state,curr_file);
+  }
 
+  // set hack back to 0
+  hack = 0;
+  // change cwd back
+  inode *change_node_back = state.get_tmp();
+  state.change_cwd(*change_node_back);
+
+  TRACE ('c', state);
+  TRACE ('c', words);
+}
+
+void print_lsr(inode_state &state, const wordvec &words){
+  map<string, inode *>::iterator it;
   // Call ls preorder
-  fn_ls(state, words);
+  if (!words.empty()){
+    fn_ls(state, words);
+  }
   // Get the dirents of cwd
+  inode *cwd = state.get_cwd();
   directory cwd_dirents = cwd->get_directory();
+  
   // For all dirents in the directory:
   for( it = cwd_dirents.begin(); it != cwd_dirents.end(); it++){
-
+  
     // Get the filename
     string current_file = it->first;
     // Skip through if it's . or ..
     if(current_file == "." || current_file == "..") continue;
-
+    
     // Makes sure that cwd_string is corrent 
     string pwd_string = state.get_cwd_string();
-    if(pwd_string.compare(slash) != 0){
-      wordvec pathname = split(pwd_string, slash);
+    if(pwd_string.compare("/") != 0){
+      wordvec pathname = split(pwd_string, "/");
       string end = pathname.back();
       if(current_file.compare(end) != 0 ){
-        state.append_cwd_string(current_file);
+	state.append_cwd_string(current_file);
       }
     }else{
       state.append_cwd_string(current_file);
     }
-
+    
     // Create a wordvec to pass back into lsr, needs an 
     // lsr at the front so it doesn't delete the filename
-    wordvec curr_file;
+    wordvec curr_file = words;
     curr_file.push_back("lsr");
     curr_file.push_back(current_file);
     // Find the node
@@ -301,17 +389,9 @@ void fn_lsr (inode_state &state, const wordvec &words){
     if (type != 1){
       state.change_cwd(*change_node);
       // call lsr recurvisly
-      fn_lsr(state, curr_file);
+      print_lsr(state, curr_file);
     }
-  } 
-  // set hack back to 0
-  hack = 0;
-  // change cwd back
-  inode *change_node_back = state.get_tmp();
-  state.change_cwd(*change_node_back);
-
-  TRACE ('c', state);
-  TRACE ('c', words);
+  }
 }
 
 void fn_make (inode_state &state, const wordvec &words){

@@ -63,7 +63,7 @@ void fn_prompt (inode_state &state, const wordvec &words);
 void fn_pwd    (inode_state &state, const wordvec &words);
 void fn_rm     (inode_state &state, const wordvec &words);
 void fn_rmr    (inode_state &state, const wordvec &words);
-void pre_order (nodevec *node_vec,inode &new_root);
+void print_lsr (inode_state &state, const wordvec &words);
 
 //
 // exit_status_message -
