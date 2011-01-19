@@ -1,4 +1,4 @@
-// $Id: commands.cc,v 1.357 2011-01-18 19:06:41-08 - - $
+// $Id: commands.cc,v 1.360 2011-01-18 19:41:41-08 - - $
 
 #include <cstdlib>
 #include <cassert>
@@ -220,20 +220,31 @@ int hack = 0;
 
 void fn_lsr (inode_state &state, const wordvec &words){
   const string slash = "/";
+  // Need to store the current cwd, recursion makes this
+  // tricky, hence global variable hack.
   inode *cwd = state.get_cwd();
   if(hack == 0) state.change_tmp(*cwd);
   hack++;
+
+  //initalize variables, store the words after lsr command
   map<string, inode *>::iterator it;
   wordvec lsr_vec = words;
   lsr_vec.erase (lsr_vec.begin() );
   string filename = lsr_vec.front();
+
+  // Call ls preorder
   fn_ls(state, words);
+  // Get the dirents of cwd
   directory cwd_dirents = cwd->get_directory();
+  // For all dirents in the directory:
   for( it = cwd_dirents.begin(); it != cwd_dirents.end(); it++){
 
+    // Get the filename
     string current_file = it->first;
+    // Skip through if it's . or ..
     if(current_file == "." || current_file == "..") continue;
 
+    // Makes sure that cwd_string is corrent 
     string pwd_string = state.get_cwd_string();
     if(pwd_string.compare(slash) != 0){
       wordvec pathname = split(pwd_string, slash);
@@ -245,37 +256,48 @@ void fn_lsr (inode_state &state, const wordvec &words){
       state.append_cwd_string(current_file);
     }
 
+    // Create a wordvec to pass back into lsr, needs an 
+    // lsr at the front so it doesn't delete the filename
     wordvec curr_file;
-    curr_file.push_back("crap");
+    curr_file.push_back("lsr");
     curr_file.push_back(current_file);
+    // Find the node
     inode *change_node = state.locateinode(current_file);
+    // check to make sure it's a directory
     int type = change_node->get_type();
     if (type != 1){
       state.change_cwd(*change_node);
+      // call lsr recurvisly
       fn_lsr(state, curr_file);
     }
   } 
+  // set hack back to 0
   hack = 0;
+  // change cwd back
   inode *change_node_back = state.get_tmp();
   state.change_cwd(*change_node_back);
 
   TRACE ('c', state);
-//  TRACE ('c', words);
+  TRACE ('c', words);
 }
 
 void fn_make (inode_state &state, const wordvec &words){
+  //Following lines store the cwd because it is changed in function
   inode *cwd = state.get_cwd();
   state.change_tmp(*cwd);
 
- 
+  //Intialize variables
   string dir_path = words[1];
   string file_name;
+  // used to store the char at the rit pointer 
   string tmp;
   string::reverse_iterator it;
   int path_size = dir_path.size();
   int path_end = path_size;
   int ool = 0;
   wordvec cd_words;
+  // This loop runs backwards through the list and it deletes
+  // everything up until the '/' it stores everything it deletes
   for(it = dir_path.rbegin(); it < dir_path.rend(); it++){
     if(*it == '/'){
        ool = 1;
@@ -286,11 +308,12 @@ void fn_make (inode_state &state, const wordvec &words){
     path_size--;
     dir_path.erase(path_size, path_end);
   }
+  // If the file being created had a path, do this:
   if(ool == 1){
+    //This will change the directory to the path given
     cd_words.push_back("cd");
     cd_words.push_back(dir_path);
     fn_cd(state, cd_words);
-    //Now create a directory
     cwd = state.get_cwd();
   }
 
@@ -303,6 +326,7 @@ void fn_make (inode_state &state, const wordvec &words){
   make_vec.erase (make_vec.begin());
   //Now create a new file
   inode *check = state.locateinode(filename);
+  // check to make sure file isn't already created
   if (check != NULL){
     int type = check->get_type();
     if (type == 0)
@@ -315,6 +339,7 @@ void fn_make (inode_state &state, const wordvec &words){
     //Now add the contents of words into newfile
     newfile.writefile(make_vec);
   }
+  //Change cwd back to what it was before function was called
   inode *change_node_back = state.get_tmp();
   state.change_cwd(*change_node_back);
   TRACE ('c', state);
@@ -322,17 +347,22 @@ void fn_make (inode_state &state, const wordvec &words){
 }
 
 void fn_mkdir (inode_state &state, const wordvec &words){
+  //Following lines store the cwd because it is changed in function
   inode *cwd = state.get_cwd();
   state.change_tmp(*cwd);
 
+  //Intialize variables
   string dir_path = words[1];
   string dir_name;
+  // used to store the char at the rit pointer 
   string tmp;
   string::reverse_iterator it;
   int path_size = dir_path.size();
   int path_end = path_size;
   int ool = 0;
   wordvec cd_words;
+  // This loop runs backwards through the list and it deletes
+  // everything up until the '/' it stores everything it deletes
   for(it = dir_path.rbegin(); it < dir_path.rend(); it++){
     if(*it == '/'){
        ool = 1;
@@ -342,17 +372,18 @@ void fn_mkdir (inode_state &state, const wordvec &words){
     dir_name.insert(0, tmp);
     path_size--;
     dir_path.erase(path_size, path_end);
-//    dir_path.erase(*it);
-//    cout << *it << endl;
   }
+  // If the file being created had a path, do this:
   if(ool == 1){
+    //This will change the directory to the path given
     cd_words.push_back("cd");
     cd_words.push_back(dir_path);
     fn_cd(state, cd_words);
-    //Now create a directory
     cwd = state.get_cwd();
   }
+  //Now create a directory
   cwd->mkdir(dir_name);
+  //Change cwd back to what it was before function was called
   inode *change_node_back = state.get_tmp();
   state.change_cwd(*change_node_back);
   TRACE ('c', state);
@@ -380,37 +411,38 @@ void fn_prompt (inode_state &state, const wordvec &words){
 }
 
 void fn_pwd (inode_state &state, const wordvec &words){
+  //string used to store pwd
   vector<string> pwd_string;
+  //stores string returned from get_inode_name()
   string tmp_cwd;
   directory cwd_dirents;
   inode *cwd = state.get_cwd();
-//  pwd_string.push_back("/");
-//  pwd_string = cwd->get_inode_name();
+  // Used to check for root, root is == 1
   int inode_nr = 0;
   inode_nr = cwd->get_inode_nr();
+  // While not root, get the inode name and go to parent
   while(inode_nr != 1){
+    //stores the current inode
     tmp_cwd = cwd->get_inode_name();
     pwd_string.push_back(tmp_cwd);
-    inode_nr = cwd->get_inode_nr();
+    //The following lines change cwd to parent directory
     cwd_dirents = cwd->get_directory();
     cwd = (cwd_dirents)[".."];
     inode_nr = cwd->get_inode_nr();
     
   } 
+  // If pwd is called from root:
   if(pwd_string.empty()){
     cout << "/";
   }
   else{
+    // String was stored backwards, this prints it correctly
     vector<string>::reverse_iterator rit;
     for(rit = pwd_string.rbegin(); rit < pwd_string.rend(); ++rit){
       cout << "/" << *rit;
     }
   }
   cout << endl;
-/*
-  string pwd_string = state.get_cwd_string();
-  cout << pwd_string << endl;
-*/
   TRACE ('c', state);
   TRACE ('c', words);
 }
@@ -429,40 +461,53 @@ void fn_rm (inode_state &state, const wordvec &words){
 }
 
 void fn_rmr (inode_state &state, const wordvec &words){
-  
+  // Initialize iterator 
   map<string, inode*>::iterator it;
+  // Store only the strings entered after rmr entered
   wordvec rmr_vec = words;
   rmr_vec.erase (rmr_vec.begin() );
   string filename = rmr_vec.front();
 
+  // Change cwd to the directory specified
   inode *change_node = state.locateinode(filename);
   state.change_cwd(*change_node);
 
 
+  // get the dirents of the new directory
   directory *curr_dirents = &(change_node->get_directory() );
-
+  // Cycle through the dirents
   for(it = curr_dirents->begin(); it != curr_dirents->end(); it++){
+    // store the name of the file
     const string current_file = it->first;
     
+    // skip if the filename is . or ..
     if(current_file == "." || current_file == "..") continue;
 
+
+    // store filename into a wordvec
     wordvec curr_file;
-    change_node = state.locateinode(it->first);
-    int type = change_node->get_type();
     curr_file.push_back("rmr");
     curr_file.push_back(current_file);
+
+    // change node to the current filename
+    change_node = state.locateinode(it->first);
+    int type = change_node->get_type();
+    // make sure that it's a directory
     if(type == 1)
       fn_rm(state, curr_file);
     else
+      // if it's a directory pass it back into lsr recursivly
       fn_rmr(state, curr_file);
   }
 
+  // Change node back to it's parent
   change_node = (*curr_dirents)[".."];
+  // get the new dirents
   curr_dirents = &(change_node->get_directory() );
-
  
+  // change current working directory back
   state.change_cwd(*change_node);
-  fn_ls(state,words);
+  // call rm post-order
   fn_rm(state, words);
 
   TRACE ('c', state);

@@ -1,4 +1,4 @@
-// $Id: inode.cc,v 1.196 2011-01-18 18:04:33-08 - - $
+// $Id: inode.cc,v 1.197 2011-01-18 19:43:05-08 - - $
 
 #include <cassert>
 #include <iostream>
@@ -93,22 +93,17 @@ void inode::writefile(const wordvec &words) {
 void inode::remove (const string &filename) {
   map<string, inode*>::iterator search;
   search = contents.dirents->find(filename);
-  cout << "Removing: " << filename << endl;
   assert (search != contents.dirents->end());
   inode *remove_node = search->second;
-  cout << "in remove1" << endl;
   switch(remove_node->type){
     case DIR_INODE:
-      cout << "In dir" << endl;
       assert (remove_node->size() <= 2);
       contents.dirents->erase(search);
       break;
     case FILE_INODE:
-      cout << "In file" << endl;
       contents.dirents->erase(search);
       break;
   }
-  cout << "in remove2" << endl;
   TRACE ('i', filename);
 }
 
