@@ -1,4 +1,4 @@
-// $Id: commands.cc,v 1.360 2011-01-18 19:41:41-08 - - $
+// $Id: commands.cc,v 1.11 2011-01-18 21:32:01-08 - - $
 // Authors: Ben Ross, Erik Steggall
 // Usernames: bpross@ucsc.edu, esteggal@ucsc.edu
 
@@ -31,8 +31,38 @@ void fn_cat (inode_state &state, const wordvec &words){
   wordvec cat_vec = words;
   //Erases the command from the vector, size is decremented
   cat_vec.erase (cat_vec.begin());
+  string pathname;
+  size_t found;
+  string slash = "/";
   for(unsigned int vec_itor = 0; vec_itor < cat_vec.size(); vec_itor++){
-    inode *found_node = state.locateinode(cat_vec[vec_itor]);
+    string old_cwd = state.get_cwd_string();
+    pathname = cat_vec[vec_itor];
+    found = pathname.find(slash);
+    if (found != string::npos)
+      pathname.insert(0,slash);
+    inode *cwd = state.get_cwd();
+    string cat_file;
+    if(pathname[0] == '/'){
+      inode *to_root = state.get_root();
+      //   inode cdir (DIR_INODE);
+      state.change_cwd(*to_root);
+      state.to_root();
+      wordvec dir_change = split(cat_vec[vec_itor], slash);
+      cat_file = dir_change.back();
+      dir_change.erase(dir_change.end());
+
+      for(unsigned int vec_iter = 0; vec_iter< dir_change.size(); vec_iter++){
+	state.append_cwd_string(dir_change[vec_iter]);
+	inode *cdir = state.locateinode( dir_change[vec_iter] );
+	if (cdir == NULL){
+	  state.set_cwd_string(old_cwd);
+	  throw yshell_exn("File does not exist");
+	}
+	else
+	  state.change_cwd(*cdir);
+      }
+    }
+    inode *found_node = state.locateinode(cat_file);
     if (found_node == NULL)
       throw yshell_exn ("File does not exist");
     else{
@@ -42,6 +72,7 @@ void fn_cat (inode_state &state, const wordvec &words){
 	cout << file_contents[vec_itor] << " ";
       cout << "\n";
     }
+    state.change_cwd(*cwd);
   }
   TRACE ('c', state);
   TRACE ('c', words);
@@ -453,11 +484,48 @@ void fn_rm (inode_state &state, const wordvec &words){
   wordvec rm_vec = words;
   //Removes command from vector, size is decremented
   rm_vec.erase (rm_vec.begin());
-  //Store the Name of the file
-  string filename = rm_vec.front();
-  inode *cwd = state.get_cwd();
-  cwd->remove(filename);
   
+  //Store the Name of the file
+  string pathname;
+  size_t found;
+  string slash = "/";
+  for(unsigned int vec_itor = 0; vec_itor < rm_vec.size(); vec_itor++){
+    string old_cwd = state.get_cwd_string();
+    pathname = rm_vec[vec_itor];
+    found = pathname.find(slash);
+    if (found != string::npos)
+      pathname.insert(0,slash);
+    inode *cwd = state.get_cwd();
+    string rm_file;
+    if(pathname[0] == '/'){
+      inode *to_root = state.get_root();
+      //   inode cdir (DIR_INODE);
+      state.change_cwd(*to_root);
+      state.to_root();
+      wordvec dir_change = split(rm_vec[vec_itor], slash);
+      rm_file = dir_change.back();
+      dir_change.erase(dir_change.end());
+
+      for(unsigned int vec_iter = 0; vec_iter< dir_change.size(); vec_iter++){
+	state.append_cwd_string(dir_change[vec_iter]);
+	inode *cdir = state.locateinode( dir_change[vec_iter] );
+	if (cdir == NULL){
+	  state.set_cwd_string(old_cwd);
+	  throw yshell_exn("File does not exist");
+	}
+	else
+	  state.change_cwd(*cdir);
+      }
+    }
+    inode *found_node = state.locateinode(rm_file);
+    if (found_node == NULL)
+      throw yshell_exn ("File does not exist");
+    else{
+      inode *cwd = state.get_cwd();
+      cwd->remove(rm_file);
+    }
+    state.change_cwd(*cwd);
+  }
   TRACE ('c', state);
   TRACE ('c', words);
 }
