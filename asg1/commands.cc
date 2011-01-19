@@ -1,4 +1,4 @@
-// $Id: commands.cc,v 1.354 2011-01-18 18:53:49-08 - - $
+// $Id: commands.cc,v 1.357 2011-01-18 19:06:41-08 - - $
 
 #include <cstdlib>
 #include <cassert>
@@ -264,6 +264,36 @@ void fn_lsr (inode_state &state, const wordvec &words){
 }
 
 void fn_make (inode_state &state, const wordvec &words){
+  inode *cwd = state.get_cwd();
+  state.change_tmp(*cwd);
+
+ 
+  string dir_path = words[1];
+  string file_name;
+  string tmp;
+  string::reverse_iterator it;
+  int path_size = dir_path.size();
+  int path_end = path_size;
+  int ool = 0;
+  wordvec cd_words;
+  for(it = dir_path.rbegin(); it < dir_path.rend(); it++){
+    if(*it == '/'){
+       ool = 1;
+       break;
+    }
+    tmp = *it;
+    file_name.insert(0, tmp);
+    path_size--;
+    dir_path.erase(path_size, path_end);
+  }
+  if(ool == 1){
+    cd_words.push_back("cd");
+    cd_words.push_back(dir_path);
+    fn_cd(state, cd_words);
+    //Now create a directory
+    cwd = state.get_cwd();
+  }
+
   wordvec make_vec = words;
   //Removes command from vector, size is decremented
   make_vec.erase (make_vec.begin());
@@ -272,7 +302,6 @@ void fn_make (inode_state &state, const wordvec &words){
   //Remove the filename from rest
   make_vec.erase (make_vec.begin());
   //Now create a new file
-  inode *cwd = state.get_cwd();
   inode *check = state.locateinode(filename);
   if (check != NULL){
     int type = check->get_type();
@@ -282,10 +311,12 @@ void fn_make (inode_state &state, const wordvec &words){
       throw yshell_exn ("File already exists");
   }
   else{
-    inode newfile = cwd->mkfile(filename);
+    inode newfile = cwd->mkfile(file_name);
     //Now add the contents of words into newfile
     newfile.writefile(make_vec);
   }
+  inode *change_node_back = state.get_tmp();
+  state.change_cwd(*change_node_back);
   TRACE ('c', state);
   TRACE ('c', words);
 }
