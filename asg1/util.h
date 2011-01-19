@@ -1,4 +1,6 @@
 // $Id: util.h,v 1.3 2010-12-13 20:11:09-08 - - $
+// Authors: Ben Ross, Erik Steggall
+// Usernames: bross@ucsc.edu, esteggal@ucsc.edu
 
 //
 // util -

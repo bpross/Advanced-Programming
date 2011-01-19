@@ -1,4 +1,6 @@
 // $Id: util.cc,v 1.1 2011-01-12 11:44:44-08 - - $
+// Authors: Ben Ross, Erik Steggall
+// Usernames: bross@ucsc.edu, esteggal@ucsc.edu
 
 #include <cstdlib>
 #include <unistd.h>

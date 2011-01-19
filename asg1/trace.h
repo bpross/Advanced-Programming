@@ -1,4 +1,6 @@
 // $Id: trace.h,v 1.3 2010-12-13 20:11:09-08 - - $
+// Authors: Ben Ross, Erik Steggall
+// Usernames: bpross@ucsc.edu, esteggal@ucsc.edu
 
 #ifndef __TRACE_H__
 #define __TRACE_H__

@@ -1,4 +1,6 @@
 // $Id: commands.cc,v 1.360 2011-01-18 19:41:41-08 - - $
+// Authors: Ben Ross, Erik Steggall
+// Usernames: bpross@ucsc.edu, esteggal@ucsc.edu
 
 #include <cstdlib>
 #include <cassert>

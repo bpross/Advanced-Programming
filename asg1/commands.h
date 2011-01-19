@@ -1,4 +1,6 @@
 // $Id: commands.h,v 1.2 2010-12-13 20:11:09-08 - - $
+// Authors: Ben Ross, Erik Steggall
+// Usernames: bpross@ucsc.edu, esteggal@ucsc.edu
 
 #ifndef __COMMANDS_H__
 #define __COMMANDS_H__
