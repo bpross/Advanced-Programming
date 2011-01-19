@@ -1,4 +1,4 @@
-// $Id: inode.cc,v 1.2 2011-01-18 21:32:02-08 - - $
+// $Id: inode.cc,v 1.4 2011-01-18 23:15:19-08 - - $
 // Authors: Ben Ross, Erik Steggall
 // Usernames: bpross@ucsc.edu, esteggal@ucsc.edu
 
@@ -155,7 +155,8 @@ void inode::mkroot (const inode &start_root){
 inode inode::mkfile (const string &filename) {
   map<string, inode *>::iterator search;
   search = contents.dirents->find(filename);
-  assert (search == contents.dirents->end() );
+  if (!(search == contents.dirents->end()))
+      throw yshell_exn ("File already exists");
   inode *new_file = new inode (FILE_INODE);
   contents.dirents->insert(pair<string, inode *>(filename, new_file));
   return *new_file;

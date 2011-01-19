@@ -1,4 +1,4 @@
-// $Id: commands.cc,v 1.45 2011-01-18 23:02:42-08 - - $
+// $Id: commands.cc,v 1.47 2011-01-18 23:11:49-08 - - $
 // Authors: Ben Ross, Erik Steggall
 // Usernames: bpross@ucsc.edu, esteggal@ucsc.edu
 
@@ -440,7 +440,9 @@ void fn_make (inode_state &state, const wordvec &words){
   //Now create a new file
   inode *check = state.locateinode(filename);
   // check to make sure file isn't already created
+  cout << "before check" << endl;
   if (check != NULL){
+    cout << "in check" << endl;
     int type = check->get_type();
     if (type == 0)
       throw yshell_exn ("Cannot make file name same as a directory");
