@@ -1,4 +1,4 @@
-// $Id: commands.cc,v 1.145 2011-01-18 17:07:56-08 - - $
+// $Id: commands.cc,v 1.354 2011-01-18 18:53:49-08 - - $
 
 #include <cstdlib>
 #include <cassert>
@@ -291,10 +291,39 @@ void fn_make (inode_state &state, const wordvec &words){
 }
 
 void fn_mkdir (inode_state &state, const wordvec &words){
-  string dirname = words[1];
-  //Now create a directory
   inode *cwd = state.get_cwd();
-  cwd->mkdir(dirname);
+  state.change_tmp(*cwd);
+
+  string dir_path = words[1];
+  string dir_name;
+  string tmp;
+  string::reverse_iterator it;
+  int path_size = dir_path.size();
+  int path_end = path_size;
+  int ool = 0;
+  wordvec cd_words;
+  for(it = dir_path.rbegin(); it < dir_path.rend(); it++){
+    if(*it == '/'){
+       ool = 1;
+       break;
+    }
+    tmp = *it;
+    dir_name.insert(0, tmp);
+    path_size--;
+    dir_path.erase(path_size, path_end);
+//    dir_path.erase(*it);
+//    cout << *it << endl;
+  }
+  if(ool == 1){
+    cd_words.push_back("cd");
+    cd_words.push_back(dir_path);
+    fn_cd(state, cd_words);
+    //Now create a directory
+    cwd = state.get_cwd();
+  }
+  cwd->mkdir(dir_name);
+  inode *change_node_back = state.get_tmp();
+  state.change_cwd(*change_node_back);
   TRACE ('c', state);
   TRACE ('c', words);
 }

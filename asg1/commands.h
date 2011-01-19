@@ -4,6 +4,7 @@
 #define __COMMANDS_H__
 
 #include <map>
+#include <string>
 #include <queue>
 #include <stack>
 
@@ -53,7 +54,6 @@ void fn_cd     (inode_state &state, const wordvec &words);
 void fn_echo   (inode_state &state, const wordvec &words);
 void fn_exit   (inode_state &state, const wordvec &words);
 void fn_ls     (inode_state &state, const wordvec &words);
-//void fn_ls_lsr (inode_state &state, inode *node)
 void fn_lsr    (inode_state &state, const wordvec &words);
 void fn_make   (inode_state &state, const wordvec &words);
 void fn_mkdir  (inode_state &state, const wordvec &words);
