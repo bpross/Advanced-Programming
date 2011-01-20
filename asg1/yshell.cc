@@ -1,4 +1,4 @@
-// $Id: yshell.cc,v 1.2 2011-01-18 21:32:03-08 - - $
+// $Id: yshell.cc,v 1.3 2011-01-18 23:45:59-08 - - $
 // Authors: Ben Ross, Erik Steggall
 // Usernames: bpross@ucsc.edu, esteggal@ucsc.edu
 
@@ -79,15 +79,15 @@ int main (int argc, char **argv) {
             // function.  Complain or call it.
             wordvec words = split (line, " \t");
             TRACE ('y', "words = " << words);
-	    string comment = words[0];
+            string comment = words[0];
             if (!(comment == "#")){
-	      function fn = cmdmap[words[0]];
-	      if (fn == NULL) {
-		throw yshell_exn (words[0] + ": no such function");
-	      }
-	      fn (state, words);
-	    }
-	    prompt = state.get_prompt();
+              function fn = cmdmap[words[0]];
+              if (fn == NULL) {
+                throw yshell_exn (words[0] + ": no such function");
+              }
+              fn (state, words);
+            }
+            prompt = state.get_prompt();
          }catch (yshell_exn exn) {
             // If there is a problem discovered in any function, an
             // exn is thrown and printed here.

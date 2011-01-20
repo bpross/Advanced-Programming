@@ -1,0 +1,537 @@
+%PDF-1.2
+5 0 obj
+<</Length 6 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+1 i
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(01/18/11)Tj
+-0.659766 -12.8004 Td
+(22:20:29)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(1)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 264.512 736.5 Tm
+(egypt-mul.perl)Tj
+-137.855 18 Td
+($cmps109-wm/Assignments/asg2-dc-bigint/mul-div-egypt-perl/)Tj
+/R10 10 Tf
+-58.6574 -35.5 Td
+[(1:)-600(#!/usr/bin/perl)]TJ
+11 TL
+T*[(2:)-600(# $Id: egypt-mul.perl,v 1.1 2011-01-18 22:20:29-08 - - $)]TJ
+(3:)'
+T*[(4:)-600($0 =~ s|.*/||;)]TJ
+T*[(5:)-600(print STDERR "Usage: $0 multiplier multiplicand\\n" and exit)]TJ
+T*[(6:)-600(unless @ARGV == 2 and \($left, $right\) = @ARGV)]TJ
+T*[(7:)-600(       and $left =~ m/^\\d+$/ and $right =~ m/^\\d+$/;)]TJ
+(8:)'
+T*[(9:)-600(print "$0: verification: $left * $right = ", $left * $right, "\\n\\n";)]TJ
+-6 -11 Td
+(10:)Tj
+T*[(11:)-600($top = 1;)]TJ
+T*[(12:)-600(while \($top <= $left\) {)]TJ
+T*[(13:)-600(   push @stack, [$top, $right];)]TJ
+T*[(14:)-600(   $top += $top;)]TJ
+T*[(15:)-600(   $right += $right;)]TJ
+T*[(16:)-600(})]TJ
+(17:)'
+T*[(18:)-600($result = 0;)]TJ
+T*[(19:)-600($fmt = "%12s %12s   %12s %12s\\n";)]TJ
+T*[(20:)-600(while \(@stack\) {)]TJ
+T*[(21:)-600(   printf $fmt, "", "", $left, $result;)]TJ
+T*[(22:)-600(   \($top, $right\) = @{pop @stack};)]TJ
+T*[(23:)-600(   if \($top <= $left\) {)]TJ
+T*[(24:)-600(      $left -= $top;)]TJ
+T*[(25:)-600(      $result += $right;)]TJ
+T*[(26:)-600(      printf $fmt, $top, $right, "- " . $top, "+ " . $right;)]TJ
+T*[(27:)-600(   }else {)]TJ
+T*[(28:)-600(      printf $fmt, $top, $right, "- 0", "+ 0";)]TJ
+T*[(29:)-600(   })]TJ
+T*[(30:)-600(   printf $fmt, "", "", "= " . $left, "= " . $result;)]TJ
+T*[(31:)-600(   printf "\\n";)]TJ
+T*[(32:)-600(})]TJ
+(33:)'
+T*[(34:)-600(printf $fmt, "", "", "zero", "product";)]TJ
+(35:)'
+ET
+Q
+Q
+endstream
+endobj
+6 0 obj
+1966
+endobj
+14 0 obj
+<</Length 15 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(01/18/11)Tj
+-0.659766 -12.8004 Td
+(22:20:29)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(1)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 272.359 736.5 Tm
+(test-mul.out)Tj
+-145.701 18 Td
+($cmps109-wm/Assignments/asg2-dc-bigint/mul-div-egypt-perl/)Tj
+/R10 10 Tf
+-58.6574 -35.5 Td
+[(1:)-600(egypt-mul.perl: verification: 745 * 1033 = 769585)]TJ
+11 TL
+(2:)'
+T*[(3:)-600(                                     745            0)]TJ
+T*[(4:)-600(         512       528896          - 512     + 528896)]TJ
+T*[(5:)-600(                                   = 233     = 528896)]TJ
+(6:)'
+T*[(7:)-600(                                     233       528896)]TJ
+T*[(8:)-600(         256       264448            - 0          + 0)]TJ
+T*[(9:)-600(                                   = 233     = 528896)]TJ
+-6 -11 Td
+(10:)Tj
+T*[(11:)-600(                                     233       528896)]TJ
+T*[(12:)-600(         128       132224          - 128     + 132224)]TJ
+T*[(13:)-600(                                   = 105     = 661120)]TJ
+(14:)'
+T*[(15:)-600(                                     105       661120)]TJ
+T*[(16:)-600(          64        66112           - 64      + 66112)]TJ
+T*[(17:)-600(                                    = 41     = 727232)]TJ
+(18:)'
+T*[(19:)-600(                                      41       727232)]TJ
+T*[(20:)-600(          32        33056           - 32      + 33056)]TJ
+T*[(21:)-600(                                     = 9     = 760288)]TJ
+(22:)'
+T*[(23:)-600(                                       9       760288)]TJ
+T*[(24:)-600(          16        16528            - 0          + 0)]TJ
+T*[(25:)-600(                                     = 9     = 760288)]TJ
+(26:)'
+T*[(27:)-600(                                       9       760288)]TJ
+T*[(28:)-600(           8         8264            - 8       + 8264)]TJ
+T*[(29:)-600(                                     = 1     = 768552)]TJ
+(30:)'
+T*[(31:)-600(                                       1       768552)]TJ
+T*[(32:)-600(           4         4132            - 0          + 0)]TJ
+T*[(33:)-600(                                     = 1     = 768552)]TJ
+(34:)'
+T*[(35:)-600(                                       1       768552)]TJ
+T*[(36:)-600(           2         2066            - 0          + 0)]TJ
+T*[(37:)-600(                                     = 1     = 768552)]TJ
+(38:)'
+T*[(39:)-600(                                       1       768552)]TJ
+T*[(40:)-600(           1         1033            - 1       + 1033)]TJ
+T*[(41:)-600(                                     = 0     = 769585)]TJ
+(42:)'
+T*[(43:)-600(                                    zero      product)]TJ
+ET
+Q
+Q
+endstream
+endobj
+15 0 obj
+2886
+endobj
+18 0 obj
+<</Length 19 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(01/18/11)Tj
+-0.659766 -12.8004 Td
+(22:20:29)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(1)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 266.458 736.5 Tm
+(egypt-div.perl)Tj
+-139.8 18 Td
+($cmps109-wm/Assignments/asg2-dc-bigint/mul-div-egypt-perl/)Tj
+/R10 10 Tf
+-58.6574 -35.5 Td
+[(1:)-600(#!/usr/bin/perl)]TJ
+11 TL
+T*[(2:)-600(# $Id: egypt-div.perl,v 1.1 2011-01-18 22:20:29-08 - - $)]TJ
+(3:)'
+T*[(4:)-600($0 =~ s|.*/||;)]TJ
+T*[(5:)-600(print STDERR "Usage: $0 numerator denominator\\n" and exit)]TJ
+T*[(6:)-600(unless @ARGV == 2 and \($numer, $denom\) = @ARGV)]TJ
+T*[(7:)-600(       and $numer =~ m/^\\d+$/ and $denom =~ m/^\\d+$/;)]TJ
+(8:)'
+T*[(9:)-600(print "$0: verification: $numer / $denom = ", int $numer / $denom,)]TJ
+-6 -11 Td
+[(10:)-600(      " remainder ", $numer % $denom, "\\n\\n";)]TJ
+(11:)'
+T*[(12:)-600($top = 1;)]TJ
+T*[(13:)-600($right = $denom;)]TJ
+(14:)'
+T*[(15:)-600(while \($right <= $numer\) {)]TJ
+T*[(16:)-600(   push @stack, [$top, $right];)]TJ
+T*[(17:)-600(   $top += $top;)]TJ
+T*[(18:)-600(   $right += $right;)]TJ
+T*[(19:)-600(})]TJ
+(20:)'
+T*[(21:)-600(\($remdr, $quot\) = \($numer, 0\);)]TJ
+T*[(22:)-600($fmt = "%12s %12s   %12s %12s\\n";)]TJ
+T*[(23:)-600(while \(@stack\) {)]TJ
+T*[(24:)-600(   printf $fmt, "", "", $remdr, $quot;)]TJ
+T*[(25:)-600(   \($top, $right\) = @{pop @stack};)]TJ
+T*[(26:)-600(   if \($right <= $remdr\) {)]TJ
+T*[(27:)-600(      $remdr -= $right;)]TJ
+T*[(28:)-600(      $quot += $top;)]TJ
+T*[(29:)-600(      printf $fmt, $top, $right, "- " . $right, "+ " . $top;)]TJ
+T*[(30:)-600(   }else {)]TJ
+T*[(31:)-600(      printf $fmt, $top, $right, "- 0", "+ 0";)]TJ
+T*[(32:)-600(   })]TJ
+T*[(33:)-600(   printf $fmt, "", "", "= " . $remdr, "= " . $quot;)]TJ
+T*[(34:)-600(   printf "\\n";)]TJ
+T*[(35:)-600(})]TJ
+(36:)'
+T*[(37:)-600(printf $fmt, "", "", "remainder", "quotient";)]TJ
+ET
+Q
+Q
+endstream
+endobj
+19 0 obj
+2083
+endobj
+22 0 obj
+<</Length 23 0 R>>
+stream
+q 0.1 0 0 0.1 0 0 cm
+0 G
+380 240 5360 7080 re
+S
+0.949219 g
+380 7320 5360 180 re
+f
+0.699219 g
+380 7320 720 360 re
+f
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R9 12 Tf
+1 0 0 1 52.6641 752 Tm
+(01/18/11)Tj
+-0.659766 -12.8004 Td
+(22:20:29)Tj
+ET
+Q
+0.699219 g
+5020 7320 720 360 re
+f
+1 G
+1 g
+q
+10 0 0 10 0 0 cm BT
+/R7 28.8 Tf
+1 0 0 1 529.993 739.2 Tm
+(1)Tj
+ET
+Q
+0 G
+0 g
+q
+10 0 0 10 0 0 cm BT
+/R8 14 Tf
+1 0 0 1 274.305 736.5 Tm
+(test-div.out)Tj
+-147.647 18 Td
+($cmps109-wm/Assignments/asg2-dc-bigint/mul-div-egypt-perl/)Tj
+/R10 10 Tf
+-58.6574 -35.5 Td
+[(1:)-600(egypt-div.perl: verification: 876543 / 123 = 7126 remainder 45)]TJ
+11 TL
+(2:)'
+T*[(3:)-600(                                  876543            0)]TJ
+T*[(4:)-600(        4096       503808       - 503808       + 4096)]TJ
+T*[(5:)-600(                                = 372735       = 4096)]TJ
+(6:)'
+T*[(7:)-600(                                  372735         4096)]TJ
+T*[(8:)-600(        2048       251904       - 251904       + 2048)]TJ
+T*[(9:)-600(                                = 120831       = 6144)]TJ
+-6 -11 Td
+(10:)Tj
+T*[(11:)-600(                                  120831         6144)]TJ
+T*[(12:)-600(        1024       125952            - 0          + 0)]TJ
+T*[(13:)-600(                                = 120831       = 6144)]TJ
+(14:)'
+T*[(15:)-600(                                  120831         6144)]TJ
+T*[(16:)-600(         512        62976        - 62976        + 512)]TJ
+T*[(17:)-600(                                 = 57855       = 6656)]TJ
+(18:)'
+T*[(19:)-600(                                   57855         6656)]TJ
+T*[(20:)-600(         256        31488        - 31488        + 256)]TJ
+T*[(21:)-600(                                 = 26367       = 6912)]TJ
+(22:)'
+T*[(23:)-600(                                   26367         6912)]TJ
+T*[(24:)-600(         128        15744        - 15744        + 128)]TJ
+T*[(25:)-600(                                 = 10623       = 7040)]TJ
+(26:)'
+T*[(27:)-600(                                   10623         7040)]TJ
+T*[(28:)-600(          64         7872         - 7872         + 64)]TJ
+T*[(29:)-600(                                  = 2751       = 7104)]TJ
+(30:)'
+T*[(31:)-600(                                    2751         7104)]TJ
+T*[(32:)-600(          32         3936            - 0          + 0)]TJ
+T*[(33:)-600(                                  = 2751       = 7104)]TJ
+(34:)'
+T*[(35:)-600(                                    2751         7104)]TJ
+T*[(36:)-600(          16         1968         - 1968         + 16)]TJ
+T*[(37:)-600(                                   = 783       = 7120)]TJ
+(38:)'
+T*[(39:)-600(                                     783         7120)]TJ
+T*[(40:)-600(           8          984            - 0          + 0)]TJ
+T*[(41:)-600(                                   = 783       = 7120)]TJ
+(42:)'
+T*[(43:)-600(                                     783         7120)]TJ
+T*[(44:)-600(           4          492          - 492          + 4)]TJ
+T*[(45:)-600(                                   = 291       = 7124)]TJ
+(46:)'
+T*[(47:)-600(                                     291         7124)]TJ
+T*[(48:)-600(           2          246          - 246          + 2)]TJ
+T*[(49:)-600(                                    = 45       = 7126)]TJ
+(50:)'
+T*[(51:)-600(                                      45         7126)]TJ
+T*[(52:)-600(           1          123            - 0          + 0)]TJ
+T*[(53:)-600(                                    = 45       = 7126)]TJ
+(54:)'
+T*[(55:)-600(                               remainder     quotient)]TJ
+ET
+Q
+Q
+endstream
+endobj
+23 0 obj
+3559
+endobj
+4 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 12 0 R
+>>
+/Contents 5 0 R
+>>
+endobj
+13 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 16 0 R
+>>
+/Contents 14 0 R
+>>
+endobj
+17 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 20 0 R
+>>
+/Contents 18 0 R
+>>
+endobj
+21 0 obj
+<</Type/Page/MediaBox [0 0 612 792]
+/Parent 3 0 R
+/Resources<</ProcSet[/PDF /Text]
+/Font 24 0 R
+>>
+/Contents 22 0 R
+>>
+endobj
+3 0 obj
+<< /Type /Pages /Kids [
+4 0 R
+13 0 R
+17 0 R
+21 0 R
+] /Count 4
+>>
+endobj
+1 0 obj
+<</Type /Catalog /Pages 3 0 R
+>>
+endobj
+12 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R/R11
+11 0 R>>
+endobj
+16 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+20 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+24 0 obj
+<</R8
+8 0 R/R10
+10 0 R/R7
+7 0 R/R9
+9 0 R>>
+endobj
+8 0 obj
+<</BaseFont/Times-Roman/Type/Font
+/Subtype/Type1>>
+endobj
+10 0 obj
+<</BaseFont/Courier/Type/Font
+/Encoding 25 0 R/Subtype/Type1>>
+endobj
+25 0 obj
+<</Type/Encoding/Differences[
+126/tilde]>>
+endobj
+7 0 obj
+<</BaseFont/Helvetica-Bold/Type/Font
+/Subtype/Type1>>
+endobj
+9 0 obj
+<</BaseFont/Times-Bold/Type/Font
+/Subtype/Type1>>
+endobj
+11 0 obj
+<</BaseFont/Courier-Bold/Type/Font
+/Subtype/Type1>>
+endobj
+2 0 obj
+<</Producer(ESP Ghostscript 815.02)
+/CreationDate(D:20110118222029)
+/ModDate(D:20110118222029)>>endobj
+xref
+0 26
+0000000000 65535 f 
+0000011410 00000 n 
+0000012111 00000 n 
+0000011330 00000 n 
+0000010792 00000 n 
+0000000009 00000 n 
+0000002025 00000 n 
+0000011909 00000 n 
+0000011705 00000 n 
+0000011978 00000 n 
+0000011771 00000 n 
+0000012043 00000 n 
+0000011458 00000 n 
+0000010925 00000 n 
+0000002045 00000 n 
+0000004983 00000 n 
+0000011528 00000 n 
+0000011060 00000 n 
+0000005004 00000 n 
+0000007139 00000 n 
+0000011587 00000 n 
+0000011195 00000 n 
+0000007160 00000 n 
+0000010771 00000 n 
+0000011646 00000 n 
+0000011850 00000 n 
+trailer
+<< /Size 26 /Root 1 0 R /Info 2 0 R
+/ID [<511273542F441253F6FFC2AB11767201><511273542F441253F6FFC2AB11767201>]
+>>
+startxref
+12222
+%%EOF

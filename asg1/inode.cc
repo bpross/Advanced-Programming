@@ -1,4 +1,4 @@
-// $Id: inode.cc,v 1.4 2011-01-18 23:15:19-08 - - $
+// $Id: inode.cc,v 1.7 2011-01-18 23:48:21-08 - - $
 // Authors: Ben Ross, Erik Steggall
 // Usernames: bpross@ucsc.edu, esteggal@ucsc.edu
 
@@ -139,17 +139,21 @@ void inode::mkdir (const string &filename) {
 
 void inode::list (){
   map<string, inode*>::iterator it;
-  for( it = contents.dirents->begin(); it != contents.dirents->end(); it++){
+  for( it = contents.dirents->begin(); it != contents.dirents->end();
+       it++){
     inode *curr = it->second;
-    cout << "      " << curr->get_inode_nr() << "      " << curr->size() << "  " <<  (*it).first << endl;
+    cout << "      " << curr->get_inode_nr() << "      " << curr->size()
+         << "  " <<  (*it).first << endl;
   }
 }
 
+
 void inode::mkroot (const inode &start_root){
-//  start_root.contents.dirents->insert( pair<string, inode *>("/", start_root);
+
   inode *dot = this;
   start_root.contents.dirents->insert( pair<string, inode *>(".",dot));
-  start_root.contents.dirents->insert( pair<string, inode *>("..", this));
+  start_root.contents.dirents->insert( 
+                               pair<string, inode *>("..", this));
 }
 
 inode inode::mkfile (const string &filename) {
@@ -188,7 +192,8 @@ string inode::get_inode_name(){
    string name;
    map<string, inode*>::iterator search;
    inode *parent = (*contents.dirents)[".."];
-   for(search = parent->contents.dirents->begin(); search != parent->contents.dirents->end(); search++){
+   for(search = parent->contents.dirents->begin(); 
+       search != parent->contents.dirents->end(); search++){
      if(search->second->inode_nr == this->inode_nr)
        name = search->first;
 
@@ -209,7 +214,8 @@ void inode_state::set_cwd_string(const string start){
   cwd_string = start;
 }
 
-inode_state::inode_state(): root (NULL), cwd (NULL), prompt ("%"), cwd_string("/") {
+inode_state::inode_state(): root (NULL), cwd (NULL), prompt ("%"), 
+                            cwd_string("/") {
    TRACE ('i', "root = " << (void*) root << ", cwd = " << (void*) cwd
           << ", prompt = " << prompt);
 }
@@ -219,7 +225,8 @@ inode *inode_state::locateinode(const string &filename){
   map<string, inode *>::iterator search;
   inode *cwd = get_cwd();
   directory *cwd_dirents = &cwd->get_directory();
-  for( search = cwd_dirents->begin(); search != cwd_dirents->end(); search++){
+  for( search = cwd_dirents->begin(); search != cwd_dirents->end();
+       search++){
     if(search->first == filename) return search->second;
   }
   return NULL;

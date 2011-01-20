@@ -1,4 +1,4 @@
-// $Id: commands.cc,v 1.47 2011-01-18 23:11:49-08 - - $
+// $Id: commands.cc,v 1.57 2011-01-18 23:44:45-08 - - $
 // Authors: Ben Ross, Erik Steggall
 // Usernames: bpross@ucsc.edu, esteggal@ucsc.edu
 
@@ -51,15 +51,16 @@ void fn_cat (inode_state &state, const wordvec &words){
       cat_file = dir_change.back();
       dir_change.erase(dir_change.end());
 
-      for(unsigned int vec_iter = 0; vec_iter< dir_change.size(); vec_iter++){
-	state.append_cwd_string(dir_change[vec_iter]);
-	inode *cdir = state.locateinode( dir_change[vec_iter] );
-	if (cdir == NULL){
-	  state.set_cwd_string(old_cwd);
-	  throw yshell_exn("File does not exist");
-	}
-	else
-	  state.change_cwd(*cdir);
+      for(unsigned int vec_iter = 0; vec_iter< dir_change.size();
+          vec_iter++){
+        state.append_cwd_string(dir_change[vec_iter]);
+        inode *cdir = state.locateinode( dir_change[vec_iter] );
+        if (cdir == NULL){
+          state.set_cwd_string(old_cwd);
+          throw yshell_exn("File does not exist");
+        }
+        else
+          state.change_cwd(*cdir);
       }
     }
     inode *found_node = state.locateinode(cat_file);
@@ -68,8 +69,8 @@ void fn_cat (inode_state &state, const wordvec &words){
     else{
       wordvec file_contents = found_node->readfile();
       for(unsigned int vec_itor = 0; vec_itor < file_contents.size();
-	  vec_itor++)
-	cout << file_contents[vec_itor] << " ";
+          vec_itor++)
+        cout << file_contents[vec_itor] << " ";
       cout << "\n";
     }
     state.change_cwd(*cwd);
@@ -96,16 +97,16 @@ void fn_cd (inode_state &state, const wordvec &words){
     state.change_cwd(*to_root);
     state.to_root();
     wordvec dir_change = split(cd_vec.front(), root);
-    for(unsigned int vec_itor = 0; vec_itor < dir_change.size(); vec_itor++){
+    for(unsigned int vec_itor = 0; vec_itor < dir_change.size();
+        vec_itor++){
       state.append_cwd_string(dir_change[vec_itor]);
       inode *cdir = state.locateinode( dir_change[vec_itor] );
       if (cdir == NULL){
-	state.set_cwd_string(old_cwd);
-	throw yshell_exn("Directory does not exist");
-
+        state.set_cwd_string(old_cwd);
+        throw yshell_exn("Directory does not exist");
       }
       else
-	state.change_cwd(*cdir);
+        state.change_cwd(*cdir);
     }
   }
   else if(filename[0] == '.' && filename[1] == '.'){
@@ -115,18 +116,19 @@ void fn_cd (inode_state &state, const wordvec &words){
     state.change_cwd(*up_dir);
     wordvec dir_change = split(cd_vec.front(), root);
     dir_change.erase(dir_change.begin());
-    for(unsigned int vec_itor = 0; vec_itor < dir_change.size(); vec_itor++){
+    for(unsigned int vec_itor = 0; vec_itor < dir_change.size();
+        vec_itor++){
       if(dir_change[vec_itor] == "..")
         state.remove_dir_string();
       else
         state.append_cwd_string(dir_change[vec_itor]);
       inode *cdir = state.locateinode( dir_change[vec_itor] );
       if (cdir == NULL){
-	state.set_cwd_string(old_cwd);
-	throw yshell_exn ("Directory does not exist");
+        state.set_cwd_string(old_cwd);
+        throw yshell_exn ("Directory does not exist");
       }
       else
-	state.change_cwd(*cdir);
+        state.change_cwd(*cdir);
     }
   }
   else{
@@ -199,22 +201,27 @@ void fn_ls (inode_state &state, const wordvec &words){
   size_t found;
   string filename = ls_vec.front();
   string fake_cwd_string = "/";
+  
+  //checks to see if there is a pathname given
   found = filename.find("/");
   if (found != string::npos)
     filename.insert(0,"/");
-  if (filename[0] == '/' || (filename[0] == '.' && filename[1] == '.')){
+  //moves cwd to the path specified
+  if (filename[0] == '/' || (filename[0] == '.' &&
+      filename[1] == '.')){
     inode *fake_cwd = state.get_root();
     if(filename[0] == '/'){  
       wordvec dir_change = split(ls_vec.front(), root);
-      for(unsigned int vec_itor = 0; vec_itor < dir_change.size(); vec_itor++){
-	inode *cdir = state.locateinode( dir_change[vec_itor] );
-	if (cdir == NULL){
-	  throw yshell_exn ("Directory does not exist");
-	}
-	else{
-	  fake_cwd_string.append(dir_change[vec_itor]);
-	  fake_cwd = cdir;
-	}
+      for(unsigned int vec_itor = 0; vec_itor < dir_change.size();
+          vec_itor++){
+        inode *cdir = state.locateinode( dir_change[vec_itor] );
+        if (cdir == NULL){
+          throw yshell_exn ("Directory does not exist");
+        }
+        else{
+          fake_cwd_string.append(dir_change[vec_itor]);
+          fake_cwd = cdir;
+        }
       }
     }
     else if(filename[0] == '.' && filename[1] == '.'){
@@ -225,15 +232,15 @@ void fn_ls (inode_state &state, const wordvec &words){
       fake_cwd = up_dir;
       wordvec dir_change = split(ls_vec.front(), root);
       dir_change.erase(dir_change.begin());
-      for(unsigned int vec_itor = 0; vec_itor < dir_change.size(); vec_itor++){
-	
-	inode *cdir = state.locateinode( dir_change[vec_itor] );
-	if (cdir == NULL)
-	  throw yshell_exn ("Directory does not exist");
-	else{
-	  fake_cwd_string.append(dir_change[vec_itor]);
-	  fake_cwd = cdir;
-	}
+      for(unsigned int vec_itor = 0; vec_itor < dir_change.size(); 
+          vec_itor++){
+        inode *cdir = state.locateinode( dir_change[vec_itor] );
+        if (cdir == NULL)
+          throw yshell_exn ("Directory does not exist");
+        else{
+          fake_cwd_string.append(dir_change[vec_itor]);
+          fake_cwd = cdir;
+        }
       }
     }
     cout << fake_cwd_string << endl;
@@ -277,56 +284,18 @@ void fn_lsr (inode_state &state, const wordvec &words){
       state.to_root();
       wordvec dir_change = split(lsr_vec[vec_iter],"/");
       
-      for(unsigned int vec_iter = 0; vec_iter< dir_change.size(); vec_iter++){
-	state.append_cwd_string(dir_change[vec_iter]);
-	inode *cdir = state.locateinode( dir_change[vec_iter] );
-	if (cdir == NULL){
-	  state.set_cwd_string(old_cwd);
-	  throw yshell_exn("File does not exist");
-	}
-	else
-	  state.change_cwd(*cdir);
+      for(unsigned int vec_iter = 0; vec_iter< dir_change.size();
+          vec_iter++){
+        state.append_cwd_string(dir_change[vec_iter]);
+        inode *cdir = state.locateinode( dir_change[vec_iter] );
+        if (cdir == NULL){
+          state.set_cwd_string(old_cwd);
+          throw yshell_exn("File does not exist");
+        }
+        else
+          state.change_cwd(*cdir);
       }
-    }/*
-    // Call ls preorder
-    fn_ls(state, words);
-    // Get the dirents of cwd
-    directory cwd_dirents = cwd->get_directory();
-    // For all dirents in the directory:
-    for( it = cwd_dirents.begin(); it != cwd_dirents.end(); it++){
-      
-      // Get the filename
-      string current_file = it->first;
-      // Skip through if it's . or ..
-      if(current_file == "." || current_file == "..") continue;
-      
-      // Makes sure that cwd_string is corrent 
-      string pwd_string = state.get_cwd_string();
-      if(pwd_string.compare(slash) != 0){
-	wordvec pathname = split(pwd_string, slash);
-	string end = pathname.back();
-	if(current_file.compare(end) != 0 ){
-	  state.append_cwd_string(current_file);
-	}
-      }else{
-	state.append_cwd_string(current_file);
-      }
-      
-      // Create a wordvec to pass back into lsr, needs an 
-      // lsr at the front so it doesn't delete the filename
-      wordvec curr_file;
-      curr_file.push_back("lsr");
-      curr_file.push_back(current_file);
-      // Find the node
-      inode *change_node = state.locateinode(current_file);
-      // check to make sure it's a directory
-      int type = change_node->get_type();
-      if (type != 1){
-	state.change_cwd(*change_node);
-	// call lsr recurvisly
-	fn_lsr(state, curr_file);
-      }
-      }*/
+    }
     wordvec curr_file;
     curr_file.push_back("lsr");
     print_lsr(state,curr_file);
@@ -371,7 +340,7 @@ void print_lsr(inode_state &state, const wordvec &words){
       wordvec pathname = split(pwd_string, "/");
       string end = pathname.back();
       if(current_file.compare(end) != 0 ){
-	state.append_cwd_string(current_file);
+         state.append_cwd_string(current_file);
       }
     }else{
       state.append_cwd_string(current_file);
@@ -571,7 +540,8 @@ void fn_rm (inode_state &state, const wordvec &words){
   string pathname;
   size_t found;
   string slash = "/";
-  for(unsigned int vec_itor = 0; vec_itor < rm_vec.size(); vec_itor++){
+  for(unsigned int vec_itor = 0; vec_itor < rm_vec.size();
+      vec_itor++){
     string old_cwd = state.get_cwd_string();
     pathname = rm_vec[vec_itor];
     found = pathname.find(slash);
@@ -588,15 +558,16 @@ void fn_rm (inode_state &state, const wordvec &words){
       rm_file = dir_change.back();
       dir_change.erase(dir_change.end());
 
-      for(unsigned int vec_iter = 0; vec_iter< dir_change.size(); vec_iter++){
-	state.append_cwd_string(dir_change[vec_iter]);
-	inode *cdir = state.locateinode( dir_change[vec_iter] );
-	if (cdir == NULL){
-	  state.set_cwd_string(old_cwd);
-	  throw yshell_exn("File does not exist");
-	}
-	else
-	  state.change_cwd(*cdir);
+      for(unsigned int vec_iter = 0; vec_iter< dir_change.size();
+          vec_iter++){
+        state.append_cwd_string(dir_change[vec_iter]);
+        inode *cdir = state.locateinode( dir_change[vec_iter] );
+        if (cdir == NULL){
+          state.set_cwd_string(old_cwd);
+          throw yshell_exn("File does not exist");
+        }
+        else
+          state.change_cwd(*cdir);
       }
     }
     inode *found_node = state.locateinode(rm_file);
