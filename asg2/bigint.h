@@ -18,10 +18,17 @@ class bigint {
       friend ostream &operator<< (ostream &, const bigint &);
    private:
       int small_value;
+      typedef unsigned char digit_t;
+      typedef vector <digit_t> bigvalue_t;
+      bool negative;
+      bigvalue_t *big_value;
+
       bigpair div_rem (const bigint &that) const;
       int compare (const bigint &that) const;
       int abscompare (const bigint &that) const;
       bigint mul_by_2 ();
+      void do_bigadd(const bigint &that) const;
+      void do_bigsub(const bigint &that) const;
    public:
       //
       // Override implicit members.

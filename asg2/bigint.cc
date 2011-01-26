@@ -1,4 +1,4 @@
-// $Id: bigint.cc,v 1.2 2011-01-18 22:18:35-08 - - $
+// $Id: bigint.cc,v 1.1 2011-01-25 17:04:51-08 - - $
 
 #include <cstdlib>
 #include <exception>
@@ -11,16 +11,16 @@ using namespace std;
 #include "bigint.h"
 #include "trace.h"
 
-bigint::bigint (): small_value (0) {
+bigint::bigint (): big_value (0) {
 }
 
-bigint::bigint (const bigint &that): small_value (that.small_value) {
+bigint::bigint (const bigint &that): big_value (that.big_value) {
    *this = that;
 }
 
 bigint &bigint::operator= (const bigint &that) {
    if (this == &that) return *this;
-   this->small_value = that.small_value;
+   this->big_value = that.big_value;
    return *this;
 }
 
@@ -37,13 +37,70 @@ bigint::bigint (const string &that) {
    string::const_iterator end = that.end();
    bool isnegative = false;
    if (*itor == '_') {isnegative = true; ++itor; }
-   int newval = 0;
-   for (; itor != end; ++itor) newval = newval * 10 + *itor - '0';
-   small_value = isnegative ? - newval : + newval;
+   //bigvalue newval = 0;
+   digit_t temp;
+   for (; end != itor; --end){
+     temp = *end;
+     this->big_value->push_back(temp);
+   } 
+//   big_value = isnegative ? - newval : + newval;
 }
 
 bigint bigint::operator+ (const bigint &that) const {
-   return this->small_value + that.small_value;
+  int comp = 0;
+  int abs = 0;
+  comp = this->compare(that);
+  if(comp == 0){
+    this->do_bigadd(that);
+  }elseif(comp == -1){
+    abs = this->abscompare(that);
+  }elseif(comp == 1){
+    abs = this->abscompare(that);
+  }elseif(comp == 2){
+    cout << "something is broken" << endl;
+  }
+  return *this;
+//   return this->big_value + that.big_value;
+}
+
+
+bigint bigint::do_bigadd(const bigint &that) const{
+   int smaller = 0;
+   int abs = 0;
+   int itor = 0;
+   int itordigit = 0;
+   int thisdigit = 0;
+   int thatdigit = 0;
+   int carry = 0;
+   if(abs == 0 || abs == 1){
+     smaller = that->big_value->size();
+   }else if(abs == -1){
+     smaller = this->big_value->size();
+   }else{
+     cout << "something's broken in bigadd" << endl;
+   }
+   for(itor = 0; itor <= smaller; itor++){
+      thisdigit = this->big_value[itor];
+      thisdigit -= 48;
+      thatdigit = that.big_value[itor];
+      thatdigit -= 48;
+      itordigit = thisdigit + thatdigit;
+      if(carry == 1) itordigit++;
+      if(itordigit >= 10){
+        carry = 1;
+        itordigit -= 10;
+      }else{
+        carry = 0;
+      }
+      itordigit += 48;
+      this->big_value[itor] = itordigit;
+   }
+   while(carry != 0){
+     itor++;
+     this->big_value[itor].
+      
+     carry--;
+   }
 }
 
 bigint bigint::operator- (const bigint &that) const {
@@ -55,13 +112,37 @@ bigint bigint::operator- () const {
 }
 
 int bigint::compare (const bigint &that) const {
-   return this->small_value < that.small_value ? -1
-        : this->small_value > that.small_value ? +1 : 0;
+  if(this->negative == true && that.negative == false){ 
+    return -1;
+  }
+  if(this->negative == false && that.negative == true){
+    return 1;
+  }
+  if(this->negative == true && that.negative == true){
+    return 0;
+  }
+  if(this->negative == false && that.negative == false){
+    return 0;
+  }
+  return 2;
+
+//   return this->small_value < that.small_value ? -1
+//        : this->small_value > that.small_value ? +1 : 0;
 }
 
 int bigint::abscompare (const bigint &that) const {
-   return abs (this->small_value) < abs (that.small_value) ? -1
-        : abs (this->small_value) > abs (that.small_value) ? +1 : 0;
+  if(this->big_value->size() < that.big_value->size() ){
+    return -1;
+  }
+  if(this->big_value->size() > that.big_value->size() ){
+    return 1;
+  }
+  if(this->big_value->size() == that.big_value->size() ){
+    return 0;
+  }
+  return 2;
+//   return abs (this->small_value) < abs (that.small_value) ? -1
+//        : abs (this->small_value) > abs (that.small_value) ? +1 : 0;
 }
 
 int bigint::smallint () const {
