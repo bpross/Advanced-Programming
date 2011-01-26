@@ -1,4 +1,4 @@
-// $Id: bigint.cc,v 1.84 2011-01-25 22:11:48-08 - - $
+// $Id: bigint.cc,v 1.1 2011-01-25 17:04:51-08 - - $
 
 #include <cstdlib>
 #include <exception>
@@ -52,7 +52,7 @@ bigint::bigint (const string &that): negative(false), big_value (new bigvalue_t(
      this->big_value->push_back(temp);
    } 
 
-
+// Test print code below
    int size;
    int it;
    digit_t test;
