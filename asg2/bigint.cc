@@ -1,4 +1,4 @@
-// $Id: bigint.cc,v 1.51 2011-01-25 20:55:58-08 - - $
+// $Id: bigint.cc,v 1.74 2011-01-25 21:43:31-08 - - $
 
 #include <cstdlib>
 #include <exception>
@@ -11,10 +11,10 @@ using namespace std;
 #include "bigint.h"
 #include "trace.h"
 
-bigint::bigint (): big_value (0) {
+bigint::bigint (): negative(false),  big_value (new bigvalue_t (1, 0) ) {
 }
 
-bigint::bigint (const bigint &that): big_value (that.big_value) {
+bigint::bigint (const bigint &that): big_value (new bigvalue_t (*that.big_value) ) {
    *this = that;
 }
 
@@ -28,10 +28,17 @@ bigint::~bigint() {
    TRACE ('~', cout << *this);
 }
 
-bigint::bigint (int that): small_value (that) {
+bigint::bigint (int that): negative(false), big_value (new bigvalue_t(1, 0) ) {
+  digit_t temp;
+  while(that > 10){ 
+    temp = that % 10;
+    this->big_value->push_back(temp);
+    that /= 10;
+  }
 }
+ 
 
-bigint::bigint (const string &that) {
+bigint::bigint (const string &that): negative(false), big_value (new bigvalue_t(1, 0) ) {
    TRACE ('b', that);
    string::const_iterator itor = that.begin();
    string::const_iterator end = that.end();
@@ -39,8 +46,11 @@ bigint::bigint (const string &that) {
    if (*itor == '_') {isnegative = true; ++itor; }
    //bigvalue newval = 0;
    digit_t temp;
-   for (; end != itor; --end){
+   for (; end >= itor; end--){
+     if(*end == '\0') continue;
+     cout << "end = " << *end << endl;
      temp = *end - '0';
+     TRACE('b', "test here" << big_value);
      this->big_value->push_back(temp);
    } 
 //   big_value = isnegative ? - newval : + newval;
@@ -57,7 +67,7 @@ bigint bigint::operator+ (const bigint &that) const {
   }else if(comp == 1){
     abs = this->abscompare(that);
   }else if(comp == 2){
-    cout << "something is broken" << endl;
+    cout << "something is broken in +" << endl;
   }
   return *this;
 //   return this->big_value + that.big_value;
