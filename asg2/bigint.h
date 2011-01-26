@@ -27,8 +27,8 @@ class bigint {
       int compare (const bigint &that) const;
       int abscompare (const bigint &that) const;
       bigint mul_by_2 ();
-      void do_bigadd(const bigint &that) const;
-      void do_bigsub(const bigint &that) const;
+      bigint do_bigadd(const bigint &that) const;
+      bigint do_bigsub(const bigint &that) const;
    public:
       //
       // Override implicit members.
