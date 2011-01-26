@@ -1,4 +1,4 @@
-// $Id: bigint.cc,v 1.74 2011-01-25 21:43:31-08 - - $
+// $Id: bigint.cc,v 1.84 2011-01-25 22:11:48-08 - - $
 
 #include <cstdlib>
 #include <exception>
@@ -38,21 +38,30 @@ bigint::bigint (int that): negative(false), big_value (new bigvalue_t(1, 0) ) {
 }
  
 
-bigint::bigint (const string &that): negative(false), big_value (new bigvalue_t(1, 0) ) {
+bigint::bigint (const string &that): negative(false), big_value (new bigvalue_t() ) {
    TRACE ('b', that);
    string::const_iterator itor = that.begin();
    string::const_iterator end = that.end();
    bool isnegative = false;
    if (*itor == '_') {isnegative = true; ++itor; }
-   //bigvalue newval = 0;
    digit_t temp;
    for (; end >= itor; end--){
      if(*end == '\0') continue;
      cout << "end = " << *end << endl;
      temp = *end - '0';
-     TRACE('b', "test here" << big_value);
      this->big_value->push_back(temp);
    } 
+
+
+   int size;
+   int it;
+   digit_t test;
+   size = this->big_value->size();
+   for(it = 0; it < size; it++){
+     test = this->big_value->at(it);
+     test += '0';
+     cout << test << endl;
+   }
 //   big_value = isnegative ? - newval : + newval;
 }
 
