@@ -1,4 +1,4 @@
-// $Id: bigint.cc,v 1.1 2011-01-25 17:04:51-08 - - $
+// $Id: bigint.cc,v 1.51 2011-01-25 20:55:58-08 - - $
 
 #include <cstdlib>
 #include <exception>
@@ -40,7 +40,7 @@ bigint::bigint (const string &that) {
    //bigvalue newval = 0;
    digit_t temp;
    for (; end != itor; --end){
-     temp = *end;
+     temp = *end - '0';
      this->big_value->push_back(temp);
    } 
 //   big_value = isnegative ? - newval : + newval;
@@ -52,11 +52,11 @@ bigint bigint::operator+ (const bigint &that) const {
   comp = this->compare(that);
   if(comp == 0){
     this->do_bigadd(that);
-  }elseif(comp == -1){
+  }else if(comp == -1){
     abs = this->abscompare(that);
-  }elseif(comp == 1){
+  }else if(comp == 1){
     abs = this->abscompare(that);
-  }elseif(comp == 2){
+  }else if(comp == 2){
     cout << "something is broken" << endl;
   }
   return *this;
@@ -68,22 +68,20 @@ bigint bigint::do_bigadd(const bigint &that) const{
    int smaller = 0;
    int abs = 0;
    int itor = 0;
-   int itordigit = 0;
-   int thisdigit = 0;
-   int thatdigit = 0;
+   digit_t itordigit = 0;
+   digit_t thisdigit = 0;
+   digit_t thatdigit = 0;
    int carry = 0;
    if(abs == 0 || abs == 1){
-     smaller = that->big_value->size();
+     smaller = that.big_value->size();
    }else if(abs == -1){
      smaller = this->big_value->size();
    }else{
      cout << "something's broken in bigadd" << endl;
    }
    for(itor = 0; itor <= smaller; itor++){
-      thisdigit = this->big_value[itor];
-      thisdigit -= 48;
-      thatdigit = that.big_value[itor];
-      thatdigit -= 48;
+      thisdigit = this->big_value->at(itor);
+      thatdigit = that.big_value->at(itor);
       itordigit = thisdigit + thatdigit;
       if(carry == 1) itordigit++;
       if(itordigit >= 10){
@@ -93,14 +91,22 @@ bigint bigint::do_bigadd(const bigint &that) const{
         carry = 0;
       }
       itordigit += 48;
-      this->big_value[itor] = itordigit;
+      this->big_value->at(itor) = itordigit;
    }
    while(carry != 0){
      itor++;
-     this->big_value[itor].
-      
+     this->big_value->at(itor) += 1;
      carry--;
    }
+   if(abs == 0 || abs == 1){
+     return *this;
+   }else if(abs == -1){
+     return that;
+   }else{
+     cout << "something's broken in bigadd" << endl;
+     return that;
+   }
+   
 }
 
 bigint bigint::operator- (const bigint &that) const {
