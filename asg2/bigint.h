@@ -15,7 +15,7 @@ class bigint;
 typedef pair <bigint, bigint> bigpair;
 
 class bigint {
-      friend ostream &operator<< (ostream &, const bigint &);
+      friend ostream &operator<< (ostream &, const bigint &that);
    private:
       int small_value;
       typedef unsigned char digit_t;

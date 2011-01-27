@@ -1,4 +1,4 @@
-// $Id: main.cc,v 1.1 2011-01-25 17:04:48-08 - - $
+// $Id: main.cc,v 1.19 2011-01-26 17:40:27-08 - - $
 
 #include <deque>
 #include <exception>
@@ -36,24 +36,24 @@ DO_BINOP(do_rem, '%', %   )
 DO_BINOP(do_pow, '^', .pow)
 
 void do_clear (bigint_stack &stack) {
-   TRACE ('c', "");
-   stack.clear();
+  TRACE ('c', "");
+  stack.clear();
 }
 
 void do_dup (bigint_stack &stack) {
-   bigint top = stack.front();
-   TRACE ('d', top);
-   stack.push_front (top);
+  bigint top = stack.front();
+  TRACE ('d', top);
+  stack.push_front (top);
 }
 
 void do_printall (bigint_stack &stack) {
-   bigint_stack::const_iterator itor = stack.begin();
-   bigint_stack::const_iterator end = stack.end();
-   for (; itor != end; ++itor) cout << *itor << endl;
+  bigint_stack::const_iterator itor = stack.begin();
+  bigint_stack::const_iterator end = stack.end();
+  for (; itor != end; ++itor) cout << *itor << endl;
 }
 
 void do_print (bigint_stack &stack) {
-   cout << stack.front() << endl;
+  cout << stack.front() << endl;
 }
 
 void do_debug (bigint_stack &stack) {
@@ -124,8 +124,10 @@ int main (int argc, char **argv) {
             if (token.symbol == SCANEOF) break;
             switch (token.symbol) {
                case NUMBER:
+               {
                   operand_stack.push_front (token.lexinfo);
                   break;
+               }
                case OPERATOR: {
                   function fn = functions[token.lexinfo];
                   if (fn == NULL) {

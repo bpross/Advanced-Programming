@@ -1,4 +1,4 @@
-// $Id: bigint.cc,v 1.1 2011-01-25 17:04:51-08 - - $
+// $Id: bigint.cc,v 1.125 2011-01-26 17:46:20-08 - - $
 
 #include <cstdlib>
 #include <exception>
@@ -42,27 +42,32 @@ bigint::bigint (const string &that): negative(false), big_value (new bigvalue_t(
    TRACE ('b', that);
    string::const_iterator itor = that.begin();
    string::const_iterator end = that.end();
-   bool isnegative = false;
-   if (*itor == '_') {isnegative = true; ++itor; }
+   if (*itor == '_'){
+     this->negative = true;
+     ++itor;
+   }else{
+     this->negative = false;
+   }
    digit_t temp;
    for (; end >= itor; end--){
      if(*end == '\0') continue;
-     cout << "end = " << *end << endl;
      temp = *end - '0';
      this->big_value->push_back(temp);
-   } 
+     } 
+/*
 
-// Test print code below
    int size;
    int it;
    digit_t test;
    size = this->big_value->size();
+   if(this->negative == true) cout << '-';
    for(it = 0; it < size; it++){
      test = this->big_value->at(it);
      test += '0';
      cout << test << endl;
    }
-//   big_value = isnegative ? - newval : + newval;
+
+*/
 }
 
 bigint bigint::operator+ (const bigint &that) const {
@@ -71,14 +76,48 @@ bigint bigint::operator+ (const bigint &that) const {
   comp = this->compare(that);
   if(comp == 0){
     this->do_bigadd(that);
+    return *this;
   }else if(comp == -1){
     abs = this->abscompare(that);
+
+    if(abs == 0){
+      that.do_bigsub(*this);
+      return that;
+    }else if(abs == -1){
+      that.do_bigsub(*this);
+      return that;
+    }else if(abs == 1){
+      this->do_bigsub(that);
+      return *this;
+    }else{
+      cout << "something is broken in +" << endl;
+      return *this;
+    }
+
   }else if(comp == 1){
     abs = this->abscompare(that);
+
+    if(abs == 0){
+      this->do_bigsub(that);
+      return *this;
+    }else if(abs == -1){
+      this->do_bigsub(that);
+      return *this;
+    }else if(abs == 1){
+      that.do_bigsub(*this);
+      return that;
+    }else{
+      cout << "something is broken in +" << endl;
+      return *this;
+    }
+    
   }else if(comp == 2){
     cout << "something is broken in +" << endl;
+    return *this;
   }
+  cout << "Shouldn't be here in + " << endl;
   return *this;
+  
 //   return this->big_value + that.big_value;
 }
 
@@ -91,10 +130,11 @@ bigint bigint::do_bigadd(const bigint &that) const{
    digit_t thisdigit = 0;
    digit_t thatdigit = 0;
    int carry = 0;
+   abs = this->abscompare(that);
    if(abs == 0 || abs == 1){
-     smaller = that.big_value->size();
+     smaller = that.big_value->size() -1;
    }else if(abs == -1){
-     smaller = this->big_value->size();
+     smaller = this->big_value->size() -1;
    }else{
      cout << "something's broken in bigadd" << endl;
    }
@@ -109,14 +149,22 @@ bigint bigint::do_bigadd(const bigint &that) const{
       }else{
         carry = 0;
       }
-      itordigit += 48;
+//      itordigit += 48;
       this->big_value->at(itor) = itordigit;
    }
+   cout << "past for loop" << endl;
+/*
    while(carry != 0){
      itor++;
-     this->big_value->at(itor) += 1;
+     if(abs == 1){
+       this->big_value->at(itor) += 1;
+     }else{
+       that.big_value->at(itor) +=1;
+     }
      carry--;
    }
+*/
+   cout << "past while loop" << endl;
    if(abs == 0 || abs == 1){
      return *this;
    }else if(abs == -1){
@@ -132,23 +180,35 @@ bigint bigint::operator- (const bigint &that) const {
    return this->small_value - that.small_value;
 }
 
+
+bigint bigint::do_bigsub(const bigint &that) const{
+  int comp = 0;
+//  int abs = 0;
+  comp = this->compare(that);
+  return *this;
+
+}
+
 bigint bigint::operator- () const {
    return -small_value;
 }
 
 int bigint::compare (const bigint &that) const {
+  cout << this->negative << that.negative << endl;
   if(this->negative == true && that.negative == false){ 
+    cout << "this neg that pos " << endl;
     return -1;
-  }
-  if(this->negative == false && that.negative == true){
+  }else if(this->negative == false && that.negative == true){
+    cout << "this post that neg" << endl;
     return 1;
-  }
-  if(this->negative == true && that.negative == true){
+  }else if(this->negative == true && that.negative == true){
+    cout << "this neg that neg " << endl;
+    return 0;
+  }else if(this->negative == false && that.negative == false){
+    cout << "this pos that pos " << endl;
     return 0;
   }
-  if(this->negative == false && that.negative == false){
-    return 0;
-  }
+  cout << "fuck you dolphin" << endl;
   return 2;
 
 //   return this->small_value < that.small_value ? -1
@@ -282,7 +342,16 @@ INT_LEFT (bool, > )
 INT_LEFT (bool, >=)
 
 ostream &operator<< (ostream &out, const bigint &that) {
-   out << that.small_value;
+  int itor;
+  int size = 3;
+  bigint::digit_t temp;
+  size = that.big_value->size();
+  if(that.negative == true) cout << '-';
+  for(itor = size - 1; itor >= 0; --itor){
+    temp = that.big_value->at(itor);
+    temp += '0';
+    cout << temp;
+  }
    return out;
 }
 

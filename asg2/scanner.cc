@@ -1,4 +1,4 @@
-// $Id: scanner.cc,v 1.1 2011-01-25 18:53:37-08 - - $
+// $Id: scanner.cc,v 1.6 2011-01-26 20:31:07-08 - - $
 
 #include <iostream>
 #include <locale>
