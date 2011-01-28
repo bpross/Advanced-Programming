@@ -89,14 +89,26 @@ void fn_cd (inode_state &state, const wordvec &words){
   size_t found;
   string filename = cd_vec.front();
   found = filename.find("/");
+  wordvec dir_change = split(cd_vec.front(), root);
   if (found != string::npos)
-    filename.insert(0,"/");
+    for(unsigned int vec_itor = 0; vec_itor < dir_change.size(); vec_itor++){
+      state.append_cwd_string(dir_change[vec_itor]);
+      inode *cdir = state.locateinode( dir_change[vec_itor] );
+      if (cdir == NULL){
+	state.set_cwd_string(old_cwd);
+	throw yshell_exn("Directory does not exist");
+
+      }
+      else
+	state.change_cwd(*cdir);
+    }
+//    filename.insert(0,"/");
   if(filename[0] == '/'){
     inode *to_root = state.get_root();
  //   inode cdir (DIR_INODE);
     state.change_cwd(*to_root);
     state.to_root();
-    wordvec dir_change = split(cd_vec.front(), root);
+ //   wordvec dir_change = split(cd_vec.front(), root);
     for(unsigned int vec_itor = 0; vec_itor < dir_change.size();
         vec_itor++){
       state.append_cwd_string(dir_change[vec_itor]);
