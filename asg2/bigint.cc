@@ -1,4 +1,4 @@
-// $Id: bigint.cc,v 1.125 2011-01-26 17:46:20-08 - - $
+// $Id: bigint.cc,v 1.181 2011-01-28 09:37:16-08 - - $
 
 #include <cstdlib>
 #include <exception>
@@ -54,7 +54,6 @@ bigint::bigint (const string &that): negative(false), big_value (new bigvalue_t(
      temp = *end - '0';
      this->big_value->push_back(temp);
      } 
-/*
 
    int size;
    int it;
@@ -64,10 +63,10 @@ bigint::bigint (const string &that): negative(false), big_value (new bigvalue_t(
    for(it = 0; it < size; it++){
      test = this->big_value->at(it);
      test += '0';
-     cout << test << endl;
+     cout << test;
    }
+   cout << endl; 
 
-*/
 }
 
 bigint bigint::operator+ (const bigint &that) const {
@@ -152,7 +151,7 @@ bigint bigint::do_bigadd(const bigint &that) const{
 //      itordigit += 48;
       this->big_value->at(itor) = itordigit;
    }
-   cout << "past for loop" << endl;
+//   cout << "past for loop" << endl;
 /*
    while(carry != 0){
      itor++;
@@ -164,7 +163,7 @@ bigint bigint::do_bigadd(const bigint &that) const{
      carry--;
    }
 */
-   cout << "past while loop" << endl;
+//   cout << "past while loop" << endl;
    if(abs == 0 || abs == 1){
      return *this;
    }else if(abs == -1){
@@ -182,8 +181,67 @@ bigint bigint::operator- (const bigint &that) const {
 
 
 bigint bigint::do_bigsub(const bigint &that) const{
-  int comp = 0;
-//  int abs = 0;
+    /*Not sure if any of this works/compiles
+  int greater = 0;
+  int abs = 0;
+  int itor = 0;
+  int updigit = 0;
+  digit_t itordigit = 0;
+  digit_t thisdigit = 0;
+  digit_t thatdigit = 0;
+  int carry = 0;
+  abs = this->abscompare(that);
+  // This if statment splits the sub into two sections for lack of a better algo I only co
+mmented one because they are the same thing with this and that flipfloped
+  if(abs == 0 || abs == 1){
+    greater = this->big_value->size() -1;
+    for(itor = greater; itor > 0; itor--){
+      //This is a check to make sure there is something to be subtracted from (in "that").
+      if(that.big_value->at(itor) == NULL) break;
+      // Use thisdigit and thatdigit to avoid using to many function calls
+      thisdigit = this->big_value->at(itor);
+      thatdigit = that.big_value->at(itor);
+      if(thisdigit >= thatdigit){
+      //This is the easy part of the if statment
+        itordigit = thisdigit - thatdigit;
+      }else{
+        updigit = itor;
+        // find the next most significant digit that isn't = 0
+        while(this->big_value->at(updigit) <= 0){updigit++;}
+        // Subtract 1 from it once it's found
+        this->big_value->at(updigit)--;
+        // Add 10
+        thisdigit += 10;
+        // use itordigit to hold the value that should go into this(itor)
+        itordigit = thisdigit - thatdigit;                               
+        // replace the existing value at this(itor)
+        this->big_value->at(itor) = itordigit;
+      }
+      return *this;
+    }
+  }else if(abs == -1){
+    greater = that.big_value->size() -1;
+    for(itor = greater; itor > 0; itor--){
+      if(this->big_value->at(itor) == NULL) break;
+      thatdigit = that.big_value->at(itor);
+      thisdigit = this->big_value->at(itor);
+      if(thatdigit >= thisdigit){
+        itordigit = thatdigit - thisdigit;
+      }else{
+        updigit = itor;
+        while(that.big_value->at(updigit) <= 0){updigit++;}
+        that.big_value->at(updigit)--;
+        thatdigit += 10;
+        itordigit = thatdigit - thisdigit;
+        that->big_value->at(itor) = itordigit;
+        return that;
+      }
+    }
+  }else{
+    cout << "something broken in bigsub from abs" << endl;
+  }
+  */
+  int comp;
   comp = this->compare(that);
   return *this;
 
@@ -198,13 +256,16 @@ int bigint::compare (const bigint &that) const {
   if(this->negative == true && that.negative == false){ 
     cout << "this neg that pos " << endl;
     return -1;
-  }else if(this->negative == false && that.negative == true){
+  }
+  if(this->negative == false && that.negative == true){
     cout << "this post that neg" << endl;
     return 1;
-  }else if(this->negative == true && that.negative == true){
+  }
+  if(this->negative == true && that.negative == true){
     cout << "this neg that neg " << endl;
     return 0;
-  }else if(this->negative == false && that.negative == false){
+  }
+  if(this->negative == false && that.negative == false){
     cout << "this pos that pos " << endl;
     return 0;
   }
@@ -258,6 +319,27 @@ bigint bigint::operator* (const bigint &that) const {
    popstack (egyptstack); // junk to suppress a warning
    bigint result = 0;
    if ((*this < 0) != (that < 0)) result = - result;
+   /* Not sure if this works/compiles: pretty much sudo code, doesn't seem like enough to work but it makes sense to me.
+  bigint product = new bigint();
+  bigint bin = new bigint;
+  bin.big_value = 1;
+  //push bin up until it is close to the range of that.big_value
+  while(that.abscompare(bin) != -1){
+    bin.big_value *= 2;
+  }
+  // This loop runs as long as that isn't = 1
+  while(that.size() > 0){                     
+    // go into if statement if that is bigger than bin
+    if(that.abscompare(bin) == 1){
+      that.big_value -= bin.big_value;
+      //Add this.big_value to product
+      product.big_value += this.big_value;
+    }
+    //Multiply this by 2, divide bin by 2
+    this.big_value *= 2;
+    bin.big_value /= 2;
+  }        
+  */
    return result;
 }
 
@@ -343,9 +425,10 @@ INT_LEFT (bool, >=)
 
 ostream &operator<< (ostream &out, const bigint &that) {
   int itor;
-  int size = 3;
+  int size = 0;
   bigint::digit_t temp;
   size = that.big_value->size();
+  cout << that.negative << endl;
   if(that.negative == true) cout << '-';
   for(itor = size - 1; itor >= 0; --itor){
     temp = that.big_value->at(itor);
