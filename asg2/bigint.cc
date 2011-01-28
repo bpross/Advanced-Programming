@@ -1,4 +1,4 @@
-// $Id: bigint.cc,v 1.185 2011-01-28 09:56:04-08 - - $
+// $Id: bigint.cc,v 1.231 2011-01-28 11:06:00-08 - - $
 
 #include <cstdlib>
 #include <exception>
@@ -55,6 +55,7 @@ bigint::bigint (const string &that): negative(false), big_value (new bigvalue_t(
      temp = *end - '0';
      this->big_value->push_back(temp);
      } 
+/*test print statement
 
    int size;
    int it;
@@ -67,6 +68,7 @@ bigint::bigint (const string &that): negative(false), big_value (new bigvalue_t(
      cout << test;
    }
    cout << endl; 
+*/
 
 }
 
@@ -153,17 +155,15 @@ bigint bigint::do_bigadd(const bigint &that) const{
       this->big_value->at(itor) = itordigit;
    }
 //   cout << "past for loop" << endl;
-/*
-   while(carry != 0){
-     itor++;
+   while(carry > 0){
      if(abs == 1){
        this->big_value->at(itor) += 1;
      }else{
        that.big_value->at(itor) +=1;
      }
+     itor++;
      carry--;
    }
-*/
 //   cout << "past while loop" << endl;
    if(abs == 0 || abs == 1){
      return *this;
@@ -182,23 +182,23 @@ bigint bigint::operator- (const bigint &that) const {
 
 
 bigint bigint::do_bigsub(const bigint &that) const{
-    /*Not sure if any of this works/compiles
   int greater = 0;
+  int smaller = 0;
   int abs = 0;
   int itor = 0;
   int updigit = 0;
   digit_t itordigit = 0;
   digit_t thisdigit = 0;
   digit_t thatdigit = 0;
-  int carry = 0;
   abs = this->abscompare(that);
-  // This if statment splits the sub into two sections for lack of a better algo I only co
-mmented one because they are the same thing with this and that flipfloped
+  // This if statment splits the sub into two sections for lack of a better algo
+// I only commented one because they are the same thing with this and that flipfloped
   if(abs == 0 || abs == 1){
     greater = this->big_value->size() -1;
+    smaller = that.big_value->size() -1;
     for(itor = greater; itor > 0; itor--){
       //This is a check to make sure there is something to be subtracted from (in "that").
-      if(that.big_value->at(itor) == NULL) break;
+      if(itor > smaller) break;
       // Use thisdigit and thatdigit to avoid using to many function calls
       thisdigit = this->big_value->at(itor);
       thatdigit = that.big_value->at(itor);
@@ -222,8 +222,9 @@ mmented one because they are the same thing with this and that flipfloped
     }
   }else if(abs == -1){
     greater = that.big_value->size() -1;
+    smaller = this->big_value->size() -1;
     for(itor = greater; itor > 0; itor--){
-      if(this->big_value->at(itor) == NULL) break;
+      if(itor > smaller) break;
       thatdigit = that.big_value->at(itor);
       thisdigit = this->big_value->at(itor);
       if(thatdigit >= thisdigit){
@@ -234,16 +235,14 @@ mmented one because they are the same thing with this and that flipfloped
         that.big_value->at(updigit)--;
         thatdigit += 10;
         itordigit = thatdigit - thisdigit;
-        that->big_value->at(itor) = itordigit;
+        that.big_value->at(itor) = itordigit;
         return that;
       }
     }
   }else{
     cout << "something broken in bigsub from abs" << endl;
   }
-  */
-  int comp;
-  comp = this->compare(that);
+  cout << "do_bigsub(): Shouldn't be here" << endl;
   return *this;
 
 }
@@ -253,7 +252,6 @@ bigint bigint::operator- () const {
 }
 
 int bigint::compare (const bigint &that) const {
-  cout << this->negative << that.negative << endl;
   if(this->negative == true && that.negative == false){ 
     cout << "this neg that pos " << endl;
     return -1;
@@ -313,6 +311,10 @@ static bigpair popstack (stack <bigpair> &egyptstack) {
 // Ancient Egyptian multiplication algorithm.
 //
 bigint bigint::operator* (const bigint &that) const {
+   int binsize = 0;
+   int thatsize = 0;
+   int thissize = 0;
+   int itor = 0;
    bigint top = that;
    bigint count = 1;
    TRACE ('*', *this << " * " << that);
@@ -320,27 +322,37 @@ bigint bigint::operator* (const bigint &that) const {
    popstack (egyptstack); // junk to suppress a warning
    bigint result = 0;
    if ((*this < 0) != (that < 0)) result = - result;
-   /* Not sure if this works/compiles: pretty much sudo code, doesn't seem like enough to work but it makes sense to me.
-  bigint product = new bigint();
-  bigint bin = new bigint;
-  bin.big_value = 1;
+   // Not sure if this works/compiles: pretty much sudo code, doesn't seem like enough to work but it makes sense to me.
+  bigint product;
+  bigint bin;
+  bin.big_value->push_back(1);
   //push bin up until it is close to the range of that.big_value
   while(that.abscompare(bin) != -1){
-    bin.big_value *= 2;
+    binsize = bin.big_value->size() -1;
+    for(itor = 0; itor > binsize; itor++){
+      bin.big_value->at(itor) *= 2;
+    }
   }
   // This loop runs as long as that isn't = 1
-  while(that.size() > 0){                     
+  thatsize = that.big_value->size() -1;
+  while(thatsize > 0){                     
     // go into if statement if that is bigger than bin
     if(that.abscompare(bin) == 1){
-      that.big_value -= bin.big_value;
+      that.do_bigsub(bin);
       //Add this.big_value to product
-      product.big_value += this.big_value;
+      product.do_bigadd(*this);
     }
     //Multiply this by 2, divide bin by 2
-    this.big_value *= 2;
-    bin.big_value /= 2;
+    thissize = this->big_value->size() -1;
+    for(itor = 0; itor > thissize; itor++){
+      this->big_value->at(itor) *= 2;
+    }
+    binsize = bin.big_value->size() -1;
+    for(itor = 0; itor > thissize; itor++){
+      bin.big_value->at(itor) /= 2;
+    }
+    thatsize = that.big_value->size() -1;
   }        
-  */
    return result;
 }
 
