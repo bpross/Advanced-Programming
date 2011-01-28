@@ -1,4 +1,4 @@
-// $Id: bigint.cc,v 1.181 2011-01-28 09:37:16-08 - - $
+// $Id: bigint.cc,v 1.185 2011-01-28 09:56:04-08 - - $
 
 #include <cstdlib>
 #include <exception>
@@ -21,6 +21,7 @@ bigint::bigint (const bigint &that): big_value (new bigvalue_t (*that.big_value)
 bigint &bigint::operator= (const bigint &that) {
    if (this == &that) return *this;
    this->big_value = that.big_value;
+   this->negative = that.negative;
    return *this;
 }
 
