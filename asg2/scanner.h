@@ -1,4 +1,6 @@
 // $Id: scanner.h,v 1.1 2011-01-18 22:17:09-08 - - $
+//bpross
+//esteggal
 
 #ifndef __SCANNER_H__
 #define __SCANNER_H__

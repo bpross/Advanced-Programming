@@ -1,4 +1,6 @@
-// $Id: scanner.cc,v 1.6 2011-01-26 20:31:07-08 - - $
+// $Id: scanner.cc,v 1.4 2011-01-31 18:27:19-08 - - $
+//bpross
+//esteggal
 
 #include <iostream>
 #include <locale>

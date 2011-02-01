@@ -1,4 +1,6 @@
 // $Id: util.h,v 1.1 2011-01-18 22:17:09-08 - - $
+//bpross
+//esteggal
 
 //
 // util -

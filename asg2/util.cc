@@ -1,4 +1,6 @@
-// $Id: util.cc,v 1.1 2011-01-25 18:53:38-08 - - $
+// $Id: util.cc,v 1.2 2011-01-31 18:27:20-08 - - $
+//bpross
+//esteggal
 
 #include <cstdlib>
 #include <sstream>

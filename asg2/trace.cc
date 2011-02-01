@@ -1,4 +1,6 @@
-// $Id: trace.cc,v 1.1 2011-01-25 18:53:37-08 - - $
+// $Id: trace.cc,v 1.2 2011-01-31 18:27:19-08 - - $
+//bpross
+//esteggal
 
 #include <climits>
 #include <vector>

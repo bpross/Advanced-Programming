@@ -1,4 +1,9 @@
-// $Id: main.cc,v 1.19 2011-01-26 17:40:27-08 - - $
+
+// $Id: main.cc,v 1.4 2011-01-31 18:27:17-08 - - $
+
+//bpross
+//esteggal
+
 
 #include <deque>
 #include <exception>

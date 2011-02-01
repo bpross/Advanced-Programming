@@ -1,4 +1,6 @@
 // $Id: iterstack.h,v 1.1 2011-01-18 22:17:09-08 - - $
+//bpross
+//esteggal
 
 //
 // The class std::stack does not provide an iterator, which is needed

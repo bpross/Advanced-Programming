@@ -1,4 +1,6 @@
 // $Id: trace.h,v 1.1 2011-01-18 22:17:09-08 - - $
+//bpross
+//esteggal
 
 #ifndef __TRACE_H__
 #define __TRACE_H__

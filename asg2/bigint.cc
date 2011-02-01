@@ -1,4 +1,6 @@
-// $Id: bigint.cc,v 1.231 2011-01-28 11:06:00-08 - - $
+// $Id: bigint.cc,v 1.17 2011-01-31 18:27:18-08 - - $
+//bpross
+//esteggal
 
 #include <cstdlib>
 #include <exception>
@@ -11,10 +13,12 @@ using namespace std;
 #include "bigint.h"
 #include "trace.h"
 
-bigint::bigint (): negative(false),  big_value (new bigvalue_t (1, 0) ) {
+bigint::bigint (): negative(false),  
+                   big_value (new bigvalue_t (1, 0) ) {
 }
 
-bigint::bigint (const bigint &that): big_value (new bigvalue_t (*that.big_value) ) {
+bigint::bigint (const bigint &that): big_value 
+               (new bigvalue_t (*that.big_value) ) {
    *this = that;
 }
 
@@ -29,7 +33,8 @@ bigint::~bigint() {
    TRACE ('~', cout << *this);
 }
 
-bigint::bigint (int that): negative(false), big_value (new bigvalue_t(1, 0) ) {
+bigint::bigint (int that): negative(false), 
+                           big_value (new bigvalue_t(1, 0) ) {
   digit_t temp;
   while(that > 10){ 
     temp = that % 10;
@@ -39,7 +44,8 @@ bigint::bigint (int that): negative(false), big_value (new bigvalue_t(1, 0) ) {
 }
  
 
-bigint::bigint (const string &that): negative(false), big_value (new bigvalue_t() ) {
+bigint::bigint (const string &that): negative(false), 
+                big_value (new bigvalue_t() ) {
    TRACE ('b', that);
    string::const_iterator itor = that.begin();
    string::const_iterator end = that.end();
@@ -176,10 +182,6 @@ bigint bigint::do_bigadd(const bigint &that) const{
    
 }
 
-bigint bigint::operator- (const bigint &that) const {
-   return this->small_value - that.small_value;
-}
-
 
 bigint bigint::do_bigsub(const bigint &that) const{
   int greater = 0;
@@ -191,15 +193,19 @@ bigint bigint::do_bigsub(const bigint &that) const{
   digit_t thisdigit = 0;
   digit_t thatdigit = 0;
   abs = this->abscompare(that);
-  // This if statment splits the sub into two sections for lack of a better algo
-// I only commented one because they are the same thing with this and that flipfloped
+  // This if statment splits the sub into two sections for 
+  //lack of a better algo
+  // I only commented one because they are the same thing 
+  //with this and that flipfloped
   if(abs == 0 || abs == 1){
     greater = this->big_value->size() -1;
     smaller = that.big_value->size() -1;
     for(itor = greater; itor > 0; itor--){
-      //This is a check to make sure there is something to be subtracted from (in "that").
+      //This is a check to make sure there is something to 
+      //be subtracted from (in "that").
       if(itor > smaller) break;
-      // Use thisdigit and thatdigit to avoid using to many function calls
+      // Use thisdigit and thatdigit to avoid using to many function 
+      //calls
       thisdigit = this->big_value->at(itor);
       thatdigit = that.big_value->at(itor);
       if(thisdigit >= thatdigit){
@@ -213,8 +219,9 @@ bigint bigint::do_bigsub(const bigint &that) const{
         this->big_value->at(updigit)--;
         // Add 10
         thisdigit += 10;
-        // use itordigit to hold the value that should go into this(itor)
-        itordigit = thisdigit - thatdigit;                               
+        // use itordigit to hold the value that should go into 
+        //this(itor)
+        itordigit = thisdigit - thatdigit;
         // replace the existing value at this(itor)
         this->big_value->at(itor) = itordigit;
       }
@@ -247,8 +254,61 @@ bigint bigint::do_bigsub(const bigint &that) const{
 
 }
 
-bigint bigint::operator- () const {
-   return -small_value;
+bigint bigint::operator- (const bigint &that) const {
+  int comp = 0;
+  int abs = 0;
+  comp = this->compare(that);
+  if(comp == 0){
+    this->do_bigsub(that);
+    return *this;
+  }
+  else if(comp == -1){
+    abs = this->abscompare(that);
+
+    if(abs == 0){
+      that.do_bigadd(*this);
+      return that;
+    }
+    else if(abs == -1){
+      that.do_bigadd(*this);
+      return that;
+    }
+    else if(abs == 1){
+      this->do_bigadd(that);
+      return *this;
+    }
+    else{
+      cout << "something is broken in -" << endl;
+      return *this;
+    }
+  }
+  else if(comp == 1){
+    abs = this->abscompare(that);
+
+    if(abs == 0){
+      this->do_bigadd(that);
+      return *this;
+    }
+    else if(abs == -1){
+      this->do_bigadd(that);
+      return *this;
+    }
+    else if(abs == 1){
+      that.do_bigadd(*this);
+      return that;
+    }
+    else{
+      cout << "something is broken in -" << endl;
+      return *this;
+    
+    }
+  }
+  else if(comp == 2){
+    cout << "something is broken in -" << endl;
+    return *this;
+  }
+  cout << "Shouldn't be here in -" << endl;
+  return *this;
 }
 
 int bigint::compare (const bigint &that) const {
@@ -268,7 +328,7 @@ int bigint::compare (const bigint &that) const {
     cout << "this pos that pos " << endl;
     return 0;
   }
-  cout << "fuck you dolphin" << endl;
+  
   return 2;
 
 //   return this->small_value < that.small_value ? -1
@@ -321,8 +381,9 @@ bigint bigint::operator* (const bigint &that) const {
    stack <bigpair> egyptstack;
    popstack (egyptstack); // junk to suppress a warning
    bigint result = 0;
-   if ((*this < 0) != (that < 0)) result = - result;
-   // Not sure if this works/compiles: pretty much sudo code, doesn't seem like enough to work but it makes sense to me.
+   //if ((*this < 0) != (that < 0)) result = - result;
+   // Not sure if this works/compiles: pretty much sudo code, 
+   //doesn't seem like enough to work but it makes sense to me.
   bigint product;
   bigint bin;
   bin.big_value->push_back(1);
@@ -361,21 +422,48 @@ bigint bigint::operator* (const bigint &that) const {
 //
 bigpair bigint::div_rem (const bigint &that) const {
    if (that == 0) throw range_error ("divide by 0");
-   bigint count = 1;
-   bigint top = abs (that.small_value);
+   int top = this->abscompare(that);
+   bigpair return_pair;
    TRACE ('/', *this << " /% " << that);
    stack <bigpair> egyptstack;
    bigint quotient = 0;
-   bigint remainder = abs (this->small_value);
-   return bigpair (quotient, remainder);
+   bigint remainder = 0;
+   int comp = 0;
+   if (top == -1){
+     quotient = *this;
+     while(comp != -1){
+       quotient.do_bigadd(quotient);
+       remainder = that - quotient;
+       return_pair.first = quotient;
+       return_pair.second = remainder;
+       egyptstack.push(return_pair);
+       comp = that.abscompare(quotient);
+     }
+   }
+   else if(top == -1){
+     quotient = that;
+     while (comp != -1){
+       quotient.do_bigadd(quotient);
+       remainder = *this - quotient;
+       return_pair.first = quotient;
+       return_pair.second = remainder;
+       egyptstack.push(return_pair);
+       comp = this->abscompare(quotient);
+     }
+   }
+   egyptstack.pop();
+   return_pair = egyptstack.top();
+   return return_pair;
 }
 
 bigint bigint::operator/ (const bigint &that) const {
-   return div_rem (that).first;
+  bigpair div_rem = this->div_rem(that); 
+  return div_rem.first;
 }
 
 bigint bigint::operator% (const bigint &that) const {
-   return div_rem (that).second;
+  bigpair div_rem = this->div_rem(that); 
+  return div_rem.second;
 }
 
 #define TRACE_POW \
