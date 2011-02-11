@@ -129,6 +129,7 @@ object *interpreter::make_object (parameters &command) {
 
 object *interpreter::make_text (parameters &command) {
    TRACE ('f', command);
+   cout << "Here";
    return new text ("", points(0), string());
 }
 
