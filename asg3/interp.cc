@@ -56,12 +56,14 @@ void interpreter::interpret (parameters &params) {
 }
 
 void interpreter::do_define (parameters &params) {
+//   cout << "In do_define: " << params << endl;
    TRACE ('i', params);
    string name = shift (params);
    objmap[name] = make_object (params);
 }
 
 void interpreter::do_draw (parameters &params) {
+//   cout << "In do_draw: " << params << endl;
    TRACE ('i', params);
    string name = shift (params);
    object *thing = objmap[name];
@@ -129,8 +131,10 @@ object *interpreter::make_object (parameters &command) {
 
 object *interpreter::make_text (parameters &command) {
    TRACE ('f', command);
-   cout << "Here";
+//   cout << "In make_text: " << endl;
+   cout << "Correct output: " << endl << command.back() << endl;
    return new text ("", points(0), string());
+//   return new text (command.back(), points(0), string());
 }
 
 object *interpreter::make_ellipse (parameters &command) {
