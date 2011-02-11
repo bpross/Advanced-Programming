@@ -62,6 +62,21 @@ void text::draw (ostream &out, const xycoords &coords,
                 const degrees &angle) {
    DTRACE ("font=" << fontname << " size=" << fontsize
            << " \"" << textdata << "\"")
+   cout << "font_size: " << fontsize << " font: " << fontname << " writing: " << textdata << endl;
+   cout << "xycoords: " << coords << " degrees: " << angle << endl;
+   out << "gsave" << endl;
+   out << "    /" << fontname << " findfont" << endl;
+   out << "    " << fontsize << " scalefont setfont" << endl;
+   out << "    144 576 translate" << endl << "    0 rotate" << endl;
+   out << "    0 0 moveto" << endl;
+   out << "    (";
+   unsigned int itor;
+   for(itor = 0; itor < textdata.size(); ++itor){
+       out << "\\" << textdata.at(itor);
+   }
+   out << ")" << endl;
+   out << "    show" << endl;
+   out << "grestore" << endl;
 }
 
 void ellipse::draw (ostream &out, const xycoords &coords,

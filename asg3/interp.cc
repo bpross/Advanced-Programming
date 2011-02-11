@@ -57,6 +57,7 @@ void interpreter::interpret (parameters &params) {
 
 void interpreter::do_define (parameters &params) {
 //   cout << "In do_define: " << params << endl;
+   outfile << "%%Command[1]: define " << params << endl;
    TRACE ('i', params);
    string name = shift (params);
    objmap[name] = make_object (params);
@@ -66,6 +67,8 @@ void interpreter::do_draw (parameters &params) {
 //   cout << "In do_draw: " << params << endl;
    TRACE ('i', params);
    string name = shift (params);
+   cout << "%%Command[1]: draw " << params << endl;
+   outfile << "%%Command[1]: draw " << name << endl;
    object *thing = objmap[name];
    if (thing == NULL) throw runtime_error (name + ": no such object");
    degrees angle = degrees (0);
@@ -102,7 +105,7 @@ void interpreter::startpage () {
    outfile << page_xoffset << " " << page_yoffset
            << " translate" << endl;
    outfile << "/Courier findfont 10 scalefont setfont" << endl;
-   outfile << "0 0 moveto (" << infilename << ":"
+   outfile << "0 0 moveto" << endl << " (" << infilename << ":"
            << pagenr << ") show" << endl;
 
 }
@@ -131,10 +134,11 @@ object *interpreter::make_object (parameters &command) {
 
 object *interpreter::make_text (parameters &command) {
    TRACE ('f', command);
-//   cout << "In make_text: " << endl;
-   cout << "Correct output: " << endl << command.back() << endl;
-   return new text ("", points(0), string());
-//   return new text (command.back(), points(0), string());
+   const string size = shift (command);
+   double fontsize = from_string<double>(size);
+   string fontname = shift (command);
+   string textdata = shift (command);
+   return new text (string(fontname), points(fontsize), string(textdata) );
 }
 
 object *interpreter::make_ellipse (parameters &command) {
