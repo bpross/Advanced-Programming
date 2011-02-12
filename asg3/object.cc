@@ -62,12 +62,19 @@ void text::draw (ostream &out, const xycoords &coords,
                 const degrees &angle) {
    DTRACE ("font=" << fontname << " size=" << fontsize
            << " \"" << textdata << "\"")
+//   string strfirst = coords.first;
+//   double first = from_string<double>(strfirst);
+//   first = first*72;
+//   coords.second = coords.second*72; 
+//   coords = coords*72;
+   double first = double(coords.first);
+   double second = double(coords.second);
    cout << "font_size: " << fontsize << " font: " << fontname << " writing: " << textdata << endl;
    cout << "xycoords: " << coords << " degrees: " << angle << endl;
    out << "gsave" << endl;
    out << "    /" << fontname << " findfont" << endl;
    out << "    " << fontsize << " scalefont setfont" << endl;
-   out << "    144 576 translate" << endl << "    0 rotate" << endl;
+   out << "    " << first << " " << second << " translate" << endl << "    0 rotate" << endl;
    out << "    0 0 moveto" << endl;
    out << "    (";
    unsigned int itor;
@@ -81,24 +88,44 @@ void text::draw (ostream &out, const xycoords &coords,
 
 void ellipse::draw (ostream &out, const xycoords &coords,
                 const degrees &angle) {
+   out << " Hello" << endl;
+
    DTRACE ("height=" << height << " width=" << width
            << " thick=" << thick);
 }
 
 void polygon::draw (ostream &out, const xycoords &coords,
                 const degrees &angle) {
+   out << "Hello" << endl;
    DTRACE ( "thick=" << thick << " coords=" << endl
             << coordinates);
 }
 
 coordlist rectangle::make_list (
             const inches &height, const inches &width) {
-   coordlist coordlist;
+   coordlist coordlist; 
+   double rect_height_d = double(height);
+   double rect_width_d = double(width);
+   inches rect_height(rect_height_d);
+   inches rect_width(rect_width_d);
+   inches zero(0);
+   xycoords side1(rect_height, zero);
+   xycoords side2(rect_width, zero);
+   xycoords side3(zero, rect_width);
+   coordlist.push_back(side1);
+   coordlist.push_back(side2);
+   coordlist.push_back(side3);
    return coordlist;
 }
 
 coordlist line::make_list (const inches &length) {
    coordlist coordlist;
+   double line_length = double(length);
+   inches start(0);
+   inches end(line_length);
+   xycoords linecoord(end, start);
+   coordlist.push_back(linecoord);
+   cout << length << endl;
    return coordlist;
 }
 

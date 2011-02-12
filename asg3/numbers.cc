@@ -8,22 +8,22 @@ using namespace std;
 #include "util.h"
 
 ostream &operator<< (ostream &out, const degrees &that) {
-   out << that.angle << "deg";
+   out << that.angle;
    return out;
 }
 
 ostream &operator<< (ostream &out, const points &that) {
-   out << that.pointvalue << "pt";
+   out << that.pointvalue;
    return out;
 }
 
 ostream &operator<< (ostream &out, const inches &that) {
-   out << that.pointvalue / PTS_PER_INCH << "in";
+   out << that.pointvalue / PTS_PER_INCH;
    return out;
 }
 
 ostream &operator<< (ostream &out, const xycoords &coords) {
-   out << "(" << coords.first << "," << coords.second << ")";
+   out << coords.first << " " << coords.second;
    return out;
 }
 

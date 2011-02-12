@@ -142,32 +142,68 @@ object *interpreter::make_text (parameters &command) {
 }
 
 object *interpreter::make_ellipse (parameters &command) {
+   string strheight = shift (command);
+   string strwidth = shift (command);
+   string strthick = shift (command);
+   double height = from_string<double>(strheight);
+   double width = from_string<double>(strwidth);
+   double thickness = from_string<double>(strthick);
+   cout << "In make elipse: command = " << command << endl;
    TRACE ('f', command);
-   return new ellipse (inches(0), inches(0), points(0));
+   return new ellipse (inches(height), inches(width), points(thickness));
 }
 
 object *interpreter::make_circle (parameters &command) {
+   cout << "In make circle: command = " << command << endl;
+   string strdiam = shift (command);
+   double diameter = from_string<double>(strdiam);
+   string strthick = shift (command);
+   double thickness = from_string<double>(strthick);
+   
    TRACE ('f', command);
-   return new circle (inches(0), points(0));
+   return new circle (inches(diameter), points(thickness));
 }
 
 object *interpreter::make_polygon (parameters &command) {
+   cout << "In make polygon: command = " << command << endl;
+//   coordlist coords = new coordlist();
+   while(command.size() < 0){
+     string strcoord = shift (command);
+     double coord = from_string<double>(strcoord);
+   }
    TRACE ('f', command);
    return new polygon (coordlist(), points(0));
 }
 
 object *interpreter::make_rectangle (parameters &command) {
+   cout << "In make rectangle: command = " << command << endl;
+   string strheight = shift (command);
+   string strwidth = shift (command);
+   string strthick = shift (command);
+   double height = from_string<double>(strheight);
+   double width = from_string<double>(strwidth);
+   double thickness = from_string<double>(strthick);
    TRACE ('f', command);
-   return new rectangle (inches(0), inches(0), points(0));
+   return new rectangle (inches(height), inches(width), points(thickness));
 }
 
 object *interpreter::make_square (parameters &command) {
+   string strwidth = shift (command);
+   string strthick = shift (command);
+   double width = from_string<double>(strwidth);
+   double thickness = from_string<double>(strthick);
+   cout << "In make square: command = " << command << endl;
    TRACE ('f', command);
-   return new square (inches(0), points(0));
+   return new square (inches(width), points(thickness));
 }
 
 object *interpreter::make_line (parameters &command) {
+   string strlength = shift (command);
+   string strthick = shift (command);
+   double length = from_string<double>(strlength);
+   double thickness = from_string<double>(strthick);
+   cout << "In make line: command = " << command << endl;
    TRACE ('f', command);
-   return new line (inches(0), points(0));
+   return new line (inches(length), points(thickness));
 }
 
