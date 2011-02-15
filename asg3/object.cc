@@ -62,11 +62,6 @@ void text::draw (ostream &out, const xycoords &coords,
                 const degrees &angle) {
    DTRACE ("font=" << fontname << " size=" << fontsize
            << " \"" << textdata << "\"")
-//   string strfirst = coords.first;
-//   double first = from_string<double>(strfirst);
-//   first = first*72;
-//   coords.second = coords.second*72; 
-//   coords = coords*72;
    double first = double(coords.first);
    double second = double(coords.second);
    cout << "font_size: " << fontsize << " font: " << fontname << " writing: " << textdata << endl;
@@ -89,16 +84,49 @@ void text::draw (ostream &out, const xycoords &coords,
 void ellipse::draw (ostream &out, const xycoords &coords,
                 const degrees &angle) {
    out << " Hello" << endl;
-
    DTRACE ("height=" << height << " width=" << width
            << " thick=" << thick);
+   double first = double(coords.first);
+   double second = double(coords.second);
+   cout << "first = " << first << "second = " << second << endl;
+   cout << "angle = " << angle << endl;
+   out << "gsave" << endl;
+   out << "   newpath" << endl;
+   out << "   /save matrix currentmatrix def" << endl;
+   out << "   " << first << " " << second << " traslate" << endl;
+
+   list<xycoords>::const_iterator itor;
+   for(itor = coordinates.begin(); itor != coordinates.end();++itor){
+     cout << "   " << *itor << " rlineto " << endl;
+   }
+
+   out << "   " << angle << " rotate" << endl;
+   out << "   " << thick <<  " setlinewidth" << endl;
+   out << "   stroke" << endl;
+   out << "grestore" << endl;
+   
 }
 
 void polygon::draw (ostream &out, const xycoords &coords,
                 const degrees &angle) {
-   out << "Hello" << endl;
    DTRACE ( "thick=" << thick << " coords=" << endl
             << coordinates);
+   out << "gsave" << endl;
+   out << "   newpath" << endl;
+   double first = double(coords.first);
+   double second = double(coords.second);
+   out << "   " << first << " " << second << " translate" << endl;
+   out << "   " << angle << " rotate" << endl;
+   out << "   0 0 moveto" << endl;
+   list<xycoords>::const_iterator itor;
+   for(itor = coordinates.begin(); itor != coordinates.end();++itor){
+     out << "   " << *itor << " rlineto " << endl;
+   }
+   out << "   closepath" << endl;
+   out << "   " << thick <<  " setlinewidth" << endl;
+   out << "   stroke" << endl;
+   out << "grestore" << endl;
+   
 }
 
 coordlist rectangle::make_list (
@@ -108,10 +136,11 @@ coordlist rectangle::make_list (
    double rect_width_d = double(width);
    inches rect_height(rect_height_d);
    inches rect_width(rect_width_d);
+   inches rect_height_neg(-rect_height_d);
    inches zero(0);
-   xycoords side1(rect_height, zero);
+   xycoords side1(zero, rect_height);
    xycoords side2(rect_width, zero);
-   xycoords side3(zero, rect_width);
+   xycoords side3(zero, rect_height_neg);
    coordlist.push_back(side1);
    coordlist.push_back(side2);
    coordlist.push_back(side3);

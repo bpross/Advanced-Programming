@@ -56,7 +56,7 @@ void interpreter::interpret (parameters &params) {
 }
 
 void interpreter::do_define (parameters &params) {
-//   cout << "In do_define: " << params << endl;
+   cout << "In do_define: " << params << endl;
    outfile << "%%Command[1]: define " << params << endl;
    TRACE ('i', params);
    string name = shift (params);
@@ -66,6 +66,7 @@ void interpreter::do_define (parameters &params) {
 void interpreter::do_draw (parameters &params) {
 //   cout << "In do_draw: " << params << endl;
    TRACE ('i', params);
+   cout << "PARAMS SIZE: " << params.size() << endl;
    string name = shift (params);
    cout << "%%Command[1]: draw " << params << endl;
    outfile << "%%Command[1]: draw " << name << endl;
@@ -144,10 +145,13 @@ object *interpreter::make_text (parameters &command) {
 object *interpreter::make_ellipse (parameters &command) {
    string strheight = shift (command);
    string strwidth = shift (command);
-   string strthick = shift (command);
    double height = from_string<double>(strheight);
    double width = from_string<double>(strwidth);
-   double thickness = from_string<double>(strthick);
+   double thickness = 2;
+   if (command.size() > 0){
+     string strthick = shift (command);
+     thickness = from_string<double>(strthick);
+   }
    cout << "In make elipse: command = " << command << endl;
    TRACE ('f', command);
    return new ellipse (inches(height), inches(width), points(thickness));
@@ -166,32 +170,54 @@ object *interpreter::make_circle (parameters &command) {
 
 object *interpreter::make_polygon (parameters &command) {
    cout << "In make polygon: command = " << command << endl;
-//   coordlist coords = new coordlist();
-   while(command.size() < 0){
-     string strcoord = shift (command);
-     double coord = from_string<double>(strcoord);
+   coordlist coords;
+   double point = 2;
+   while(command.size() > 1){
+     string strcoordx = shift (command);
+     string strcoordy = shift (command);
+     double coordx = from_string<double>(strcoordx);
+     double coordy = from_string<double>(strcoordy);
+     coordx *= 72;
+     coordy *= 72;
+     cout << "x " << strcoordx << "y " << strcoordy << endl;
+     inches polyX(coordx);
+     inches polyY(coordy);
+     xycoords side(polyX, polyY);
+     coords.push_back(side);
+   }
+   if(command.size() == 1){
+      string strpoint = shift (command);
+      cout << "strpoint = " << strpoint << endl;
+      point = from_string<double>(strpoint);
    }
    TRACE ('f', command);
-   return new polygon (coordlist(), points(0));
+   return new polygon (coordlist(coords), points(point));
 }
 
 object *interpreter::make_rectangle (parameters &command) {
    cout << "In make rectangle: command = " << command << endl;
    string strheight = shift (command);
    string strwidth = shift (command);
-   string strthick = shift (command);
+   double thickness = 2;
+   if (command.size() > 0){
+      string strthick = shift (command);
+      thickness = from_string<double>(strthick);
+   }
    double height = from_string<double>(strheight);
    double width = from_string<double>(strwidth);
-   double thickness = from_string<double>(strthick);
    TRACE ('f', command);
    return new rectangle (inches(height), inches(width), points(thickness));
+
 }
 
 object *interpreter::make_square (parameters &command) {
    string strwidth = shift (command);
-   string strthick = shift (command);
    double width = from_string<double>(strwidth);
-   double thickness = from_string<double>(strthick);
+   double thickness = 2;
+   if (command.size() > 0){
+     string strthick = shift (command);
+     thickness = from_string<double>(strthick);
+   }
    cout << "In make square: command = " << command << endl;
    TRACE ('f', command);
    return new square (inches(width), points(thickness));
