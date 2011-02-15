@@ -1,4 +1,5 @@
 // $Id: object.h,v 1.1 2011-01-25 18:56:05-08 - - $
+//bpross, esteggall
 
 #ifndef __OBJECT_H__
 #define __OBJECT_H__

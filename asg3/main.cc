@@ -1,4 +1,5 @@
 // $Id: main.cc,v 1.1 2011-01-25 18:56:05-08 - - $
+//bpross, esteggall
 
 #include <fstream>
 #include <iostream>

@@ -1,4 +1,5 @@
 // $Id: trace.h,v 1.1 2011-01-25 18:56:05-08 - - $
+//bpross, esteggall
 
 #ifndef __TRACE_H__
 #define __TRACE_H__

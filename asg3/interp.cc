@@ -1,4 +1,5 @@
 // $Id: interp.cc,v 1.1 2011-01-25 18:56:05-08 - - $
+//bpross, esteggall
 
 #include <list>
 #include <map>
@@ -9,6 +10,8 @@ using namespace std;
 #include "interp.h"
 #include "object.h"
 #include "util.h"
+
+static int command_num = 1;
 
 interpreter::interpreter(const string &filename, ostream &outfile,
                          objectmap &objmap):
@@ -56,20 +59,18 @@ void interpreter::interpret (parameters &params) {
 }
 
 void interpreter::do_define (parameters &params) {
-   cout << "In do_define: " << params << endl;
-   outfile << "%%Command[1]: define " << params << endl;
+   outfile << "%%Command["<< command_num <<"]: define "
+                                     << params << endl;
    TRACE ('i', params);
    string name = shift (params);
    objmap[name] = make_object (params);
+   command_num += 1;
 }
 
 void interpreter::do_draw (parameters &params) {
-//   cout << "In do_draw: " << params << endl;
    TRACE ('i', params);
-   cout << "PARAMS SIZE: " << params.size() << endl;
    string name = shift (params);
-   cout << "%%Command[1]: draw " << params << endl;
-   outfile << "%%Command[1]: draw " << name << endl;
+   outfile << "%%Command["<< command_num <<"]: draw " << name << endl;
    object *thing = objmap[name];
    if (thing == NULL) throw runtime_error (name + ": no such object");
    degrees angle = degrees (0);
@@ -81,6 +82,7 @@ void interpreter::do_draw (parameters &params) {
    xycoords coords (inches (from_string<double> (params.front())),
                     inches (from_string<double> (params.back())));
    thing->draw (outfile, coords, angle);
+   command_num += 1;
 }
 
 void interpreter::do_newpage (parameters &params) {
@@ -106,8 +108,11 @@ void interpreter::startpage () {
    outfile << page_xoffset << " " << page_yoffset
            << " translate" << endl;
    outfile << "/Courier findfont 10 scalefont setfont" << endl;
-   outfile << "0 0 moveto" << endl << " (" << infilename << ":"
+   outfile << "0 746 moveto" << endl << "(" << infilename << ",p."
            << pagenr << ") show" << endl;
+   outfile << "576 (" << datestring() << 
+           ") stringwidth pop sub 746 moveto" <<
+   endl << "(" << datestring() << ") show" << endl;
 
 }
 
@@ -135,11 +140,24 @@ object *interpreter::make_object (parameters &command) {
 
 object *interpreter::make_text (parameters &command) {
    TRACE ('f', command);
-   const string size = shift (command);
-   double fontsize = from_string<double>(size);
-   string fontname = shift (command);
-   string textdata = shift (command);
-   return new text (string(fontname), points(fontsize), string(textdata) );
+   string ft_size = shift (command);
+   string fontname;
+   string fontshit;
+   double fontsize = 12;
+   if (ft_size != "font"){ 
+      fontsize = from_string<double>(ft_size);
+      fontname = shift (command);
+   }else{
+      fontname = ft_size;
+   }
+   string textdata;
+   string tempdata;
+   while( command.size() > 0){
+     tempdata = shift (command);
+     textdata.append(tempdata);
+   }
+   return new text (string(fontname), points(fontsize), 
+                    string(textdata) );
 }
 
 object *interpreter::make_ellipse (parameters &command) {
@@ -152,24 +170,24 @@ object *interpreter::make_ellipse (parameters &command) {
      string strthick = shift (command);
      thickness = from_string<double>(strthick);
    }
-   cout << "In make elipse: command = " << command << endl;
    TRACE ('f', command);
-   return new ellipse (inches(height), inches(width), points(thickness));
+   return new ellipse (inches(height), inches(width), 
+                       points(thickness));
 }
 
 object *interpreter::make_circle (parameters &command) {
-   cout << "In make circle: command = " << command << endl;
    string strdiam = shift (command);
    double diameter = from_string<double>(strdiam);
-   string strthick = shift (command);
-   double thickness = from_string<double>(strthick);
-   
+   double thickness = 2;
+   if (command.size() > 0){
+      string strthick = shift (command);
+      thickness = from_string<double>(strthick);
+   }
    TRACE ('f', command);
    return new circle (inches(diameter), points(thickness));
 }
 
 object *interpreter::make_polygon (parameters &command) {
-   cout << "In make polygon: command = " << command << endl;
    coordlist coords;
    double point = 2;
    while(command.size() > 1){
@@ -179,7 +197,6 @@ object *interpreter::make_polygon (parameters &command) {
      double coordy = from_string<double>(strcoordy);
      coordx *= 72;
      coordy *= 72;
-     cout << "x " << strcoordx << "y " << strcoordy << endl;
      inches polyX(coordx);
      inches polyY(coordy);
      xycoords side(polyX, polyY);
@@ -187,7 +204,6 @@ object *interpreter::make_polygon (parameters &command) {
    }
    if(command.size() == 1){
       string strpoint = shift (command);
-      cout << "strpoint = " << strpoint << endl;
       point = from_string<double>(strpoint);
    }
    TRACE ('f', command);
@@ -195,7 +211,6 @@ object *interpreter::make_polygon (parameters &command) {
 }
 
 object *interpreter::make_rectangle (parameters &command) {
-   cout << "In make rectangle: command = " << command << endl;
    string strheight = shift (command);
    string strwidth = shift (command);
    double thickness = 2;
@@ -206,7 +221,8 @@ object *interpreter::make_rectangle (parameters &command) {
    double height = from_string<double>(strheight);
    double width = from_string<double>(strwidth);
    TRACE ('f', command);
-   return new rectangle (inches(height), inches(width), points(thickness));
+   return new rectangle (inches(height), inches(width), 
+                         points(thickness));
 
 }
 
@@ -218,17 +234,18 @@ object *interpreter::make_square (parameters &command) {
      string strthick = shift (command);
      thickness = from_string<double>(strthick);
    }
-   cout << "In make square: command = " << command << endl;
    TRACE ('f', command);
    return new square (inches(width), points(thickness));
 }
 
 object *interpreter::make_line (parameters &command) {
    string strlength = shift (command);
-   string strthick = shift (command);
    double length = from_string<double>(strlength);
-   double thickness = from_string<double>(strthick);
-   cout << "In make line: command = " << command << endl;
+   double thickness = 2;
+   if( command.size() > 0){
+      string strthick = shift (command);
+      thickness = from_string<double>(strthick);
+   }
    TRACE ('f', command);
    return new line (inches(length), points(thickness));
 }

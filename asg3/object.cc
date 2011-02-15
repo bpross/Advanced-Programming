@@ -1,4 +1,5 @@
 // $Id: object.cc,v 1.1 2011-01-25 18:56:05-08 - - $
+//bpross, esteggall
 
 #include <typeinfo>
 
@@ -64,17 +65,22 @@ void text::draw (ostream &out, const xycoords &coords,
            << " \"" << textdata << "\"")
    double first = double(coords.first);
    double second = double(coords.second);
-   cout << "font_size: " << fontsize << " font: " << fontname << " writing: " << textdata << endl;
-   cout << "xycoords: " << coords << " degrees: " << angle << endl;
    out << "gsave" << endl;
    out << "    /" << fontname << " findfont" << endl;
    out << "    " << fontsize << " scalefont setfont" << endl;
-   out << "    " << first << " " << second << " translate" << endl << "    0 rotate" << endl;
+   out << "    " << first << " " << second << 
+          " translate" << endl << "    0 rotate" << endl;
    out << "    0 0 moveto" << endl;
    out << "    (";
    unsigned int itor;
    for(itor = 0; itor < textdata.size(); ++itor){
-       out << "\\" << textdata.at(itor);
+       if(textdata.at(itor) == '(' || textdata.at(itor) == ')'){ 
+         out << "\\" << textdata.at(itor);
+       }
+       else{
+         out << textdata.at(itor);
+       }
+         
    }
    out << ")" << endl;
    out << "    show" << endl;
@@ -83,24 +89,30 @@ void text::draw (ostream &out, const xycoords &coords,
 
 void ellipse::draw (ostream &out, const xycoords &coords,
                 const degrees &angle) {
-   out << " Hello" << endl;
    DTRACE ("height=" << height << " width=" << width
            << " thick=" << thick);
    double first = double(coords.first);
    double second = double(coords.second);
-   cout << "first = " << first << "second = " << second << endl;
-   cout << "angle = " << angle << endl;
+   double xscale, yscale, radius;
+   if (height < width){
+      xscale = 1;
+      yscale = height / width;
+      radius = width / 2;
+   }
+   else{
+      xscale = width / height;
+      yscale = 1;
+      radius = height / 2;
+   }
    out << "gsave" << endl;
    out << "   newpath" << endl;
    out << "   /save matrix currentmatrix def" << endl;
    out << "   " << first << " " << second << " traslate" << endl;
 
-   list<xycoords>::const_iterator itor;
-   for(itor = coordinates.begin(); itor != coordinates.end();++itor){
-     cout << "   " << *itor << " rlineto " << endl;
-   }
-
    out << "   " << angle << " rotate" << endl;
+   out << "   " << xscale << " " << yscale << " scale" << endl;
+   out << "   0 0 " << radius << " 0 360 arc" << endl;
+   out << "   save setmatrix" << endl;
    out << "   " << thick <<  " setlinewidth" << endl;
    out << "   stroke" << endl;
    out << "grestore" << endl;
@@ -154,7 +166,6 @@ coordlist line::make_list (const inches &length) {
    inches end(line_length);
    xycoords linecoord(end, start);
    coordlist.push_back(linecoord);
-   cout << length << endl;
    return coordlist;
 }
 
