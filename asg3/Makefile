@@ -20,7 +20,7 @@ ALLSOURCES  = ${CCHEADER} ${CCSOURCE} ${OTHERS}
 LISTFILES   = ${ALLSOURCES} ${DEPSFILE}
 
 LISTING     = ../asg3-draw.code.ps
-CLASS       = cmps109-wm.w10
+CLASS       = cmps109-wm.w11
 PROJECT     = asg3
 
 all : ${EXECBIN}
