@@ -1,4 +1,4 @@
-// $Id: util.cc,v 1.2 2011-01-18 21:32:03-08 - - $
+// $Id: util.cc,v 1.2 2011-01-18 21:08:53-08 - - $
 // Authors: Ben Ross, Erik Steggall
 // Usernames: bross@ucsc.edu, esteggal@ucsc.edu
 
