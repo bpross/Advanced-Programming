@@ -1,3 +1,11 @@
+// Authors: Ben Ross, Erik Steggall
+// emails: bpross@ucsc.edu, esteggal@ucsc.edu
+// Assignment 4
+// CMPS109
+// 02.28.11
+
+
+
 typedef struct Node{
   int data;
   struct Node *next;
