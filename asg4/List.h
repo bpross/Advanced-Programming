@@ -4,32 +4,27 @@
 // CMPS109
 // 02.28.11
 
+#include <iostream>
+using namespace std;
 
-
-typedef struct Node{
-  int data;
-  struct Node *next;
-  struct Node *prev;
-}Node;
-
-typedef Node *Node_ref;
-
-typedef struct List{
-  Node_ref head;
-  Node_ref curr;
-  Node_ref tail;
-  int length;
-}List;
-
-typedef List *List_ref;
-
-
-/*              Constructors                 */
-
-Node_ref newNode(int data);
-
-List_ref newList();
-
-void freeNode(Node_ref *fN);
-
-void freeList(List_ref* L);
+template <typename T>
+class List{
+  private:
+    struct node{
+      T item;
+      node *next;
+      node *previous;
+      friend ostream &operator << <>(ostream &, const List<T> &);
+    }; 
+    node* head;
+    node* tail;
+    int size;
+    bool isEmpty();
+    node* remove();
+  public:
+    List();
+    ~List();
+    void push(T item);
+    T pop();
+    void sort();
+}
