@@ -5,14 +5,12 @@
 // 02.28.11
 
 #include "List.h"
+/*
 
-List List::List(){
-  List new_list = new List<T>();
-  new_list.size = 0;
-  return new_list;
+List::List():head( NULL), tail( NULL), size(0){
 }
 
-List<T>::~List(){
+List::~List(){
   node* temp;
   while !this.isEmpty(){
     temp = this.pop();
@@ -20,7 +18,7 @@ List<T>::~List(){
   }
 }
 
-node typename List<T>::node(){
+node List::node(){
   node new_node = new node();
   new_node.item = NULL;
   new_node.next = NULL;
@@ -102,6 +100,6 @@ ostream &operator<< (ostream &out, const List<class T> &that){
   }
 }
 
-
+*/
 
 
