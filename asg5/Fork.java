@@ -1,18 +1,18 @@
-class Fork{
-  private boolean available = true;
-  private int id;
+import java.util.concurrent.Semaphore;
 
-  public synchronized void pickup(){
-    if(available){
-      available = false;
+class Fork{
+  private Semaphore available = new Semaphore(1);
+
+  public void pickup(){
+    try{
+      available.acquire();
+    }
+    catch (InterruptedException e){
+      throw new Error(e.toString());
     }
   }
 
-  public synchronized void put_down(){
-    available = true;
-  }
-
-  public boolean available(){
-    return available;
+  public void put_down(){
+      available.release();
   }
 }
