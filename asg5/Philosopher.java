@@ -6,6 +6,7 @@
 */
 import java.util.concurrent.Semaphore;
 
+
 class Philosopher implements Runnable{
   //fields
   private int id;
@@ -14,17 +15,20 @@ class Philosopher implements Runnable{
   private int think_time;
   private int eat_time;
 
-  public Philosopher(int i, Fork left, Fork right,
+/* Philosopher constructor */
+  public Philosopher(int id, Fork left, Fork right,
                      int think, int eat){
-    id = id;
-    left_fork = left;
-    right_fork = right;
-    think_time = think;
-    eat_time = eat;
+    this.id = id;
+    this.left_fork = left;
+    this.right_fork = right;
+    this.think_time = think;
+    this.eat_time = eat;
   }
 
+/* This function will sleep for the time that the philosopher is "thinking */
   private void think(){
     System.out.println("Philosopher " + id + ": is thinking");
+    /* Check for interrupts */
     try{
       Thread.currentThread().sleep(think_time);
     }
@@ -32,10 +36,13 @@ class Philosopher implements Runnable{
     System.out.println("Philosopher " + id + ": is done thinking");
   }
 
+/* This function will sleep for the time that the philosopher is "eating */
   private void eat(){
+      /* Attempt to pick up both forks */
       right_fork.pickup();
       left_fork.pickup();
       System.out.println("Philosopher " + id + ": is starting to eat");
+      /* Check for interrupts */
       try{
         Thread.currentThread().sleep(eat_time);
       }
@@ -45,7 +52,7 @@ class Philosopher implements Runnable{
       left_fork.put_down();
     }
   
-
+/* The philosopher's actions */
   public void run(){
     think();
     eat();
